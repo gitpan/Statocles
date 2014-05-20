@@ -1,0 +1,507 @@
+==================================================
+Changes from 2013-05-20 00:00:00 +0000 to present.
+==================================================
+
+------------------------------------------
+version 0.001 at 2014-05-20 04:54:55 +0000
+------------------------------------------
+
+  Change: 3b5ad67e993cc08cc240c39a8c4cafdf3fabfb79
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-19 23:41:29 +0000
+
+    make sure only built files get committed
+
+    If we left any random dirty file in the git deploy dir, we would
+    commit it along with the deployed site, which is bad. Now we only
+    commit the files we moved from the build directory. 
+
+  Change: 18ab115c2953b1d7dee8d446e872007190f605df
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-19 23:31:27 +0000
+
+    add a basic git-based site
+
+    This is the very basic stuff to be added to in time.
+
+    Fixes #27 
+
+  Change: 1708388c9b36edb0a563f9f4ffa22dc3bdef9566
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-19 19:34:29 +0000
+
+    document Statocles::Template and everything else
+
+    Fixes #24 
+
+  Change: 99fbdb81bd6c6f34e1abe53cf3621354b0e593c2
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-19 02:36:04 +0000
+
+    better default theme with more example content 
+
+  Change: 3ad7fd44a0adc18d47c1a2f8c715b826db343ca7
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-18 03:46:08 +0000
+
+    basic site navigation array
+
+    I do not think this is going to be good enough for our needs. Perhaps
+    a set of named navigation lists (akin to the set of named
+    applications)?
+
+    Fixes #18 for now. 
+
+  Change: c5c4264dc59f89671bb4d5ea2effdc6a91dfc2bb
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-18 03:22:47 +0000
+
+    reduce duplication in site test 
+
+  Change: 140cfdd8d9c0af16b2dca82d40ff0b4e27f1bc90
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-18 02:40:47 +0000
+
+    fix default site theme for Statocles::Template
+
+    Pass the file path to Mojo::Template to improve debugging 
+
+  Change: cb953076a606186621ff58afbfd2306aec025d33
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-18 02:40:10 +0000
+
+    add --version command-line script option
+
+    Fixes #20 
+
+  Change: 692dd0095235f81c0c2798189c71bc5228739bcd
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-18 02:12:13 +0000
+
+    switch to Mojo::Template
+
+    A much better template for our purposes, even if the incantation to
+    render them is a bit obtuse.
+
+    See Mojolicious::Plugin::EPRenderer and
+    Mojolicious::Plugin::EPLRenderer for details on how to render
+    Mojo::Template, for when we need to add new things in the future...
+
+    Fixes #17 
+
+  Change: ef383801de072a7752a17b2eb8787bf42f8f31c8
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 23:51:07 +0000
+
+    attribute -> attr 
+
+  Change: 854e60dcb09478154b9d1041a98cc07e946615db
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 23:50:29 +0000
+
+    add some missing documentation to Page classes 
+
+  Change: 36e431c9e3eeb5b60f8a1b0522b2f3ff384f4579
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 23:43:56 +0000
+
+    change Page to a role
+
+    This reduces some of the duplication between the two Page classes.
+
+    Fixes #5 
+
+  Change: 9dc1f24947f0d3ccf871cfaded10a8109c514bd8
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 23:24:12 +0000
+
+    add a base Role class 
+
+  Change: 762c06733dca0916b6d5958a65c5bf4237e04ddf
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 02:02:42 +0000
+
+    refactor test to remove some duplication 
+
+  Change: 046cb62a6fe8fa8afdb03e3d8bd90c2be129c9b9
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 01:44:14 +0000
+
+    add missing layout template
+
+    Our gitignore was a bit over-zealous 
+
+  Change: fc94a4d9fe21a235f821a866eb08aeeaa84512fb
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 01:36:20 +0000
+
+    add site title
+
+    Text::Template does not seem to like blessed objects, another reason
+    why it is not the right template system for this thing...
+
+    We also need to make sure to test that the correct content is
+    present, and not just compare pages against each other. If the
+    template has an error, testing page renders against each other will
+    not reveal the problem, since they'll still be equal.
+
+    Fixes #19 
+
+  Change: b1894e954e388ba670c422ac2a94110880019834
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 01:20:40 +0000
+
+    pull the render() call out of the store
+
+    This way, Store does not need to know about Page objects, just plain
+    strings. This also prevents us from having to pass the extra template
+    arguments to write_page(), which is just awkward...
+
+    They still need to know about Document objects though, but those are
+    proper data structures, not just a string of content. 
+
+  Change: 286bfa4b2158c6046b375d9f013d1893abb1a90c
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 01:17:41 +0000
+
+    add additional template arguments to pages
+
+    This lets us add things after the Application gives us the Page 
+
+  Change: 570102312773fed9efa4ace883a9fe244eea8dc6
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-12 00:25:53 +0000
+
+    add error checking to template fill_in() 
+
+  Change: 05f8172298acf3d318713739b617ce909628253f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-11 01:21:57 +0000
+
+    site index should not duplicate an app page
+
+    So we move the app page to the right place. This may come back to
+    bite us when something assumes that the app page will be there...
+
+    Fixes #14 
+
+  Change: f732d3b7f3bae1b841462c7d8de3945c2d961909
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-11 01:10:00 +0000
+
+    remove the link because POD->Markdown does bad things 
+
+  Change: 1a32722c04bae3c945d31955d69cb108a2b940e8
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-11 01:01:22 +0000
+
+    add some introduction documentation
+
+    Fixes #3 
+
+  Change: a7fbc2986244796a2f107340295704023771d989
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-11 00:19:33 +0000
+
+    add initial default theme and an example site.yml
+
+    This more than anything proves that Text::Template is not the right
+    engine for this application 
+
+  Change: 44a2a8340d9687b5c8183e9e4592119be9e0842c
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-10 23:39:02 +0000
+
+    fix loading theme from a relative directory 
+
+  Change: ca4acc7044e5c5a4566be115bf9b0f142fe79997
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-10 23:23:50 +0000
+
+    fix read documents from a relative directory
+
+    find() does chdir, so we should always use $_ to read the file, but
+    we should use $File::Find::name to set the full path. 
+
+  Change: e5ef120c63113848ca9231ea88d0c88e2d10e735
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-10 23:17:20 +0000
+
+    set the execute bit 
+
+  Change: 015bc9508df4bd5d69afaa0836c986e634453e48
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-10 22:41:27 +0000
+
+    add initial command-line interface
+
+    Fixes #4 
+
+  Change: c89d0b28dcd781291f615e09c8a4fcad671f9510
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-10 21:31:35 +0000
+
+    break up build and deploy stores
+
+    build is step one. deploy is step two. We should be able to build to
+    any store we want, including a remote site, for validation, before we
+    finally call deploy.
+
+    Deploy is the finality. Except that a git repo is not a store... 
+
+  Change: eeb6794a5995104efa1e81bcabb5831cbba5296d
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-10 21:10:44 +0000
+
+    remove destination from apps to reduce duplication
+
+    Having to set the same destination on all the apps is horrible,
+    especially when the apps are already supposed to add their url_root
+    to the page's URL. 
+
+  Change: 10a5759d6e867751c4828e4aae15479715b3f4d4
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-10 21:06:32 +0000
+
+    add missing index page to theme test 
+
+  Change: 49860c815e64e0649c472c1011c21585cca50d58
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-04 02:31:36 +0000
+
+    add an index page to the entire site
+
+    Site indexes are just copies of a specific app index. This may come
+    back to bite me when the event stuff starts happening... 
+
+  Change: 54a742345ace3c3a7a7a216df7f62ace426a67bc
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 23:14:35 +0000
+
+    add index page to the blog 
+
+  Change: 66fcd3dff6ee7e569e061f1f6d7476eca38b1054
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 22:59:26 +0000
+
+    all pages need paths 
+
+  Change: 3ff9e9b9143d7281def5bc82672a2268f266d6aa
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 22:17:02 +0000
+
+    add initial List page, for indexes 
+
+  Change: 391ae2c1a780be526960c622c8eec5f51820ea3f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 21:23:15 +0000
+
+    test multiple blog posts in preparation for lists 
+
+  Change: 437c2142ce035d1cefe23f87c0f6eebb7d875e9f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 19:48:31 +0000
+
+    better description of what the method returns 
+
+  Change: 14f920bbc0fe13e788f37d795167c94dc9dc92fb
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 19:38:55 +0000
+
+    File -> Store to get all docs from a dir path
+
+    The store will help with making an event-driven, responsive
+    application during preview time. It also makes it a lot easier to
+    implement different methods of storing documents and pages. 
+
+  Change: 22492f665c7a47c36877b0065e487753e10cd791
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 01:52:38 +0000
+
+    add site class
+
+    The Site class encapsulates a set of applications and handles the
+    deploy process.
+
+    Configuring a Site can be easily done using a DI container like
+    Beam::Wire. 
+
+  Change: 34b64f931e72adb2524460af9a2fffd9b6dad7ec
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 01:50:34 +0000
+
+    provide a single pages() method in applications
+
+    The pages() method returns all pages currently active in the
+    application. 
+
+  Change: d0b3ebf63b52a9279a87a27e8563f500c81216c0
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 01:33:14 +0000
+
+    fix template not being stored with the right group
+
+    The "dirs" from splitpath ends with a /, so the last item from
+    splitdir( dirs ) is the empty string. 
+
+  Change: 5698c7c159ea59124c83d1b9d779d679bf71e4e8
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 01:14:50 +0000
+
+    throw a better error when the template is undef
+
+    Previously, it would throw Text::Template's usage message, which
+    doesn't quite explain what the problem is. 
+
+  Change: 0baf9fecf75077fc0fb2129e7f41e82425919c5e
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 01:03:23 +0000
+
+    fix broken tests
+
+    Removing the unneeded imports from the tests revealed that the
+    classes were not importing the other classes they needed. There
+    should be some kind of module to scan for this...
+
+    read_file returns a list of lines in list context, which doesn't work
+    for eq_or_diff 
+
+  Change: 6b70869b9bcb6a4da17aeeba47e39da33b80a7b6
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-03 00:25:28 +0000
+
+    allow loading of theme templates from a directory 
+
+  Change: ffc15eb30fc61485c729c4d72047e322bb7d3c0d
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-30 01:55:44 +0000
+
+    we don't need these imports
+
+    The app encapsulates the model and view, as it rightly should. 
+
+  Change: 594944a261791771ced382dea7ee3da9b19a97a3
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-30 01:18:56 +0000
+
+    add layouts to blog application 
+
+  Change: 6a36ace21159d17f87ddd64cdc8c71d134da1968
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-30 01:17:37 +0000
+
+    add layout to page
+
+    A layout wraps the page's content and is shared throughout the site. 
+
+  Change: 570db15a491d7e657dfdaf06f014a7db2a89a6e8
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-30 00:01:37 +0000
+
+    blog app can now read source files from directory 
+
+  Change: 7f5f801489d04b463d17f43ac8d6fc3c94b2751e
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-29 23:36:47 +0000
+
+    add write() method to blog app
+
+    The blog app is now capable of taking documents and writing pages. 
+
+  Change: bc6abc54b6a04746cca8c877fc4f8af560b1a758
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-29 23:35:49 +0000
+
+    make sure to create full paths when writing pages 
+
+  Change: 9fd07e98da6570a20d8737ce7f988930f69d7c49
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-29 23:25:50 +0000
+
+    add theme to the blog app 
+
+  Change: 7a1021dd7d647a76a2b89c4b6de3f334bc52694b
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-29 23:12:20 +0000
+
+    add themes - bundles of templates 
+
+  Change: 88832da01659e23e150b194f4e963bf471931b99
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-29 01:34:20 +0000
+
+    initial build artifacts
+
+    We're going public on GitHub, but we are nowhere near ready for
+    actual site generation yet. 
+
+  Change: de0d315a1d7e3c2a01933da54c7bb0b88e8a9cc4
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-29 01:31:31 +0000
+
+    initial work on a blog application
+
+    We can change Documents into Pages via an API call. Lot more work to
+    be done... 
+
+  Change: c3b737189fa35b206302dbfc4f48869c21be85c8
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-28 01:12:00 +0000
+
+    add documentation 
+
+  Change: e27c2bd22362beb563035a9abf959b7cee5c1d73
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-28 01:07:08 +0000
+
+    rename project to Statocles
+
+    Then we can have Dynamocles, adding dynamically-generated site
+    features like users and sessions and what-not. 
+
+  Change: 91a125aafbeed25a1c11c036279d94e5a67964fe
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-28 00:56:29 +0000
+
+    add some documentation 
+
+  Change: e6e418256d100419483dd09d4274feebab6c806d
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-27 18:16:57 +0000
+
+    add ref to File that Document is read from/writ to
+
+    This way, Pages can get access to the path the Document was loaded
+    from, to help build a URL. 
+
+  Change: cb9e5cff7fb166ea53e8f351e55a628c21846c75
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-27 17:33:52 +0000
+
+    write pages to disk
+
+    Apps will be responsible for giving paths to Page objects. These
+    paths will probably correspond to the Document's source path, but
+    they are not required to (links in documents will probably fail if
+    they are not...) 
+
+  Change: 07d76c01dc6ae79be73529fa94f91e4f9cbc750e
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-27 17:17:32 +0000
+
+    add simple page rendering
+
+    Pages take one or more Documents and build HTML which will then be
+    written to disk (probably). The document's content is run through a
+    Markdown parser, and the document and rendered content is passed to a
+    Text::Template template. 
+
+  Change: 6650017a871bef029d214276a207e4a572966b6d
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-04-26 19:37:43 +0000
+
+    add base File and Document classes 
+
+================
+End of releases.
+================
