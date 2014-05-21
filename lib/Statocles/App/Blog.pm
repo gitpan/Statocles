@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 {
-  $Statocles::App::Blog::VERSION = '0.001';
+  $Statocles::App::Blog::VERSION = '0.002';
 }
 # ABSTRACT: A blog application
 
@@ -77,7 +77,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 DESCRIPTION
 

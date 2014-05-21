@@ -1,6 +1,6 @@
 package Statocles::Site::Git;
 {
-  $Statocles::Site::Git::VERSION = '0.001';
+  $Statocles::Site::Git::VERSION = '0.002';
 }
 
 use Statocles::Class;

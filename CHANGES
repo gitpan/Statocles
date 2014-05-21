@@ -1,9 +1,46 @@
 ==================================================
-Changes from 2013-05-20 00:00:00 +0000 to present.
+Changes from 2013-05-21 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.001 at 2014-05-20 04:54:55 +0000
+version 0.002 at 2014-05-21 04:17:48 +0000
+------------------------------------------
+
+  Change: 1cb5ccbefd8f8a10e60d5229cdebf71ad0f62082
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-20 23:17:39 +0000
+
+    release v0.002 
+
+  Change: 2fb229f8c8ca6b39e1506bae921bb2ade8e6dde3
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-20 23:14:28 +0000
+
+    fix one of the dir seperator problems on Win32
+
+    URLs are always /, so we need to switch the \ on Win32 to /. 
+
+  Change: d66c25d78f1b3d122c695057154ea712906d0574
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-20 22:28:15 +0000
+
+    check for git earlier in the test
+
+    We could then make Git::Repository an optional prereq, but I'm not
+    sure if I want to do that... More likely I'll move
+    Statocles::Site::Git and other git-related modules to their own dist
+    and indicate what to install in the statocles command script. 
+
+  Change: 066f012afb40a6ec6ac501739388c430fb9d9351
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-20 22:25:36 +0000
+
+    add missing prereqs
+
+    Thanks CPANTS! 
+
+------------------------------------------
+version 0.001 at 2014-05-20 04:41:29 +0000
 ------------------------------------------
 
   Change: 3b5ad67e993cc08cc240c39a8c4cafdf3fabfb79

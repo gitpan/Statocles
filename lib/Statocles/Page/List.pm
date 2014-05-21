@@ -1,6 +1,6 @@
 package Statocles::Page::List;
 {
-  $Statocles::Page::List::VERSION = '0.001';
+  $Statocles::Page::List::VERSION = '0.002';
 }
 # ABSTRACT: A page presenting a list of other pages
 
@@ -55,7 +55,7 @@ Statocles::Page::List - A page presenting a list of other pages
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 DESCRIPTION
 

@@ -28,9 +28,11 @@ requires:
   File::Path: 0
   File::Slurp: 0
   File::Spec::Functions: 0
+  Git::Repository: 0
   Import::Base: 0
   Mojolicious: 0
   Moo::Lax: 0
+  Pod::Usage::Return: 0
   Text::Markdown: 0
   YAML: 0
   strict: 0
@@ -39,4 +41,4 @@ resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: https://github.com/preaction/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: 0.001
+version: 0.002
