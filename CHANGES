@@ -1,9 +1,49 @@
 ==================================================
-Changes from 2013-05-21 00:00:00 +0000 to present.
+Changes from 2013-05-25 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.002 at 2014-05-21 04:17:48 +0000
+version 0.003 at 2014-05-25 03:29:06 +0000
+------------------------------------------
+
+  Change: d20c95d8641c11b342557bbadab702b5f3301ab7
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-24 22:26:39 +0000
+
+    release v0.003 
+
+  Change: 802d6ec79fff5f84ea5bf6899685372f0598f72f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-24 22:25:51 +0000
+
+    fix git commands writing to stdout
+
+    Fixes #30 
+
+  Change: 104afaefcd0c1160dfca9411eb2d2015e4bec7c4
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-24 21:49:12 +0000
+
+    always specify a template path
+
+    This prevents uninitialized warnings when Mojo::Template tries to set
+    the current line with #line.
+
+    Fixes #31 
+
+  Change: 52ddf1d3bb83930fc557c0f5ba5c8856dbd4fa8a
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-24 21:46:30 +0000
+
+    allow regex-unsafe characters in file path
+
+    This should fix #32 on windows, though there is no exact test for
+    it...
+
+    Should we do platform-specific tests? 
+
+------------------------------------------
+version 0.002 at 2014-05-21 04:17:39 +0000
 ------------------------------------------
 
   Change: 1cb5ccbefd8f8a10e60d5229cdebf71ad0f62082

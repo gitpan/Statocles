@@ -2,7 +2,7 @@
 # ABSTRACT: Run Statocles commands
 package statocles;
 {
-  $statocles::VERSION = '0.002';
+  $statocles::VERSION = '0.003';
 }
 
 use Statocles::Command;
@@ -18,7 +18,7 @@ statocles - Run Statocles commands
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 

@@ -39,6 +39,7 @@ t/page/document.t
 t/page/list.t
 t/share/blog/2014/04/23/slug.yml
 t/share/blog/2014/04/30/plug.yml
+t/share/blog/2014/05/22/(regex)[name].file.yml
 t/share/multi.yml
 t/share/theme/blog/index.tmpl
 t/share/theme/blog/post.tmpl

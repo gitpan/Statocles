@@ -1,6 +1,6 @@
 package Statocles::Template;
 {
-  $Statocles::Template::VERSION = '0.002';
+  $Statocles::Template::VERSION = '0.003';
 }
 # ABSTRACT: A template object to pass around
 
@@ -24,6 +24,21 @@ has path => (
     is => 'ro',
     isa => Str,
 );
+
+
+around BUILDARGS => sub {
+    my ( $orig, $self, @args ) = @_;
+    my $args = $self->$orig( @args );
+    if ( !$args->{path} ) {
+        my ( $i, $caller_class ) = ( 0, (caller 0)[0] );
+        while ( $caller_class->isa( 'Statocles::Template' ) || $caller_class->isa( 'Sub::Quote' ) ) {
+            $i++;
+            $caller_class = (caller $i)[0];
+        }
+        $args->{path} = join " line ", (caller($i))[1,2];
+    }
+    return $args;
+};
 
 
 sub render {
@@ -55,7 +70,7 @@ Statocles::Template - A template object to pass around
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 DESCRIPTION
 
@@ -73,6 +88,10 @@ default.
 The path to the file for this template. Optional.
 
 =head1 METHODS
+
+=head2 BUILDARGS( )
+
+Set the default path to something useful for in-memory templates.
 
 =head2 render( %args )
 

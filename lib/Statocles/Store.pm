@@ -1,6 +1,6 @@
 package Statocles::Store;
 {
-  $Statocles::Store::VERSION = '0.002';
+  $Statocles::Store::VERSION = '0.003';
 }
 # ABSTRACT: A repository for Documents and Pages
 
@@ -37,7 +37,7 @@ sub read_documents {
             if ( /[.]ya?ml$/ ) {
                 my @yaml_docs = YAML::LoadFile( $_ );
                 my $rel_path = $File::Find::name;
-                $rel_path =~ s/$root_path//;
+                $rel_path =~ s/\Q$root_path//;
                 my $doc_path = join "/", splitdir( $rel_path );
                 push @docs, map { Statocles::Document->new( path => $rel_path, %$_ ) } @yaml_docs;
             }
@@ -69,7 +69,7 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 DESCRIPTION
 

@@ -1,6 +1,6 @@
 package Statocles;
 {
-  $Statocles::VERSION = '0.002';
+  $Statocles::VERSION = '0.003';
 }
 # ABSTRACT: A static site generator
 
@@ -16,7 +16,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 DESCRIPTION
 
