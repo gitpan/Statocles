@@ -1,6 +1,6 @@
 package Statocles::Class;
 {
-  $Statocles::Class::VERSION = '0.003';
+  $Statocles::Class::VERSION = '0.004';
 }
 # ABSTRACT: Base module for all Statocles classes
 
@@ -30,7 +30,7 @@ Statocles::Class - Base module for all Statocles classes
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

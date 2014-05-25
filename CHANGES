@@ -3,7 +3,64 @@ Changes from 2013-05-25 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.003 at 2014-05-25 03:29:06 +0000
+version 0.004 at 2014-05-25 06:28:56 +0000
+------------------------------------------
+
+  Change: 46e4b1d8a7e7180a2d07fb3ab3bd274c76538243
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-25 01:28:44 +0000
+
+    Release v0.004 
+
+  Change: be7223bffc0cdee5307e63cacdac45f1ed8c356a
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-25 00:53:32 +0000
+
+    get themes from Statocles share dir
+
+    This makes it a lot easier to use the default themes.
+
+    In the future, we may include a way to get any dist's share dir, so
+    that other CPAN dists can bundle Statocles themes.
+
+    Fixes #33 
+
+  Change: 1f4b7485609f4522fbf9a59b9c3cb60f59f5a41f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-25 00:21:54 +0000
+
+    add another caller to ignore finding template path
+
+    We're trying to find the place where the template is being
+    instantiated, so we need to ignore all the Moo-y stuff in the middle. 
+
+  Change: 15cb9fa5b3d0f7aac931347e3dad6ce52a74d139
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-25 00:18:10 +0000
+
+    move the pager controls to the blog index
+
+    It was erroneously in the site layout 
+
+  Change: b656dd96ac1e27957986b323b24a9647623140d4
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-25 00:12:49 +0000
+
+    add the page path to the template
+
+    The page path should override the document path, since the document
+    path does not really apply once all the content is rendered.
+
+    Fixes #29 
+
+  Change: b74c407a7334cda8237ae28e1879d12d8c450274
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-24 22:41:43 +0000
+
+    add missing ABSTRACT 
+
+------------------------------------------
+version 0.003 at 2014-05-25 03:26:39 +0000
 ------------------------------------------
 
   Change: d20c95d8641c11b342557bbadab702b5f3301ab7

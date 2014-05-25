@@ -1,6 +1,6 @@
 package Statocles::Store;
 {
-  $Statocles::Store::VERSION = '0.003';
+  $Statocles::Store::VERSION = '0.004';
 }
 # ABSTRACT: A repository for Documents and Pages
 
@@ -69,7 +69,7 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 DESCRIPTION
 

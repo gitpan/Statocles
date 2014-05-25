@@ -1,12 +1,13 @@
 package Statocles::Theme;
 {
-  $Statocles::Theme::VERSION = '0.003';
+  $Statocles::Theme::VERSION = '0.004';
 }
 # ABSTRACT: Templates, headers, footers, and navigation
 
 use Statocles::Class;
 use File::Find qw( find );
 use File::Slurp qw( read_file );
+use File::Share qw( dist_dir );
 
 
 has source_dir => (
@@ -21,6 +22,17 @@ has templates => (
     lazy => 1,
     builder => 'read',
 );
+
+
+around BUILDARGS => sub {
+    my ( $orig, $self, @args ) = @_;
+    my $args = $self->$orig( @args );
+    if ( $args->{source_dir} =~ /^::/ ) {
+        my $name = substr $args->{source_dir}, 2;
+        $args->{source_dir} = catdir( dist_dir( 'Statocles' ), 'theme', $name );
+    }
+    return $args;
+};
 
 
 sub read {
@@ -62,7 +74,7 @@ Statocles::Theme - Templates, headers, footers, and navigation
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 
@@ -89,11 +101,18 @@ their name and their parent directory.
 
 The source directory for this theme.
 
+If the source_dir begins with ::, will pull one of the Statocles default
+themes from the Statocles share directory.
+
 =head2 templates
 
 The template objects for this theme.
 
 =head1 METHODS
+
+=head2 BUILDARGS
+
+Handle the source_dir :: share theme.
 
 =head2 read()
 

@@ -1,6 +1,6 @@
 package Statocles::Base;
 {
-  $Statocles::Base::VERSION = '0.003';
+  $Statocles::Base::VERSION = '0.004';
 }
 # ABSTRACT: Base module for Statocles modules
 
@@ -10,6 +10,7 @@ use base 'Import::Base';
 
 sub modules {
     return (
+        Statocles => [],
         strict => [],
         warnings => [],
         feature => [qw( :5.10 )],
@@ -29,7 +30,7 @@ Statocles::Base - Base module for Statocles modules
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

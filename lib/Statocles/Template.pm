@@ -1,6 +1,6 @@
 package Statocles::Template;
 {
-  $Statocles::Template::VERSION = '0.003';
+  $Statocles::Template::VERSION = '0.004';
 }
 # ABSTRACT: A template object to pass around
 
@@ -31,10 +31,15 @@ around BUILDARGS => sub {
     my $args = $self->$orig( @args );
     if ( !$args->{path} ) {
         my ( $i, $caller_class ) = ( 0, (caller 0)[0] );
-        while ( $caller_class->isa( 'Statocles::Template' ) || $caller_class->isa( 'Sub::Quote' ) ) {
+        while ( $caller_class->isa( 'Statocles::Template' )
+            || $caller_class->isa( 'Sub::Quote' )
+            || $caller_class->isa( 'Method::Generate::Constructor' )
+        ) {
+            #; print "Class: $caller_class\n";
             $i++;
             $caller_class = (caller $i)[0];
         }
+        #; print "Class: $caller_class\n";
         $args->{path} = join " line ", (caller($i))[1,2];
     }
     return $args;
@@ -70,7 +75,7 @@ Statocles::Template - A template object to pass around
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 DESCRIPTION
 

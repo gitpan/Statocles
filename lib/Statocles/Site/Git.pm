@@ -1,7 +1,8 @@
 package Statocles::Site::Git;
 {
-  $Statocles::Site::Git::VERSION = '0.003';
+  $Statocles::Site::Git::VERSION = '0.004';
 }
+# ABSTRACT: A git-based site
 
 use Statocles::Class;
 extends 'Statocles::Site';
@@ -10,11 +11,6 @@ use File::Find qw( find );
 use File::Copy::Recursive qw( dircopy );
 use Git::Repository;
 
-=attr deploy_dir
-
-The directory of the Git repository to deploy to.
-
-=cut
 
 has deploy_dir => (
     is => 'ro',
@@ -22,11 +18,6 @@ has deploy_dir => (
     default => '.',
 );
 
-=attr deploy_branch
-
-The Git branch to deploy to.
-
-=cut
 
 has deploy_branch => (
     is => 'ro',
@@ -34,11 +25,6 @@ has deploy_branch => (
     default => 'master',
 );
 
-=method deploy()
-
-Deploy the site.
-
-=cut
 
 sub deploy {
     my ( $self ) = @_;
@@ -99,9 +85,48 @@ sub _has_branch {
 }
 
 1;
+
 __END__
+
+=pod
+
+=head1 NAME
+
+Statocles::Site::Git - A git-based site
+
+=head1 VERSION
+
+version 0.004
 
 =head1 DESCRIPTION
 
 This site deploys to a Git repository.
 
+=head1 ATTRIBUTES
+
+=head2 deploy_dir
+
+The directory of the Git repository to deploy to.
+
+=head2 deploy_branch
+
+The Git branch to deploy to.
+
+=head1 METHODS
+
+=head2 deploy()
+
+Deploy the site.
+
+=head1 AUTHOR
+
+Doug Bell <preaction@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Doug Bell.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
