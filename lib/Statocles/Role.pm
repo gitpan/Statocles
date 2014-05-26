@@ -1,6 +1,6 @@
 package Statocles::Role;
 {
-  $Statocles::Role::VERSION = '0.004';
+  $Statocles::Role::VERSION = '0.005';
 }
 # ABSTRACT: Base module for all Statocles roles
 
@@ -29,7 +29,7 @@ Statocles::Role - Base module for all Statocles roles
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

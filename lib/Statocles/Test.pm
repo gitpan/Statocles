@@ -1,6 +1,6 @@
 package Statocles::Test;
 {
-  $Statocles::Test::VERSION = '0.004';
+  $Statocles::Test::VERSION = '0.005';
 }
 # ABSTRACT: Base set of imports for all Statocles tests
 
@@ -34,7 +34,7 @@ Statocles::Test - Base set of imports for all Statocles tests
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

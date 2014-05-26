@@ -1,9 +1,80 @@
 ==================================================
-Changes from 2013-05-25 00:00:00 +0000 to present.
+Changes from 2013-05-26 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.004 at 2014-05-25 06:28:56 +0000
+version 0.005 at 2014-05-26 06:29:25 +0000
+------------------------------------------
+
+  Change: a6550d1cf8a4badf2a6b92c95ca015e95968a085
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-26 01:29:14 +0000
+
+    Release v0.005 
+
+  Change: b9f491caf86e7c36cce8f2b3c86e34d9d979a40a
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-26 01:27:41 +0000
+
+    docs and pages do not need to be in any order
+
+    So compare using Test::Deep bag().
+
+    Fixes #38 
+
+  Change: fc0e570b2ddb5a596d9238f3b31618b81e449a9e
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-26 01:24:34 +0000
+
+    use canon dirsep in template path
+
+    File::Find appears to use / even on Windows. This makes the output of
+    File::Spec->catfile() different from $File::Find::name.
+
+    Fixes #37 
+
+  Change: 4e2367e9f68555718eb3d32bb831bdcb00106d59
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-26 01:23:21 +0000
+
+    doc paths are files; page paths are URLs
+
+    Also, organize the test a bit better to prevent having to filter out
+    //.
+
+    Fixes #37 
+
+  Change: 519c2831ceaee1e241aa660423856cff92f6edea
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-26 00:35:30 +0000
+
+    remove warning if source_dir is undefined 
+
+  Change: 0e6b998443bebdf8750c05c7c2e8b8f31965c792
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-26 00:29:26 +0000
+
+    Moo only allows subrefs as default
+
+    This fixes a "Invalid default '' for ... - not a coderef or
+    code-convertible object" in some versions of
+    Method::Generate::Accessor.
+
+    Fixes #36 
+
+  Change: 8774956c6bdd891619acfcf3c52df0c022931d88
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-26 00:26:52 +0000
+
+    preset git name/email
+
+    This fixes a problem where the current git doesn't have a user.name
+    or user.email configuration during the tests.
+
+    Fixes #35 
+
+------------------------------------------
+version 0.004 at 2014-05-25 06:28:44 +0000
 ------------------------------------------
 
   Change: 46e4b1d8a7e7180a2d07fb3ab3bd274c76538243

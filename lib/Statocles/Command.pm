@@ -1,6 +1,6 @@
 package Statocles::Command;
 {
-  $Statocles::Command::VERSION = '0.004';
+  $Statocles::Command::VERSION = '0.005';
 }
 # ABSTRACT: The statocles command-line interface
 
@@ -62,7 +62,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

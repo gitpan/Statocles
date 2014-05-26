@@ -1,6 +1,6 @@
 package Statocles::Site::Git;
 {
-  $Statocles::Site::Git::VERSION = '0.004';
+  $Statocles::Site::Git::VERSION = '0.005';
 }
 # ABSTRACT: A git-based site
 
@@ -15,14 +15,14 @@ use Git::Repository;
 has deploy_dir => (
     is => 'ro',
     isa => Str,
-    default => '.',
+    default => sub { '.' },
 );
 
 
 has deploy_branch => (
     is => 'ro',
     isa => Str,
-    default => 'master',
+    default => sub { 'master' },
 );
 
 
@@ -96,7 +96,7 @@ Statocles::Site::Git - A git-based site
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 DESCRIPTION
 

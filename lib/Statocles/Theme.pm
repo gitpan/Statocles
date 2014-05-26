@@ -1,6 +1,6 @@
 package Statocles::Theme;
 {
-  $Statocles::Theme::VERSION = '0.004';
+  $Statocles::Theme::VERSION = '0.005';
 }
 # ABSTRACT: Templates, headers, footers, and navigation
 
@@ -27,7 +27,7 @@ has templates => (
 around BUILDARGS => sub {
     my ( $orig, $self, @args ) = @_;
     my $args = $self->$orig( @args );
-    if ( $args->{source_dir} =~ /^::/ ) {
+    if ( $args->{source_dir} && $args->{source_dir} =~ /^::/ ) {
         my $name = substr $args->{source_dir}, 2;
         $args->{source_dir} = catdir( dist_dir( 'Statocles' ), 'theme', $name );
     }
@@ -46,8 +46,11 @@ sub read {
                 my @dirs = splitdir( $dirs );
                 # $dirs will end with a slash, so the last item in @dirs is ''
                 my $group = $dirs[-2];
+                # $File::Find::name has / as dirsep even on Windows. Normalize
+                # so that our tests always have the OS dirsep
+                my $fullname = catpath( $vol, $dirs, "$name.tmpl" );
                 $tmpl{ $group }{ $name } = Statocles::Template->new(
-                    path => $File::Find::name,
+                    path => $fullname,
                 );
             }
         },
@@ -74,7 +77,7 @@ Statocles::Theme - Templates, headers, footers, and navigation
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,6 @@
 package Statocles::Site;
 {
-  $Statocles::Site::VERSION = '0.004';
+  $Statocles::Site::VERSION = '0.005';
 }
 # ABSTRACT: An entire, configured website
 
@@ -22,7 +22,7 @@ has apps => (
 has index => (
     is => 'ro',
     isa => Str,
-    default => '',
+    default => sub { '' },
 );
 
 
@@ -100,7 +100,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 
