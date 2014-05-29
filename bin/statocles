@@ -2,7 +2,7 @@
 # ABSTRACT: Run Statocles commands
 package statocles;
 {
-  $statocles::VERSION = '0.005';
+  $statocles::VERSION = '0.006';
 }
 
 use Statocles::Command;
@@ -18,7 +18,7 @@ statocles - Run Statocles commands
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 SYNOPSIS
 
@@ -33,8 +33,10 @@ version 0.005
 
 The command to run. Available commands:
 
-    build - Build the site
-    deploy - Deploy the site
+    build       - Build the site
+    deploy      - Deploy the site
+    apps        - List the applications in this site
+    <app> help  - Get help for a specific application
 
 =head1 OPTIONS
 

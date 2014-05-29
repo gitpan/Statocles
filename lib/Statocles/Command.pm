@@ -1,6 +1,6 @@
 package Statocles::Command;
 {
-  $Statocles::Command::VERSION = '0.005';
+  $Statocles::Command::VERSION = '0.006';
 }
 # ABSTRACT: The statocles command-line interface
 
@@ -44,7 +44,22 @@ sub main {
 
     if ( @argv == 1 ) {
         my $method = $argv[0];
-        $cmd->site->$method;
+        if ( grep { $_ eq $method } qw( build deploy ) ) {
+            $cmd->site->$method;
+        }
+        elsif ( $method eq 'apps' ) {
+            my $apps = $cmd->site->apps;
+            for my $app_name ( keys %{ $apps } ) {
+                my $app = $apps->{$app_name};
+                my $root = $app->url_root;
+                my $class = ref $app;
+                print "$app_name ($root -- $class)\n";
+            }
+        }
+    }
+    else {
+        my $app_name = $argv[0];
+        $cmd->site->apps->{ $app_name }->command( @argv );
     }
 
     return 0;
@@ -62,7 +77,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 SYNOPSIS
 

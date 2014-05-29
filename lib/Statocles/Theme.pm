@@ -1,6 +1,6 @@
 package Statocles::Theme;
 {
-  $Statocles::Theme::VERSION = '0.005';
+  $Statocles::Theme::VERSION = '0.006';
 }
 # ABSTRACT: Templates, headers, footers, and navigation
 
@@ -77,7 +77,7 @@ Statocles::Theme - Templates, headers, footers, and navigation
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 SYNOPSIS
 

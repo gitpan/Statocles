@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 {
-  $Statocles::App::Blog::VERSION = '0.005';
+  $Statocles::App::Blog::VERSION = '0.006';
 }
 # ABSTRACT: A blog application
 
@@ -31,6 +31,47 @@ has theme => (
 );
 
 
+our $default_post = {
+    author => '',
+    content => <<'ENDCONTENT',
+Markdown content goes here.
+ENDCONTENT
+};
+
+sub command {
+    my ( $self, $name, @argv ) = @_;
+    if ( $argv[0] eq 'help' ) {
+        print <<ENDHELP;
+$name help -- This help file
+$name post <title> -- Create a new blog post with the given title
+ENDHELP
+    }
+    elsif ( $argv[0] eq 'post' ) {
+        my $title = join " ", @argv[1..$#argv];
+        my $slug = lc $title;
+        $slug =~ s/\s+/-/g;
+        my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+        my @parts = (
+            sprintf( '%04i', $year + 1900 ),
+            sprintf( '%02i', $mon + 1 ),
+            sprintf( '%02i', $day ),
+            "$slug.yml",
+        );
+        my $path = catfile( @parts );
+        my %doc = (
+            %$default_post,
+            title => $title,
+        );
+        my $full_path = $self->source->write_document( $path => \%doc );
+        print "New post at: $full_path\n";
+        if ( $ENV{EDITOR} ) {
+            system $ENV{EDITOR}, $full_path;
+        }
+    }
+    return 0;
+}
+
+
 sub post_pages {
     my ( $self ) = @_;
     my @pages;
@@ -55,7 +96,7 @@ sub index {
         path => join( "/", $self->url_root, 'index.html' ),
         template => $self->theme->template( blog => 'index' ),
         layout => $self->theme->template( site => 'layout' ),
-        pages => [ $self->post_pages ],
+        pages => [ sort { $b->path cmp $a->path } $self->post_pages ],
     );
 }
 
@@ -77,7 +118,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 DESCRIPTION
 
@@ -100,6 +141,11 @@ The Statocles::Theme for this app. See L<#THEME> for what templates this app
 requires.
 
 =head1 METHODS
+
+=head2 command( app_name, args )
+
+Run a command on this app. The app name is used to build the help, so
+users get exactly what they need to run.
 
 =head2 post_pages()
 

@@ -1,5 +1,6 @@
 
 use Statocles::Test;
+use Capture::Tiny qw( capture );
 use Statocles::Theme;
 use Statocles::Store;
 use Statocles::App::Blog;
@@ -49,7 +50,7 @@ subtest 'blog post pages' => sub {
     for my $doc_path ( @doc_paths ) {
         my $doc = Statocles::Document->new(
             path => catfile( '', @$doc_path ),
-            %{ YAML::LoadFile( catfile( $SHARE_DIR, 'blog', @$doc_path ) ) },
+            %{ $app->source->read_document( catfile( $SHARE_DIR, 'blog', @$doc_path ) ) },
         );
 
         my $page_path = join '/', '', 'blog', @$doc_path;
@@ -75,10 +76,72 @@ subtest 'index page' => sub {
         path => '/blog/index.html',
         template => $theme->template( blog => 'index' ),
         layout => $theme->template( site => 'layout' ),
-        pages => [ $app->post_pages ],
+        # Sorting by path just happens to also sort by date
+        pages => [ sort { $b->path cmp $a->path } $app->post_pages ],
     );
 
     cmp_deeply $app->index, $page;
+};
+
+subtest 'commands' => sub {
+    # We need an app we can edit
+    my $tmpdir = File::Temp->newdir;
+    my $app = Statocles::App::Blog->new(
+        source => Statocles::Store->new( path => catdir( $tmpdir->dirname, 'blog' ) ),
+        url_root => '/blog',
+        theme => $theme,
+    );
+
+    subtest 'help' => sub {
+        my @args = qw( blog help );
+        my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+        ok !$err, 'blog help is on stdout';
+        is $exit, 0;
+        like $out, qr{blog post <title> -- Create a new blog post},
+            'contains blog help information';
+    };
+
+    subtest 'post' => sub {
+        subtest 'create new post' => sub {
+            local $ENV{EDITOR}; # We can't very well open vim...
+            my ( undef, undef, undef, $day, $mon, $year ) = localtime;
+            my $doc_path = catfile(
+                $tmpdir->dirname,
+                'blog',
+                sprintf( '%04i', $year + 1900 ),
+                sprintf( '%02i', $mon + 1 ),
+                sprintf( '%02i', $day ),
+                'this-is-a-title.yml',
+            );
+
+            subtest 'run the command' => sub {
+                my @args = qw( blog post This is a Title );
+                my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                ok !$err, 'nothing on stdout';
+                is $exit, 0;
+                like $out, qr{New post at: \Q$doc_path},
+                    'contains blog post document path';
+            };
+
+            subtest 'check the generated document' => sub {
+                my $doc = $app->source->read_document( $doc_path );
+                cmp_deeply $doc, {
+                    title => 'This is a Title',
+                    author => '',
+                    content => <<'ENDMARKDOWN',
+Markdown content goes here.
+ENDMARKDOWN
+                };
+                eq_or_diff scalar read_file( $doc_path ), <<'ENDCONTENT';
+---
+author: ''
+title: This is a Title
+---
+Markdown content goes here.
+ENDCONTENT
+            };
+        };
+    };
 };
 
 done_testing;

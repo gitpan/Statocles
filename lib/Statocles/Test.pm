@@ -1,6 +1,6 @@
 package Statocles::Test;
 {
-  $Statocles::Test::VERSION = '0.005';
+  $Statocles::Test::VERSION = '0.006';
 }
 # ABSTRACT: Base set of imports for all Statocles tests
 
@@ -19,6 +19,7 @@ sub modules {
         'Dir::Self' => [qw( __DIR__ )],
         'File::Basename' => [qw( dirname )],
         'File::Slurp' => [qw( read_file write_file )],
+        'File::Spec::Functions' => [qw( rootdir )],
     );
 }
 
@@ -34,7 +35,7 @@ Statocles::Test - Base set of imports for all Statocles tests
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 SYNOPSIS
 
