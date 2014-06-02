@@ -1,15 +1,13 @@
 package Statocles::Document;
-{
-  $Statocles::Document::VERSION = '0.006';
-}
 # ABSTRACT: Base class for all Statocles documents
-
+$Statocles::Document::VERSION = '0.007';
 use Statocles::Class;
 
 
 has path => (
     is => 'rw',
-    isa => Str,
+    isa => Path,
+    coerce => Path->coercion,
 );
 
 
@@ -31,10 +29,23 @@ has content => (
 );
 
 
+has tags => (
+    is => 'rw',
+    isa => ArrayRef,
+    default => sub { [] },
+    coerce => sub {
+        if ( !ref $_[0] ) {
+            return [ split /\s*,\s*/, $_[0] ];
+        }
+        return $_[0];
+    },
+);
+
+
 sub dump {
     my ( $self ) = @_;
     return {
-        map { $_ => $self->$_ } qw( title author content )
+        map { $_ => $self->$_ } qw( title author content tags )
     };
 }
 
@@ -50,12 +61,13 @@ Statocles::Document - Base class for all Statocles documents
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 DESCRIPTION
 
-A Statically::Document is the base unit of content in Statocles. Applications
-take Documents to build Pages.
+A Statocles::Document is the base unit of content in Statocles.
+L<Applications|Statocles::App> take documents to build
+L<pages|Statocles::Page>.
 
 This is the Model class in the Model-View-Controller pattern.
 
@@ -76,6 +88,13 @@ The author of this document.
 =head2 content
 
 The raw content of this document, in markdown.
+
+=head2 tags
+
+The tags for this document. Tags are used to categorize documents.
+
+Tags may be specified as an array or as a comma-seperated string of
+tags.
 
 =head1 METHODS
 

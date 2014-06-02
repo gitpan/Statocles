@@ -1,9 +1,6 @@
 package Statocles::Test;
-{
-  $Statocles::Test::VERSION = '0.006';
-}
 # ABSTRACT: Base set of imports for all Statocles tests
-
+$Statocles::Test::VERSION = '0.007';
 use strict;
 use warnings;
 
@@ -15,11 +12,8 @@ sub modules {
     return (
         @modules,
         'Test::Most',
-        'File::Temp',
         'Dir::Self' => [qw( __DIR__ )],
-        'File::Basename' => [qw( dirname )],
-        'File::Slurp' => [qw( read_file write_file )],
-        'File::Spec::Functions' => [qw( rootdir )],
+        'Path::Tiny' => [qw( path tempdir )],
     );
 }
 
@@ -35,7 +29,7 @@ Statocles::Test - Base set of imports for all Statocles tests
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 SYNOPSIS
 
@@ -50,22 +44,17 @@ In addition to all the imports from L<Statocles::Base>, this module imports:
 
 =over
 
-=item Test::Most
+=item L<Test::Most>
 
 Which includes Test::More, Test::Deep, Test::Differences, and Test::Exception.
 
-=item File::Temp
-
-Which should be used in the object-oriented interface, to ensure easy and
-correct cleanup.
-
-=item Dir::Self
+=item L<Dir::Self>
 
 Provides the __DIR__ keyword.
 
-=item File::Basename qw( dirname )
+=item L<Path::Tiny> qw( path tempdir )
 
-=item File::Slurp qw( read_file write_file )
+To create Path::Tiny objects and get temporary directories.
 
 =back
 

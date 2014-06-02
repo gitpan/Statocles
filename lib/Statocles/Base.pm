@@ -1,9 +1,6 @@
 package Statocles::Base;
-{
-  $Statocles::Base::VERSION = '0.006';
-}
 # ABSTRACT: Base module for Statocles modules
-
+$Statocles::Base::VERSION = '0.007';
 use strict;
 use warnings;
 use base 'Import::Base';
@@ -14,7 +11,7 @@ sub modules {
         strict => [],
         warnings => [],
         feature => [qw( :5.10 )],
-        'File::Spec::Functions' => [qw( catdir catfile splitpath splitdir catpath )],
+        'Path::Tiny' => [qw( rootdir cwd )],
     );
 }
 
@@ -30,7 +27,7 @@ Statocles::Base - Base module for Statocles modules
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 SYNOPSIS
 
@@ -46,15 +43,20 @@ This module imports the following into your namespace:
 
 =over
 
-=item strict
+=item L<Statocles>
 
-=item warnings
+The base module is imported to make sure that L<File::Share> can find the right
+share directory.
 
-=item feature
+=item L<strict>
+
+=item L<warnings>
+
+=item L<feature>
 
 Currently the 5.10 feature bundle
 
-=item File::Spec::Functions qw( catdir catfile splitpath splitdir catpath )
+=item L<Path::Tiny> qw( path rootdir )
 
 We do a lot of work with the filesystem.
 

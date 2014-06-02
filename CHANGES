@@ -1,9 +1,93 @@
 ==================================================
-Changes from 2013-05-29 00:00:00 +0000 to present.
+Changes from 2013-06-02 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.006 at 2014-05-29 06:02:14 +0000
+version 0.007 at 2014-06-02 05:08:17 +0000
+------------------------------------------
+
+  Change: c7e0f947d10423d7587c21a9e977ad199ec18f1d
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-02 00:07:23 +0000
+
+    Release v0.007 
+
+  Change: 0c52f61716eeb5b8d6e4ece041f8b414b3bebe48
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-01 20:24:26 +0000
+
+    add tags attr to document
+
+    Tags are used to categorize documents. Tags may be specified as an
+    array in the YAML or as a comma-seperated string.
+
+    This does not actually add any additional display or special handling
+    of tags. 
+
+  Change: 5deb06f4b2e67e89ad7fe4f87c13d54301367f1b
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-01 20:23:35 +0000
+
+    remove hard-coded document paths in test
+
+    This will let us add new documents to the test blog without having to
+    explicitly specify them here. 
+
+  Change: 45daeb858af40b20c06d1679a879e39b5551d441
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-01 19:42:30 +0000
+
+    remove unused attribute
+
+    The git site uses the deploy store, not a simple dir as I first
+    imagined. 
+
+  Change: 87603007c4a57fbbf582182772fa890a3da91a8f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-01 19:41:10 +0000
+
+    add/update links in documentation
+
+    Fixed a couple wrong docs as well. I imagine a bunch of these are
+    broken links, but we won't know until metacpan renders them...
+
+    Fixes #44 
+
+  Change: 3db523e6d2b0d7ecf7bea3c8049fba51caa3e623
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-01 18:46:07 +0000
+
+    migrate to Path::Tiny
+
+    This makes a bunch of nicer code
+
+    Fixes #45 
+
+  Change: 634cc795870d78dbceb525aabbfa0b6f532f1528
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-01 15:23:16 +0000
+
+    Set a real git config user name/email
+
+    Just setting the environment variables does not seem to prevent the
+    problem of no user config. Hopefully this works...
+
+    Fixes #47 
+
+  Change: 418ef5bb4da0d0562fa3fbde22486498e55d9de7
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-30 01:05:34 +0000
+
+    switch to Type::Tiny. thanks mst! 
+
+  Change: 83a5142e0581a6d4303f6a18f1bcfd70298e9fdf
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-05-29 01:26:30 +0000
+
+    fix link to Jekyll. Thanks buu! 
+
+------------------------------------------
+version 0.006 at 2014-05-29 06:01:50 +0000
 ------------------------------------------
 
   Change: 8519cbbb196f627774bc2e11b05def5553421e37

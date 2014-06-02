@@ -1,9 +1,6 @@
 package Statocles::Page::Document;
-{
-  $Statocles::Page::Document::VERSION = '0.006';
-}
 # ABSTRACT: Render documents into HTML
-
+$Statocles::Page::Document::VERSION = '0.007';
 use Statocles::Class;
 with 'Statocles::Page';
 use Text::Markdown;
@@ -56,21 +53,22 @@ Statocles::Page::Document - Render documents into HTML
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 DESCRIPTION
 
-This page class takes a single document and renders it as HTML.
+This page class takes a single L<document|Statocles::Document> and renders it as HTML.
 
 =head1 ATTRIBUTES
 
 =head2 document
 
-The document this page will render.
+The L<document|Statocles::Document> this page will render.
 
 =head2 template
 
-The template to render the document.
+The L<template|Statocles::Template> to render the
+L<document|Statocles::Document>.
 
 =head1 METHODS
 
@@ -80,7 +78,8 @@ Generate the document HTML by converting Markdown.
 
 =head2 render
 
-Render the page, using the C<template> and wrapping with the C<layout>.
+Render the page, using the L<template|Statocles::Page/template> and wrapping
+with the L<layout|Statocles::Page/layout>.
 
 =head1 AUTHOR
 

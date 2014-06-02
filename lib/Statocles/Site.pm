@@ -1,9 +1,6 @@
 package Statocles::Site;
-{
-  $Statocles::Site::VERSION = '0.006';
-}
 # ABSTRACT: An entire, configured website
-
+$Statocles::Site::VERSION = '0.007';
 use Statocles::Class;
 
 
@@ -100,11 +97,16 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 SYNOPSIS
 
     my $site = Statocles::Site->new(
+        title => 'My Site',
+        nav => [
+            { title => 'Home', href => '/' },
+            { title => 'Blog', href => '/blog' },
+        ],
         apps => {
             blog => Statocles::App::Blog->new( ... ),
         },
@@ -114,7 +116,7 @@ version 0.006
 
 =head1 DESCRIPTION
 
-A Statocles::Site is a collection of applications.
+A Statocles::Site is a collection of L<applications|Statocles::App>.
 
 =head1 ATTRIBUTES
 
@@ -141,11 +143,11 @@ The main site navigation. An array of hashes with the following keys:
 
 =head2 build_store
 
-The Statocles::Store object to use for C<build()>.
+The L<store|Statocles::Store> object to use for C<build()>.
 
 =head2 deploy_store
 
-The Statocles::Store object to use for C<deploy()>. Defaults to L<build_store>.
+The L<store|Statocles::Store> object to use for C<deploy()>. Defaults to L<build_store>.
 
 =head1 METHODS
 
@@ -163,7 +165,7 @@ Write each application to its destination.
 
 =head2 write( store )
 
-Write the application to the given C<store>, a Statocles::Store object
+Write the application to the given L<store|Statocles::Store>.
 
 =head1 AUTHOR
 

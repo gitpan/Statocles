@@ -1,9 +1,6 @@
 package Statocles::Command;
-{
-  $Statocles::Command::VERSION = '0.006';
-}
 # ABSTRACT: The statocles command-line interface
-
+$Statocles::Command::VERSION = '0.007';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -77,7 +74,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 SYNOPSIS
 
@@ -92,7 +89,7 @@ This module implements the Statocles command-line interface.
 
 =head2 site
 
-The Statocles::Site we're working with.
+The L<site|Statocles::Site> we're working with.
 
 =head1 METHODS
 
@@ -100,6 +97,16 @@ The Statocles::Site we're working with.
 
 Run the command given in @argv. See L<statocles> for a list of commands and
 options.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<statocles>
+
+The documentation for the command-line application.
+
+=back
 
 =head1 AUTHOR
 

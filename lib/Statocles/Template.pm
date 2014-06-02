@@ -1,12 +1,8 @@
 package Statocles::Template;
-{
-  $Statocles::Template::VERSION = '0.006';
-}
 # ABSTRACT: A template object to pass around
-
+$Statocles::Template::VERSION = '0.007';
 use Statocles::Class;
 use Mojo::Template;
-use File::Slurp qw( read_file );
 
 
 has content => (
@@ -15,7 +11,7 @@ has content => (
     lazy => 1,
     default => sub {
         my ( $self ) = @_;
-        return scalar read_file( $self->path );
+        return Path::Tiny->new( $self->path )->slurp;
     },
 );
 
@@ -23,6 +19,9 @@ has content => (
 has path => (
     is => 'ro',
     isa => Str,
+    coerce => sub {
+        return "$_[0]"; # Force stringify in case of Path::Tiny objects
+    },
 );
 
 
@@ -75,7 +74,7 @@ Statocles::Template - A template object to pass around
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 DESCRIPTION
 
@@ -105,7 +104,9 @@ a scalar in the template.
 
 =head1 TEMPLATE LANGUAGE
 
-The default Statocles template language is Mojolicious's Embedded Perl template. Inside the template, every key of the %args passed to render() will be available as a simple scalar:
+The default Statocles template language is Mojolicious's Embedded Perl
+template. Inside the template, every key of the %args passed to render() will
+be available as a simple scalar:
 
     # template.tmpl
     % for my $p ( @$pages ) {

@@ -1,9 +1,6 @@
 package Statocles::Class;
-{
-  $Statocles::Class::VERSION = '0.006';
-}
 # ABSTRACT: Base module for all Statocles classes
-
+$Statocles::Class::VERSION = '0.007';
 use strict;
 use warnings;
 use base 'Statocles::Base';
@@ -14,7 +11,8 @@ sub modules {
     return (
         @modules,
         'Moo::Lax',
-        'MooX::Types::MooseLike::Base' => [qw( :all )],
+        'Types::Standard' => [qw( :all )],
+        'Types::Path::Tiny' => [qw( Path )],
     );
 }
 
@@ -30,7 +28,7 @@ Statocles::Class - Base module for all Statocles classes
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 SYNOPSIS
 
@@ -45,13 +43,17 @@ In addition to all the imports from L<Statocles::Base>, this module imports:
 
 =over
 
-=item Moo::Lax
+=item L<Moo::Lax>
 
 Moo without strictures.
 
-=item MooX::Types::MooseLike::Base
+=item L<Types::Standard>
 
 To get all the Moose-y type constraints.
+
+=item L<Types::Path::Tiny>
+
+To get L<Type::Tiny> types for L<Path::Tiny> objects.
 
 =back
 

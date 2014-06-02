@@ -1,9 +1,6 @@
 package Statocles::App;
-{
-  $Statocles::App::VERSION = '0.006';
-}
 # ABSTRACT: Base class for Statocles applications
-
+$Statocles::App::VERSION = '0.007';
 use Statocles::Class;
 
 1;
@@ -18,12 +15,13 @@ Statocles::App - Base class for Statocles applications
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 DESCRIPTION
 
-A Statocles App turns Statocles::Documents into a set of Statocles::Pages
-that can then be written to the filesystem (or served directly, if desired).
+A Statocles App turns L<documents|Statocles::Documents> into a set of
+L<pages|Statocles::Pages> that can then be written to the filesystem (or served
+directly, if desired).
 
 =head1 AUTHOR
 

@@ -1,9 +1,6 @@
 package Statocles::App::Blog;
-{
-  $Statocles::App::Blog::VERSION = '0.006';
-}
 # ABSTRACT: A blog application
-
+$Statocles::App::Blog::VERSION = '0.007';
 use Statocles::Class;
 use Statocles::Page::Document;
 use Statocles::Page::List;
@@ -57,7 +54,7 @@ ENDHELP
             sprintf( '%02i', $day ),
             "$slug.yml",
         );
-        my $path = catfile( @parts );
+        my $path = Path::Tiny->new( @parts );
         my %doc = (
             %$default_post,
             title => $title,
@@ -118,7 +115,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 DESCRIPTION
 
@@ -128,7 +125,7 @@ This is a simple blog application for Statocles.
 
 =head2 source
 
-The Statocles::Source to read for documents.
+The L<store|Statocles::Store> to read for documents.
 
 =head2 url_root
 
@@ -137,8 +134,8 @@ root. Use this to ensure two apps do not try to write the same path.
 
 =head2 theme
 
-The Statocles::Theme for this app. See L<#THEME> for what templates this app
-requires.
+The L<theme|Statocles::Theme> for this app. See L</THEME> for what templates this app
+uses.
 
 =head1 METHODS
 
@@ -153,11 +150,11 @@ Get the individual post Statocles::Page objects.
 
 =head2 index()
 
-Get the index page (a Statocles::Page object) for this application.
+Get the index page (a L<page|Statocles::Page> object) for this application.
 
 =head2 pages()
 
-Get all the pages for this application.
+Get all the L<pages|Statocles::Page> for this application.
 
 =head1 THEME
 
@@ -171,7 +168,7 @@ The index page template. Gets the following template variables:
 
 =item site
 
-The Statocles::Site object.
+The L<Statocles::Site> object.
 
 =item pages
 
@@ -201,7 +198,7 @@ The main post page template. Gets the following template variables:
 
 =item site
 
-The Statocles::Site object
+The L<Statocles::Site> object
 
 =item content
 
@@ -216,6 +213,14 @@ The post title
 The post author
 
 =back
+
+=back
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Statocles::App>
 
 =back
 

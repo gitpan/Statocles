@@ -1,21 +1,16 @@
 package Statocles::Store;
-{
-  $Statocles::Store::VERSION = '0.006';
-}
 # ABSTRACT: A repository for Documents and Pages
-
+$Statocles::Store::VERSION = '0.007';
 use Statocles::Class;
 use Statocles::Document;
-use File::Find qw( find );
-use File::Spec::Functions qw( file_name_is_absolute splitdir );
-use File::Path qw( make_path );
-use File::Slurp qw( write_file );
 use YAML;
+use File::Spec::Functions qw( splitdir );
 
 
 has path => (
     is => 'ro',
-    isa => Str,
+    isa => Path,
+    coerce => Path->coercion,
     required => 1,
 );
 
@@ -32,18 +27,14 @@ sub read_documents {
     my ( $self ) = @_;
     my $root_path = $self->path;
     my @docs;
-    find(
-        sub {
-            if ( /[.]ya?ml$/ ) {
-                my $data = $self->read_document( $_ );
-                my $rel_path = $File::Find::name;
-                $rel_path =~ s/\Q$root_path//;
-                my $doc_path = join "/", splitdir( $rel_path );
-                push @docs, Statocles::Document->new( path => $rel_path, %$data );
-            }
-        },
-        $root_path,
-    );
+    my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
+    while ( my $path = $iter->() ) {
+        if ( $path =~ /[.]ya?ml$/ ) {
+            my $data = $self->read_document( $path );
+            my $rel_path = rootdir->child( $path->relative( $root_path ) );
+            push @docs, Statocles::Document->new( path => $rel_path, %$data );
+        }
+    }
     return \@docs;
 }
 
@@ -83,21 +74,18 @@ sub read_document {
 
 sub write_document {
     my ( $self, $path, $doc ) = @_;
-    if ( file_name_is_absolute( $path ) ) {
+    $path = Path->coercion->( $path ); # Allow stringified paths, $path => $doc
+    if ( $path->is_absolute ) {
         die "Cannot write document '$path': Path must not be absolute";
     }
-    my $full_path = catfile( $self->path, $path );
-    my ( $vol, $dirs, $file ) = splitpath( $full_path );
-    make_path( catpath( $vol, $dirs ) );
 
     $doc = { %{ $doc } }; # Shallow copy for safety
     my $content = delete $doc->{content};
     my $header = YAML::Dump( $doc );
     chomp $header;
 
-    open my $fh, '>', $full_path or die "Could not open '$full_path' for writing: $!";
-    print $fh join "\n", $header, '---', $content;
-    close $fh;
+    my $full_path = $self->path->child( $path );
+    $full_path->touchpath->spew( join "\n", $header, '---', $content );
 
     return $full_path;
 }
@@ -105,10 +93,8 @@ sub write_document {
 
 sub write_page {
     my ( $self, $path, $html ) = @_;
-    my $full_path = catfile( $self->path, $path );
-    my ( $volume, $dirs, $file ) = splitpath( $full_path );
-    make_path( catpath( $volume, $dirs, '' ) );
-    write_file( $full_path, $html );
+    my $full_path = $self->path->child( $path );
+    $full_path->touchpath->spew( $html );
     return;
 }
 
@@ -124,13 +110,15 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 DESCRIPTION
 
-A Statocles::Store reads and writes Documents and Pages.
+A Statocles::Store reads and writes L<documents|Statocles::Document> and
+L<pages|Statocles::Page>.
 
-This class handles the parsing and inflating of Document objects.
+This class handles the parsing and inflating of
+L<"document objects"|Statocles::Document>.
 
 =head2 Frontmatter Document Format
 
@@ -149,34 +137,34 @@ on the bottom, like so:
 
 =head2 path
 
-The path to the directory containing the documents.
+The path to the directory containing the L<documents|Statocles::Document>.
 
 =head2 documents
 
-All the documents currently read by this store.
+All the L<documents|Statocles::Document> currently read by this store.
 
 =head1 METHODS
 
 =head2 read_documents()
 
-Read the directory C<path> and create the Statocles::Document objects inside.
+Read the directory C<path> and create the L<document|Statocles::Document> objects inside.
 
 =head2 read_document( path )
 
-Read a single document in either pure YAML or combined YAML/Markdown
-(Frontmatter) format and return a datastructure suitable to be given to
-C<Statocles::Document::new>.
+Read a single L<document|Statocles::Document> in either pure YAML or combined
+YAML/Markdown (Frontmatter) format and return a datastructure suitable to be
+given to L<Statocles::Document|Statocles::Document>.
 
 =head2 write_document( $path, $doc )
 
-Write a document to the store. Returns the full path to the newly-updated
-document.
+Write a L<document|Statocles::Document> to the store. Returns the full path to
+the newly-updated document.
 
 The document is written in Frontmatter format.
 
 =head2 write_page( $path, $html )
 
-Write the page C<html> to the given C<path>.
+Write the L<page|Statocles::Page> C<html> to the given C<path>.
 
 =head1 AUTHOR
 

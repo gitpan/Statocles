@@ -1,9 +1,6 @@
 package Statocles::Role;
-{
-  $Statocles::Role::VERSION = '0.006';
-}
 # ABSTRACT: Base module for all Statocles roles
-
+$Statocles::Role::VERSION = '0.007';
 use strict;
 use warnings;
 use base 'Statocles::Class';
@@ -29,7 +26,7 @@ Statocles::Role - Base module for all Statocles roles
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 SYNOPSIS
 
@@ -40,12 +37,12 @@ version 0.006
 
 This is the base module that all Statocles roles should use.
 
-In addition to all the imports from L<Statocles::Class> (except Moo::Lax), this
-module imports:
+In addition to all the imports from L<Statocles::Class> (except L<Moo::Lax>),
+this module imports:
 
 =over
 
-=item Moo::Role::Lax
+=item L<Moo::Role::Lax>
 
 Turns the module into a Role.
 
