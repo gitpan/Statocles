@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.007';
+$Statocles::VERSION = '0.008';
 # This module exists for both documentation and to help File::Share
 # find the right share dir
 
@@ -16,7 +16,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 DESCRIPTION
 

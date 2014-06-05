@@ -3,39 +3,39 @@ abstract: 'A static site generator'
 author:
   - 'Doug Bell <preaction@cpan.org>'
 build_requires:
-  Dir::Self: 0
-  Module::Build: 0.3601
-  Test::Compile: 0
-  Test::Most: 0
+  Dir::Self: '0'
+  Module::Build: '0.3601'
+  Test::Compile: '0'
+  Test::Most: '0'
 configure_requires:
-  ExtUtils::MakeMaker: 6.30
-  File::ShareDir::Install: 0.06
-  Module::Build: 0.3601
+  ExtUtils::MakeMaker: '6.30'
+  File::ShareDir::Install: '0.06'
+  Module::Build: '0.3601'
 dynamic_config: 0
 generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.141520'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: Statocles
 requires:
-  Beam::Wire: 0
-  File::Copy::Recursive: 0
-  File::Share: 0
-  Git::Repository: 0
-  Import::Base: 0
-  Mojolicious: 0
-  Moo::Lax: 0
-  Path::Tiny: 0
-  Pod::Usage::Return: 0
-  Text::Markdown: 0
-  Type::Tiny: 0
-  Types::Path::Tiny: 0
-  YAML: 0
-  strict: 0
-  warnings: 0
+  Beam::Wire: '0'
+  File::Copy::Recursive: '0'
+  File::Share: '0'
+  Git::Repository: '0'
+  Import::Base: '0'
+  Mojolicious: '0'
+  Moo::Lax: '0'
+  Path::Tiny: '0.054'
+  Pod::Usage::Return: '0'
+  Text::Markdown: '0'
+  Type::Tiny: '0'
+  Types::Path::Tiny: '0'
+  YAML: '0'
+  strict: '0'
+  warnings: '0'
 resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: https://github.com/preaction/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: 0.007
+version: '0.008'

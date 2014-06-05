@@ -1,9 +1,86 @@
 ==================================================
-Changes from 2013-06-02 00:00:00 +0000 to present.
+Changes from 2013-06-05 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.007 at 2014-06-02 05:08:17 +0000
+version 0.008 at 2014-06-05 04:35:37 +0000
+------------------------------------------
+
+  Change: 93c6c2ae3689cb1654e719f2a56ab9017242638f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-04 23:35:12 +0000
+
+    release v0.008 
+
+  Change: 9861071352a4af5663d6ab46091225d66266965f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-04 23:01:28 +0000
+
+    add tag navigation to the blog
+
+    Applications are now attached to the pages that create them so we can
+    get application-level data like which tags are in this app.
+
+    This finishes #10 
+
+  Change: 22114ce39ae33db1ae95fab9d1dd5c2da3905b43
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-04 23:00:47 +0000
+
+    add tag pages to the blog
+
+    These pages list the posts matching the given tag.
+
+    This partly fixes #10 
+
+  Change: adc4d7e3d95b4c479b544e57adbb5277c6f70ebf
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-04 23:00:28 +0000
+
+    avoid swp files when scanning for documents 
+
+  Change: 23214c0d00128a265c9a192f3f591746c5ebf0f4
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-04 20:54:47 +0000
+
+    bump Path::Tiny version to 0.054
+
+    We rely on a few features of 0.054:
+
+    1) FREEZE/THAW/TO_JSON - YAML serialization in t/command.t 2)
+    basename( SUFFIX ) - Statocles::Theme
+
+    Fixes #55 
+
+  Change: f4184479e0884d39f3c657d6bfae996a5ed80c65
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-04 20:14:16 +0000
+
+    remove the site/ directory from the release
+
+    This directory is built by the example site.yml in the git repo, and
+    is only desirable for the git repo.
+
+    Fixes #53 
+
+  Change: 329fc41eb49ea3dfce5ca1878f4874c4f4d7c2dd
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-04 20:08:40 +0000
+
+    handle older versions of git better
+
+    Fixes #54 
+
+  Change: 7109e59fd1bd6f6cd64006fd03fe4402d9827713
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-04 20:08:30 +0000
+
+    Git::Repository requires git 1.5 or higher
+
+    Fixes #54 
+
+------------------------------------------
+version 0.007 at 2014-06-02 05:07:23 +0000
 ------------------------------------------
 
   Change: c7e0f947d10423d7587c21a9e977ad199ec18f1d

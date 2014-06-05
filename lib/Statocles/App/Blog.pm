@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.007';
+$Statocles::App::Blog::VERSION = '0.008';
 use Statocles::Class;
 use Statocles::Page::Document;
 use Statocles::Page::List;
@@ -77,6 +77,7 @@ sub post_pages {
         $path =~ s{/{2,}}{/}g;
         $path =~ s{[.]\w+$}{.html};
         push @pages, Statocles::Page::Document->new(
+            app => $self,
             layout => $self->theme->templates->{site}{layout},
             template => $self->theme->templates->{blog}{post},
             document => $doc,
@@ -90,17 +91,65 @@ sub post_pages {
 sub index {
     my ( $self ) = @_;
     return Statocles::Page::List->new(
+        app => $self,
         path => join( "/", $self->url_root, 'index.html' ),
         template => $self->theme->template( blog => 'index' ),
         layout => $self->theme->template( site => 'layout' ),
+        # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } $self->post_pages ],
     );
 }
 
 
+sub tag_pages {
+    my ( $self ) = @_;
+
+    my %tagged_docs = $self->_tag_docs;
+
+    my @tag_pages;
+    for my $tag ( keys %tagged_docs ) {
+        push @tag_pages, Statocles::Page::List->new(
+            app => $self,
+            path => $self->_tag_url( $tag ),
+            template => $self->theme->template( blog => 'index' ),
+            layout => $self->theme->template( site => 'layout' ),
+            # Sorting by path just happens to also sort by date
+            pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs{ $tag } } ],
+        );
+    }
+
+    return @tag_pages;
+}
+
+
 sub pages {
     my ( $self ) = @_;
-    return ( $self->post_pages, $self->index );
+    return ( $self->post_pages, $self->index, $self->tag_pages );
+}
+
+
+sub tags {
+    my ( $self ) = @_;
+    my %tagged_docs = $self->_tag_docs;
+    return map {; { title => $_, href => $self->_tag_url( $_ ), } }
+        sort keys %tagged_docs
+}
+
+sub _tag_docs {
+    my ( $self ) = @_;
+    my %tagged_docs;
+    for my $page ( $self->post_pages ) {
+        for my $tag ( @{ $page->document->tags } ) {
+            push @{ $tagged_docs{ $tag } }, $page;
+        }
+    }
+    return %tagged_docs;
+}
+
+sub _tag_url {
+    my ( $self, $tag ) = @_;
+    $tag =~ s/\s+/-/g;
+    return join "/", $self->url_root, "tag", "$tag.html";
 }
 
 1;
@@ -115,7 +164,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 DESCRIPTION
 
@@ -152,9 +201,21 @@ Get the individual post Statocles::Page objects.
 
 Get the index page (a L<page|Statocles::Page> object) for this application.
 
+=head2 tag_pages()
+
+Get L<pages|Statocles::Page> for the tags in the blog post documents.
+
 =head2 pages()
 
 Get all the L<pages|Statocles::Page> for this application.
+
+=head2 tags()
+
+Get a set of hashrefs suitable for creating a list of tag links. The hashrefs
+contain the following keys:
+
+    title => 'The tag text'
+    href => 'The URL to the tag page'
 
 =head1 THEME
 

@@ -1,6 +1,6 @@
 package Statocles::Template;
 # ABSTRACT: A template object to pass around
-$Statocles::Template::VERSION = '0.007';
+$Statocles::Template::VERSION = '0.008';
 use Statocles::Class;
 use Mojo::Template;
 
@@ -74,7 +74,7 @@ Statocles::Template - A template object to pass around
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 DESCRIPTION
 

@@ -1,11 +1,17 @@
 package Statocles::Page;
 # ABSTRACT: Render documents into HTML
-$Statocles::Page::VERSION = '0.007';
+$Statocles::Page::VERSION = '0.008';
 use Statocles::Role;
 use Statocles::Template;
 use Text::Markdown;
 
 requires 'render';
+
+
+has app => (
+    is => 'ro',
+    isa => InstanceOf['Statocles::App'],
+);
 
 
 has path => (
@@ -56,7 +62,7 @@ Statocles::Page - Render documents into HTML
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 DESCRIPTION
 
@@ -65,6 +71,10 @@ renders them into one or more HTML pages using a main L<template|/template>
 and a L<layout template|/layout>.
 
 =head1 ATTRIBUTES
+
+=head2 app
+
+The application this page came from, so we can give it to the templates.
 
 =head2 path
 

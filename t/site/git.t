@@ -1,9 +1,11 @@
 
 use Statocles::Test;
 BEGIN {
-    my $git_version = `git --version`;
+    my $git_version = ( split ' ', `git --version` )[-1];
     plan skip_all => 'Git not installed' unless $git_version;
     diag "Git version: $git_version";
+    my $v = sprintf '%i.%03i', split /[.]/, $git_version;
+    plan skip_all => 'Git 1.5 or higher required' unless $v >= 1.005;
 };
 
 use Statocles::Site::Git;
@@ -66,7 +68,12 @@ done_testing;
 sub site {
     my ( $tmpdir, %site_args ) = @_;
 
-    Git::Repository->run( init => "$tmpdir" );
+    # Git before 1.6.4 does not allow directory as argument to "init"
+    my $cwd = cwd;
+    chdir $tmpdir;
+    Git::Repository->run( "init" );
+    chdir $cwd;
+
     my $git = Git::Repository->new( work_tree => "$tmpdir" );
 
     # Set some config so Git knows who we are (and doesn't complain)

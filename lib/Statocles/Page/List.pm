@@ -1,6 +1,6 @@
 package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
-$Statocles::Page::List::VERSION = '0.007';
+$Statocles::Page::List::VERSION = '0.008';
 use Statocles::Class;
 with 'Statocles::Page';
 use Statocles::Template;
@@ -33,10 +33,12 @@ sub render {
             map { +{ %{ $_->document }, content => $_->content, path => $_->path } }
             @{ $self->pages }
         ],
+        app => $self->app,
     );
     return $self->layout->render(
         %args,
         content => $content,
+        app => $self->app,
     );
 }
 
@@ -52,7 +54,7 @@ Statocles::Page::List - A page presenting a list of other pages
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 DESCRIPTION
 

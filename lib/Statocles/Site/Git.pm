@@ -1,6 +1,6 @@
 package Statocles::Site::Git;
 # ABSTRACT: A git-based site
-$Statocles::Site::Git::VERSION = '0.007';
+$Statocles::Site::Git::VERSION = '0.008';
 use Statocles::Class;
 extends 'Statocles::Site';
 
@@ -32,7 +32,9 @@ sub deploy {
         if ( $path->is_file ) {
             my $name = "$path";
             $name =~ s/\Q$build_dir/$deploy_dir/;
-            push @files, $name;
+            # Git versions before 1.7.4.1 require a relative path to 'git add'
+            my $deploy_path = Path::Tiny->new( $name );
+            push @files, $deploy_path->relative( $deploy_dir )->stringify;
         }
     };
 
@@ -86,7 +88,7 @@ Statocles::Site::Git - A git-based site
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 DESCRIPTION
 
