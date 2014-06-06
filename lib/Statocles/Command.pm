@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.008';
+$Statocles::Command::VERSION = '0.009';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -74,7 +74,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.008
+version 0.009
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,6 @@
 package Statocles::Base;
 # ABSTRACT: Base module for Statocles modules
-$Statocles::Base::VERSION = '0.008';
+$Statocles::Base::VERSION = '0.009';
 use strict;
 use warnings;
 use base 'Import::Base';
@@ -12,6 +12,7 @@ sub modules {
         warnings => [],
         feature => [qw( :5.10 )],
         'Path::Tiny' => [qw( rootdir cwd )],
+        'Time::Piece',
     );
 }
 
@@ -27,7 +28,7 @@ Statocles::Base - Base module for Statocles modules
 
 =head1 VERSION
 
-version 0.008
+version 0.009
 
 =head1 SYNOPSIS
 

@@ -1,10 +1,16 @@
 package Statocles::Page::Document;
 # ABSTRACT: Render documents into HTML
-$Statocles::Page::Document::VERSION = '0.008';
+$Statocles::Page::Document::VERSION = '0.009';
 use Statocles::Class;
 with 'Statocles::Page';
 use Text::Markdown;
 use Statocles::Template;
+
+
+has published => (
+    is => 'ro',
+    isa => InstanceOf['Time::Piece'],
+);
 
 
 has document => (
@@ -34,12 +40,14 @@ sub render {
         content => $self->content,
         path => $self->path,
         app => $self->app,
+        published => $self->published,
     );
     return $self->layout->render(
         %args,
         content => $content,
         path => $self->path,
         app => $self->app,
+        published => $self->published,
     );
 }
 
@@ -55,13 +63,17 @@ Statocles::Page::Document - Render documents into HTML
 
 =head1 VERSION
 
-version 0.008
+version 0.009
 
 =head1 DESCRIPTION
 
 This page class takes a single L<document|Statocles::Document> and renders it as HTML.
 
 =head1 ATTRIBUTES
+
+=head2 published
+
+The publish date/time of this page. A L<Time::Piece> object.
 
 =head2 document
 

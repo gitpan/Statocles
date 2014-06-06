@@ -1,9 +1,70 @@
 ==================================================
-Changes from 2013-06-05 00:00:00 +0000 to present.
+Changes from 2013-06-06 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.008 at 2014-06-05 04:35:37 +0000
+version 0.009 at 2014-06-06 20:15:45 +0000
+------------------------------------------
+
+  Change: 4cbc0bb5ae54d96e12ea57eca7c46132da928d67
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-06 15:15:15 +0000
+
+    release v0.009
+
+    Got the readmes and everything in another commit. Damn! Gotta figure
+    out a Dist::Zilla way of fixing this. 
+
+  Change: be6663337d6974f42d8414e8f0a41e5f23f31529
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-05 20:41:05 +0000
+
+    add the published date to the blog pages
+
+    Fixes #25 
+
+  Change: ae82473bf82aa986d9f3cac46b4cae433048f116
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-05 20:38:57 +0000
+
+    add published date to pages
+
+    Adding each attribute explicitly to the render() sub is annoying, but
+    if they're lazy, they have to be generated... Something has to be
+    done... 
+
+  Change: ad6dcaf6e2741f38d8855ff657c74eb75f38c44c
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-05 20:05:46 +0000
+
+    add last_modified and tags to default blog post
+
+    The "blog post" now includes tags and last_modified. 
+
+  Change: a8211b56c767d96181a61e0cfde43c47a299fec9
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-05 19:46:46 +0000
+
+    add last_modified to documents
+
+    The last_modified field is a Time::Piece object serialized into
+    'YYYY-MM-DD HH:MM:SS'.
+
+    The _freeze_document and _thaw_document methods will probably need to
+    be improved to be more robust and DWIMmy. 
+
+  Change: af0e9bad0db6d19c95f6ebf5526e376ad7a9d46d
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-05 18:40:40 +0000
+
+    make the default templates more semantic
+
+    <main> should encapsulate the main content of the page. <article>
+    should fully encapsulate the given article when there are more than
+    one. 
+
+------------------------------------------
+version 0.008 at 2014-06-05 04:35:12 +0000
 ------------------------------------------
 
   Change: 93c6c2ae3689cb1654e719f2a56ab9017242638f

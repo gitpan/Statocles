@@ -75,8 +75,11 @@ sub pages {
         my $page_path = join '/', '', 'blog', @{ $doc_spec->{ path } };
         $page_path =~ s/[.]yml$/.html/;
 
+        my $date = join '-', @{ $doc_spec->{ path } }[0..2];
+
         my $page = Statocles::Page::Document->new(
             app => $app,
+            published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
             template => $theme->template( blog => 'post' ),
             layout => $theme->template( site => 'layout' ),
             path => $page_path,
@@ -194,14 +197,19 @@ subtest 'commands' => sub {
                 my $doc = $app->source->read_document( $doc_path );
                 cmp_deeply $doc, {
                     title => 'This is a Title',
-                    author => '',
+                    author => undef,
+                    tags => undef,
+                    last_modified => isa( 'Time::Piece' ),
                     content => <<'ENDMARKDOWN',
 Markdown content goes here.
 ENDMARKDOWN
                 };
-                eq_or_diff $doc_path->slurp, <<'ENDCONTENT';
+                my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
+                eq_or_diff $doc_path->slurp, <<ENDCONTENT;
 ---
-author: ''
+author: ~
+last_modified: $dt_str
+tags: ~
 title: This is a Title
 ---
 Markdown content goes here.

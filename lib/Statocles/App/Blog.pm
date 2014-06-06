@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.008';
+$Statocles::App::Blog::VERSION = '0.009';
 use Statocles::Class;
 use Statocles::Page::Document;
 use Statocles::Page::List;
@@ -29,7 +29,8 @@ has theme => (
 
 
 our $default_post = {
-    author => '',
+    author => undef,
+    tags => undef,
     content => <<'ENDCONTENT',
 Markdown content goes here.
 ENDCONTENT
@@ -58,6 +59,7 @@ ENDHELP
         my %doc = (
             %$default_post,
             title => $title,
+            last_modified => Time::Piece->new,
         );
         my $full_path = $self->source->write_document( $path => \%doc );
         print "New post at: $full_path\n";
@@ -76,12 +78,17 @@ sub post_pages {
         my $path = join "/", $self->url_root, $doc->path;
         $path =~ s{/{2,}}{/}g;
         $path =~ s{[.]\w+$}{.html};
+
+        my @date_parts = $path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+$};
+        my $date = join "-", @date_parts;
+
         push @pages, Statocles::Page::Document->new(
             app => $self,
             layout => $self->theme->templates->{site}{layout},
             template => $self->theme->templates->{blog}{post},
             document => $doc,
             path => $path,
+            published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
         );
     }
     return @pages;
@@ -164,7 +171,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.008
+version 0.009
 
 =head1 DESCRIPTION
 

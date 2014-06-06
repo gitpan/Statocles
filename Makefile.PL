@@ -41,6 +41,7 @@ my %WriteMakefileArgs = (
     "Path::Tiny" => "0.054",
     "Pod::Usage::Return" => 0,
     "Text::Markdown" => 0,
+    "Time::Piece" => 0,
     "Type::Tiny" => 0,
     "Types::Path::Tiny" => 0,
     "YAML" => 0,
@@ -52,7 +53,7 @@ my %WriteMakefileArgs = (
     "Test::Compile" => 0,
     "Test::Most" => 0
   },
-  "VERSION" => "0.008",
+  "VERSION" => "0.009",
   "test" => {
     "TESTS" => "t/*.t t/app/*.t t/page/*.t t/site/*.t"
   }
@@ -74,6 +75,7 @@ my %FallbackPrereqs = (
   "Test::Compile" => 0,
   "Test::Most" => 0,
   "Text::Markdown" => 0,
+  "Time::Piece" => 0,
   "Type::Tiny" => 0,
   "Types::Path::Tiny" => 0,
   "YAML" => 0,

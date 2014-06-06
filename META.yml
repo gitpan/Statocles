@@ -29,6 +29,7 @@ requires:
   Path::Tiny: '0.054'
   Pod::Usage::Return: '0'
   Text::Markdown: '0'
+  Time::Piece: '0'
   Type::Tiny: '0'
   Types::Path::Tiny: '0'
   YAML: '0'
@@ -38,4 +39,4 @@ resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: https://github.com/preaction/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: '0.008'
+version: '0.009'
