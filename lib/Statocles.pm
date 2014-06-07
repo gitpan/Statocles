@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.009';
+$Statocles::VERSION = '0.010';
 # This module exists for both documentation and to help File::Share
 # find the right share dir
 
@@ -16,9 +16,11 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.009
+version 0.010
 
 =head1 DESCRIPTION
+
+This document is an overview of the Statocles application.
 
 Statocles is a tool for building static HTML pages from documents.
 
@@ -57,6 +59,11 @@ This page renders a single document.
 This page renders a list of other pages (not documents).
 
 =back
+
+=head1 GETTING STARTED
+
+To get started with your own Statocle site, see
+L<the setup help|Statocles::Help::Setup>.
 
 =head1 APPLICATIONS
 

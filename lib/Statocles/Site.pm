@@ -1,6 +1,6 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.009';
+$Statocles::Site::VERSION = '0.010';
 use Statocles::Class;
 
 
@@ -25,8 +25,8 @@ has index => (
 
 has nav => (
     is => 'ro',
-    isa => ArrayRef[HashRef[Str]],
-    default => sub { [] },
+    isa => HashRef[ArrayRef[HashRef[Str]]],
+    default => sub { {} },
 );
 
 
@@ -71,8 +71,14 @@ sub write {
     );
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
+
+        my $index_path;
+        if ( $self->index eq $app_name ) {
+            $index_path = ($app->index)[0]->path;
+        }
+
         for my $page ( $app->pages ) {
-            if ( $self->index eq $app_name && $page->path eq $app->index->path ) {
+            if ( $index_path && $page->path eq $index_path ) {
                 # Rename the app's page so that we don't get two pages with identical
                 # content
                 $page = Statocles::Page::List->new(
@@ -97,7 +103,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.009
+version 0.010
 
 =head1 SYNOPSIS
 
@@ -136,10 +142,26 @@ method will be called to get the index page.
 
 =head2 nav
 
-The main site navigation. An array of hashes with the following keys:
+Named navigation lists. A hash of arrays of hashes with the following keys:
 
     title - The title of the link
     href - The href of the link
+
+The most likely name for your navigation will be C<main>. Navigation names
+are defined by your L<theme|Statocles::Theme>. For example:
+
+    {
+        main => [
+            {
+                title => 'Blog',
+                href => '/blog/index.html',
+            },
+            {
+                title => 'Contact',
+                href => '/contact.html',
+            },
+        ],
+    }
 
 =head2 build_store
 

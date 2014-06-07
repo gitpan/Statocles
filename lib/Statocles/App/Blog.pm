@@ -1,7 +1,8 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.009';
+$Statocles::App::Blog::VERSION = '0.010';
 use Statocles::Class;
+use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Page::Document;
 use Statocles::Page::List;
 
@@ -28,6 +29,13 @@ has theme => (
 );
 
 
+has page_size => (
+    is => 'ro',
+    isa => Int,
+    default => 5,
+);
+
+
 our $default_post = {
     author => undef,
     tags => undef,
@@ -41,21 +49,36 @@ sub command {
     if ( $argv[0] eq 'help' ) {
         print <<ENDHELP;
 $name help -- This help file
-$name post <title> -- Create a new blog post with the given title
+$name post [--date YYYY-MM-DD] <title> -- Create a new blog post with the given title
 ENDHELP
     }
     elsif ( $argv[0] eq 'post' ) {
+        my %opt;
+        GetOptionsFromArray( \@argv, \%opt,
+            'date:s',
+        );
+
         my $title = join " ", @argv[1..$#argv];
         my $slug = lc $title;
         $slug =~ s/\s+/-/g;
-        my ( undef, undef, undef, $day, $mon, $year ) = localtime;
-        my @parts = (
-            sprintf( '%04i', $year + 1900 ),
-            sprintf( '%02i', $mon + 1 ),
+
+        my ( $year, $mon, $day );
+        if ( $opt{ date } ) {
+            ( $year, $mon, $day ) = split /-/, $opt{date};
+        }
+        else {
+            ( undef, undef, undef, $day, $mon, $year ) = localtime;
+            $year += 1900;
+            $mon += 1;
+        }
+
+        my @date_parts = (
+            sprintf( '%04i', $year ),
+            sprintf( '%02i', $mon ),
             sprintf( '%02i', $day ),
-            "$slug.yml",
         );
-        my $path = Path::Tiny->new( @parts );
+
+        my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
         my %doc = (
             %$default_post,
             title => $title,
@@ -73,6 +96,7 @@ ENDHELP
 
 sub post_pages {
     my ( $self ) = @_;
+    my $today = Time::Piece->new->ymd;
     my @pages;
     for my $doc ( @{ $self->source->documents } ) {
         my $path = join "/", $self->url_root, $doc->path;
@@ -82,10 +106,12 @@ sub post_pages {
         my @date_parts = $path =~ m{/(\d{4})/(\d{2})/(\d{2})/[^/]+$};
         my $date = join "-", @date_parts;
 
+        next if $date gt $today;
+
         push @pages, Statocles::Page::Document->new(
             app => $self,
-            layout => $self->theme->templates->{site}{layout},
-            template => $self->theme->templates->{blog}{post},
+            layout => $self->theme->template( site => 'layout.html' ),
+            template => $self->theme->template( blog => 'post.html' ),
             document => $doc,
             path => $path,
             published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
@@ -97,13 +123,15 @@ sub post_pages {
 
 sub index {
     my ( $self ) = @_;
-    return Statocles::Page::List->new(
-        app => $self,
-        path => join( "/", $self->url_root, 'index.html' ),
-        template => $self->theme->template( blog => 'index' ),
-        layout => $self->theme->template( site => 'layout' ),
+    return Statocles::Page::List->paginate(
+        after => $self->page_size,
+        path => join( "/", $self->url_root, 'page-%i.html' ),
+        index => join( "/", $self->url_root, 'index.html' ),
         # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } $self->post_pages ],
+        app => $self,
+        template => $self->theme->template( blog => 'index.html' ),
+        layout => $self->theme->template( site => 'layout.html' ),
     );
 }
 
@@ -115,13 +143,15 @@ sub tag_pages {
 
     my @tag_pages;
     for my $tag ( keys %tagged_docs ) {
-        push @tag_pages, Statocles::Page::List->new(
-            app => $self,
-            path => $self->_tag_url( $tag ),
-            template => $self->theme->template( blog => 'index' ),
-            layout => $self->theme->template( site => 'layout' ),
+        push @tag_pages, Statocles::Page::List->paginate(
+            after => $self->page_size,
+            path => join( "/", $self->url_root, 'tag', $tag, 'page-%i.html' ),
+            index => $self->_tag_url( $tag ),
             # Sorting by path just happens to also sort by date
             pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs{ $tag } } ],
+            app => $self,
+            template => $self->theme->template( blog => 'index.html' ),
+            layout => $self->theme->template( site => 'layout.html' ),
         );
     }
 
@@ -156,7 +186,7 @@ sub _tag_docs {
 sub _tag_url {
     my ( $self, $tag ) = @_;
     $tag =~ s/\s+/-/g;
-    return join "/", $self->url_root, "tag", "$tag.html";
+    return join "/", $self->url_root, "tag", $tag, "index.html";
 }
 
 1;
@@ -171,7 +201,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.009
+version 0.010
 
 =head1 DESCRIPTION
 
@@ -192,6 +222,11 @@ root. Use this to ensure two apps do not try to write the same path.
 
 The L<theme|Statocles::Theme> for this app. See L</THEME> for what templates this app
 uses.
+
+=head2 page_size
+
+The number of posts to put in a page (the main page and the tag pages). Defaults
+to 5.
 
 =head1 METHODS
 

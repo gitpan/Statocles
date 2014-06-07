@@ -16,6 +16,7 @@ lib/Statocles/Base.pm
 lib/Statocles/Class.pm
 lib/Statocles/Command.pm
 lib/Statocles/Document.pm
+lib/Statocles/Help/Setup.pod
 lib/Statocles/Page.pm
 lib/Statocles/Page/Document.pm
 lib/Statocles/Page/List.pm
@@ -27,9 +28,9 @@ lib/Statocles/Template.pm
 lib/Statocles/Test.pm
 lib/Statocles/Theme.pm
 share/blog/2014/05/06/test-post.yml
-share/theme/default/blog/index.tmpl
-share/theme/default/blog/post.tmpl
-share/theme/default/site/layout.tmpl
+share/theme/default/blog/index.html.ep
+share/theme/default/blog/post.html.ep
+share/theme/default/site/layout.html.ep
 site.yml
 t/00_compile.t
 t/app/blog.t
@@ -40,11 +41,12 @@ t/share/blog/2014/04/23/slug.yml
 t/share/blog/2014/04/30/plug.yml
 t/share/blog/2014/05/22/(regex)[name].file.yml
 t/share/blog/2014/06/02/more_tags.yml
+t/share/blog/9999/12/31/forever-is-a-long-time.yml
 t/share/multi.yml
-t/share/theme/blog/index.tmpl
-t/share/theme/blog/post.tmpl
-t/share/theme/site/layout.tmpl
-t/share/tmpl/page.tmpl
+t/share/theme/blog/index.html.ep
+t/share/theme/blog/post.html.ep
+t/share/theme/site/layout.html.ep
+t/share/tmpl/page.html.ep
 t/site.t
 t/site/git.t
 t/store.t

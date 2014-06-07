@@ -11,19 +11,19 @@ my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
 my $theme = Statocles::Theme->new(
     templates => {
         site => {
-            layout => Statocles::Template->new(
+            'layout.html' => Statocles::Template->new(
                 content => 'HEAD <%= $content %> FOOT',
             ),
         },
         blog => {
-            index => Statocles::Template->new(
+            'index.html' => Statocles::Template->new(
                 content => <<'ENDTEMPLATE'
 % for my $page ( @$pages ) {
 <% $page->{title} %> <% $page->{author} %> <% $page->{content} %>
 % }
 ENDTEMPLATE
             ),
-            post => Statocles::Template->new(
+            'post.html' => Statocles::Template->new(
                 content => '<%= $title %> <%= $author %> <%= $content %>',
             ),
         },
@@ -37,6 +37,7 @@ my $app = Statocles::App::Blog->new(
     source => Statocles::Store->new( path => $SHARE_DIR->child( 'blog' ) ),
     url_root => '/blog',
     theme => $theme,
+    page_size => 2,
 );
 
 my @all_pages;
@@ -49,6 +50,7 @@ sub docs {
     while ( my $path = $iter->() ) {
         next unless $path->is_file;
         next unless $path =~ /[.]yml$/;
+        next if $path =~ m{\b9999\b}; # It will never be 9999
 
         my $rel_path = $path->relative( $root_path );
         my @doc_path = ( splitdir( $rel_path->parent->stringify ), $rel_path->basename );
@@ -80,8 +82,8 @@ sub pages {
         my $page = Statocles::Page::Document->new(
             app => $app,
             published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
-            template => $theme->template( blog => 'post' ),
-            layout => $theme->template( site => 'layout' ),
+            template => $theme->template( blog => 'post.html' ),
+            layout => $theme->template( site => 'layout.html' ),
             path => $page_path,
             document => $doc_spec->{ doc },
         );
@@ -102,52 +104,85 @@ subtest 'blog post pages' => sub {
 };
 
 subtest 'tag pages' => sub {
-    my %tagged_docs;
-    for my $doc_spec ( docs( $app->source->path ) ) {
-        for my $tag ( @{ $doc_spec->{doc}->tags } ) {
-            push @{ $tagged_docs{ $tag } }, $doc_spec;
-        }
-    }
+    # Sorting by path just happens to also sort by date
+    my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->source->path );
 
-    my @tag_pages;
-    for my $tag ( keys %tagged_docs ) {
-        my $name = $tag;
-        $name =~ s/\s+/-/g;
-        push @tag_pages, Statocles::Page::List->new(
-            app => $app,
-            path => "/blog/tag/$name.html",
-            template => $theme->template( blog => 'index' ),
-            layout => $theme->template( site => 'layout' ),
-            # Sorting by path just happens to also sort by date
-            pages => [ sort { $b->path cmp $a->path } pages( @{ $tagged_docs{ $tag } } ) ],
-        );
-    }
+    my %page_args = (
+        app => $app,
+        template => $theme->template( blog => 'index.html' ),
+        layout => $theme->template( site => 'layout.html' ),
+    );
 
-    cmp_deeply [ $app->tag_pages ], \@tag_pages;
+    my @tag_pages = (
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/better/index.html',
+            pages => [ pages( @sorted_docs[0,1] ) ],
+            next => '/blog/tag/better/page-2.html',
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/better/page-2.html',
+            pages => [ pages( $sorted_docs[2] ) ],
+            prev => '/blog/tag/better/index.html',
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/error-message/index.html',
+            pages => [ pages( $sorted_docs[1] ) ],
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/more/index.html',
+            pages => [ pages( $sorted_docs[0] ) ],
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/tag/even-more-tags/index.html',
+            pages => [ pages( $sorted_docs[0] ) ],
+        ),
+    );
+
+    cmp_deeply [ $app->tag_pages ], bag( @tag_pages );
     push @all_pages, @tag_pages;
 
     subtest 'tag navigation' => sub {
         cmp_deeply [ $app->tags ], [
-            { title => 'better', href => '/blog/tag/better.html' },
-            { title => 'error message', href => '/blog/tag/error-message.html' },
-            { title => 'even more tags', href => '/blog/tag/even-more-tags.html' },
-            { title => 'more', href => '/blog/tag/more.html' },
+            { title => 'better', href => '/blog/tag/better/index.html' },
+            { title => 'error message', href => '/blog/tag/error-message/index.html' },
+            { title => 'even more tags', href => '/blog/tag/even-more-tags/index.html' },
+            { title => 'more', href => '/blog/tag/more/index.html' },
         ];
     };
 };
 
-subtest 'index page' => sub {
-    my $page = Statocles::Page::List->new(
+subtest 'index page(s)' => sub {
+    my @sorted_docs = sort { $b->{doc}->path cmp $a->{doc}->path } docs( $app->source->path );
+    my %page_args = (
         app => $app,
-        path => '/blog/index.html',
-        template => $theme->template( blog => 'index' ),
-        layout => $theme->template( site => 'layout' ),
-        # Sorting by path just happens to also sort by date
-        pages => [ sort { $b->path cmp $a->path } pages( docs( $app->source->path ) ) ],
+        template => $theme->template( blog => 'index.html' ),
+        layout => $theme->template( site => 'layout.html' ),
     );
 
-    cmp_deeply $app->index, $page;
-    push @all_pages, $page;
+    my @pages = (
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/index.html',
+            # Sorting by path just happens to also sort by date
+            pages => [ pages( @sorted_docs[0,1] ) ],
+            next => '/blog/page-2.html',
+        ),
+        Statocles::Page::List->new(
+            %page_args,
+            path => '/blog/page-2.html',
+            # Sorting by path just happens to also sort by date
+            pages => [ pages( @sorted_docs[2,3] ) ],
+            prev => '/blog/index.html',
+        ),
+    );
+
+    cmp_deeply [$app->index], bag( @pages );
+    push @all_pages, @pages;
 };
 
 subtest 'all pages()' => sub {
@@ -168,7 +203,7 @@ subtest 'commands' => sub {
         my ( $out, $err, $exit ) = capture { $app->command( @args ) };
         ok !$err, 'blog help is on stdout';
         is $exit, 0;
-        like $out, qr{blog post <title> -- Create a new blog post},
+        like $out, qr{\Qblog post [--date YYYY-MM-DD] <title> -- Create a new blog post},
             'contains blog help information';
     };
 
@@ -186,6 +221,45 @@ subtest 'commands' => sub {
 
             subtest 'run the command' => sub {
                 my @args = qw( blog post This is a Title );
+                my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+                ok !$err, 'nothing on stdout';
+                is $exit, 0;
+                like $out, qr{New post at: \Q$doc_path},
+                    'contains blog post document path';
+            };
+
+            subtest 'check the generated document' => sub {
+                my $doc = $app->source->read_document( $doc_path );
+                cmp_deeply $doc, {
+                    title => 'This is a Title',
+                    author => undef,
+                    tags => undef,
+                    last_modified => isa( 'Time::Piece' ),
+                    content => <<'ENDMARKDOWN',
+Markdown content goes here.
+ENDMARKDOWN
+                };
+                my $dt_str = $doc->{last_modified}->strftime( '%Y-%m-%d %H:%M:%S' );
+                eq_or_diff $doc_path->slurp, <<ENDCONTENT;
+---
+author: ~
+last_modified: $dt_str
+tags: ~
+title: This is a Title
+---
+Markdown content goes here.
+ENDCONTENT
+            };
+        };
+        subtest 'custom date' => sub {
+            local $ENV{EDITOR}; # We can't very well open vim...
+
+            my $doc_path = $tmpdir->child(
+                'blog', '2014', '04', '01', 'this-is-a-title.yml',
+            );
+
+            subtest 'run the command' => sub {
+                my @args = qw( blog post --date 2014-4-1 This is a Title );
                 my ( $out, $err, $exit ) = capture { $app->command( @args ) };
                 ok !$err, 'nothing on stdout';
                 is $exit, 0;

@@ -1,9 +1,120 @@
 ==================================================
-Changes from 2013-06-06 00:00:00 +0000 to present.
+Changes from 2013-06-07 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.009 at 2014-06-06 20:15:45 +0000
+version 0.010 at 2014-06-07 09:27:42 +0000
+------------------------------------------
+
+  Change: 16abfada34306b37e5d3ddecc5b77ee8de9be394
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-07 04:27:29 +0000
+
+    release v0.010 
+
+  Change: 4efb0c92c473e362cacd707df923af8f7e5c6a05
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-07 04:26:14 +0000
+
+    add a setup guide until we get a create command
+
+    Fixes #50 
+
+  Change: 411107fb09695af6614634781244510278b0235c
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-07 03:55:53 +0000
+
+    add named navs, so we can add more nav lists later
+
+    This makes sense with the apps having names, and will allow us to
+    have more nav lists in the future. 
+
+  Change: 2d5c39ebd86d16cdaf4ce276e383abcd6865a71a
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-07 03:53:52 +0000
+
+    add next/prev to list page render()
+
+    This needing to update render() is becoming impossible, but it
+    wouldn't have been a problem if `git format-patch` didn't miss one of
+    my patches... 
+
+  Change: 1fcbf943e797da472cf0e7b3c2370054dcfaf61a
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-07 00:54:22 +0000
+
+    mark html templates as such; use .ep like Mojo
+
+    This is setup for supporting RSS and Atom feeds, so we have something
+    to call the templates. 
+
+  Change: 1fdac9cda6d7b4614a96135c0fce0a686c8e7dd3
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-06 23:53:03 +0000
+
+    fix the pagination links in the default blog theme 
+
+  Change: 615ca4fd116995303b0f96df7dfb93fd874b1cee
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-06 23:53:03 +0000
+
+    add pagination to the blog
+
+    The index page and the tag pages are paginated. The index page is now
+    the first page returned from index() (though this may need to be
+    changed, we are generating pages repetitively).
+
+    Fixes #9 
+
+  Change: 7ccf26b512964b9d52f8884a22d53c8bf16f9099
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-06 23:53:03 +0000
+
+    enforce an order on the paginated pages
+
+    We need to know which comes first in order to set our site index
+    page. 
+
+  Change: a2d6073c0151e21b0fe5f45c6286556335adcad8
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-06 23:50:13 +0000
+
+    add optional index path to pagination
+
+    This makes building the blog paginations a lot easier. Instead of
+    having to fix the URLs after they've been made, they get made
+    correctly in the first place. 
+
+  Change: c46caafec07eb140b8f26fe114ad58c9b5231a15
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-06 23:47:53 +0000
+
+    add paginate() constructor for paginated lists
+
+    The paginate constructor returns multiple Statocles::Page::List
+    objects based on an input set of pages. 
+
+  Change: 74d8d94fee3aeb85159a5aa6b3a5a849eb2d4f09
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-06 21:02:56 +0000
+
+    do not build posts whose day has not yet come
+
+    Now we should be able to make a nightly job to run "statocles deploy"
+    and blog posts will show up correctly.
+
+    Fixes #8 
+
+  Change: d8d4fb0fe3e7b6e769ac3886aaf1d8f9d7f566e1
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-06 20:19:30 +0000
+
+    allow setting the date when creating a new post
+
+    This is the start of being able to pre-date blog posts. 
+
+------------------------------------------
+version 0.009 at 2014-06-06 20:15:15 +0000
 ------------------------------------------
 
   Change: 4cbc0bb5ae54d96e12ea57eca7c46132da928d67
