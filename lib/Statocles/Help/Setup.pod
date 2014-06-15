@@ -11,7 +11,7 @@ Statocles::Help::Setup - A guide to setting up a new Statocles site
 
 =head1 VERSION
 
-version 0.010
+version 0.011
 
 =head1 DESCRIPTION
 
@@ -21,7 +21,7 @@ be deployed to GitHub Pages using Statocles.
 =head1 site.yml - The Main Configuration File
 
 Statocles uses L<Beam::Wire|Beam::Wire>, a dependency-injection module, to
-define its configuration. The format is L<http://yaml.org|YAML> and contains
+define its configuration. The format is L<YAML|http://yaml.org> and contains
 the data needed to build the objects: Arguments to the object's constructor.
 This means that any C<ATTRIBUTES> defined in the documentation can be used in
 the configuration file.

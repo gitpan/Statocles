@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.010';
+$Statocles::App::Blog::VERSION = '0.011';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Page::Document;
@@ -32,7 +32,7 @@ has theme => (
 has page_size => (
     is => 'ro',
     isa => Int,
-    default => 5,
+    default => sub { 5 },
 );
 
 
@@ -201,7 +201,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.010
+version 0.011
 
 =head1 DESCRIPTION
 

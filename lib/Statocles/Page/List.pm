@@ -1,6 +1,6 @@
 package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
-$Statocles::Page::List::VERSION = '0.010';
+$Statocles::Page::List::VERSION = '0.011';
 use Statocles::Class;
 with 'Statocles::Page';
 use List::MoreUtils qw( part );
@@ -25,7 +25,8 @@ has '+template' => (
         Statocles::Template->new(
             content => <<'ENDTEMPLATE'
 % for my $page ( @$pages ) {
-<%= $page->{published} %> <%= $page->{path} %> <%= $page->{title} %> <%= $page->{author} %> <%= $page->{content} %>
+% my $doc = $page->document;
+<%= $page->published %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
 % }
 ENDTEMPLATE
         );
@@ -60,21 +61,11 @@ sub paginate {
 }
 
 
-sub render {
-    my ( $self, %args ) = @_;
-    my $content = $self->template->render(
-        %args,
-        pages => [
-            map { +{ %{ $_->document }, published => $_->published, content => $_->content, path => $_->path } }
-            @{ $self->pages }
-        ],
-        app => $self->app,
-        next => $self->next,
-        prev => $self->prev,
-    );
-    return $self->layout->render(
-        %args,
-        content => $content,
+sub vars {
+    my ( $self ) = @_;
+    return (
+        self => $self,
+        pages => $self->pages,
         app => $self->app,
     );
 }
@@ -91,7 +82,7 @@ Statocles::Page::List - A page presenting a list of other pages
 
 =head1 VERSION
 
-version 0.010
+version 0.011
 
 =head1 DESCRIPTION
 
@@ -134,9 +125,9 @@ Takes a list of key-value pairs with the following keys:
 Return a list of Statocles::Page::List objects in numerical order, the index
 page first (if any).
 
-=head2 render
+=head2 vars
 
-Render this page. Returns the full content of the page.
+Get the template variables for this page.
 
 =head1 AUTHOR
 

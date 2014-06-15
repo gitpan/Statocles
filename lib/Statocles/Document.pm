@@ -1,6 +1,6 @@
 package Statocles::Document;
 # ABSTRACT: Base class for all Statocles documents
-$Statocles::Document::VERSION = '0.010';
+$Statocles::Document::VERSION = '0.011';
 use Statocles::Class;
 
 
@@ -42,12 +42,26 @@ has tags => (
 );
 
 
-sub dump {
-    my ( $self ) = @_;
-    return {
-        map { $_ => $self->$_ } qw( title author content tags )
-    };
-}
+has links => (
+    is => 'rw',
+    isa => HashRef[ArrayRef[HashRef]],
+    default => sub { +{} },
+    coerce => sub {
+        # Normalize to arrays
+        for my $category ( keys %{$_[0]} ) {
+            if ( ref $_[0]{$category} ne 'ARRAY' ) {
+                $_[0]{$category} = [ $_[0]{$category} ];
+            }
+        }
+        return $_[0];
+    },
+);
+
+
+has last_modified => (
+    is => 'rw',
+    isa => InstanceOf['Time::Piece'],
+);
 
 1;
 
@@ -61,7 +75,7 @@ Statocles::Document - Base class for all Statocles documents
 
 =head1 VERSION
 
-version 0.010
+version 0.011
 
 =head1 DESCRIPTION
 
@@ -96,11 +110,22 @@ The tags for this document. Tags are used to categorize documents.
 Tags may be specified as an array or as a comma-seperated string of
 tags.
 
-=head1 METHODS
+=head2 links
 
-=head2 dump
+Related links for this document. Links are used to build relationships
+to other web addresses. Link categories are named based on their
+relationship.
 
-Get this document as a hash reference.
+    crosspost - The same document posted to another web site
+
+Each category contains an arrayref of hashrefs with the following keys:
+
+    title - The title of the link
+    href - The URL for the link
+
+=head2 last_modified
+
+The date/time this document was last modified.
 
 =head1 AUTHOR
 

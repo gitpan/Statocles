@@ -1,6 +1,6 @@
 package Statocles::Page::Document;
 # ABSTRACT: Render documents into HTML
-$Statocles::Page::Document::VERSION = '0.010';
+$Statocles::Page::Document::VERSION = '0.011';
 use Statocles::Class;
 with 'Statocles::Page';
 use Text::Markdown;
@@ -32,22 +32,13 @@ sub content {
 }
 
 
-sub render {
-    my ( $self, %args ) = @_;
-    my $content = $self->template->render(
-        %args,
-        %{$self->document},
+sub vars {
+    my ( $self ) = @_;
+    return (
         content => $self->content,
-        path => $self->path,
+        self => $self,
+        doc => $self->document,
         app => $self->app,
-        published => $self->published,
-    );
-    return $self->layout->render(
-        %args,
-        content => $content,
-        path => $self->path,
-        app => $self->app,
-        published => $self->published,
     );
 }
 
@@ -63,7 +54,7 @@ Statocles::Page::Document - Render documents into HTML
 
 =head1 VERSION
 
-version 0.010
+version 0.011
 
 =head1 DESCRIPTION
 
@@ -90,10 +81,9 @@ L<document|Statocles::Document>.
 
 Generate the document HTML by converting Markdown.
 
-=head2 render
+=head2 vars
 
-Render the page, using the L<template|Statocles::Page/template> and wrapping
-with the L<layout|Statocles::Page/layout>.
+Get the template variables for this page.
 
 =head1 AUTHOR
 

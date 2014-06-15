@@ -1,6 +1,6 @@
 package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
-$Statocles::Store::VERSION = '0.010';
+$Statocles::Store::VERSION = '0.011';
 use Statocles::Class;
 use Statocles::Document;
 use YAML;
@@ -128,7 +128,7 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.010
+version 0.011
 
 =head1 DESCRIPTION
 

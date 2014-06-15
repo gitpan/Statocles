@@ -1,9 +1,102 @@
 ==================================================
-Changes from 2013-06-07 00:00:00 +0000 to present.
+Changes from 2013-06-15 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.010 at 2014-06-07 09:27:42 +0000
+version 0.011 at 2014-06-15 03:10:51 +0000
+------------------------------------------
+
+  Change: 00072473b9c15d1432c6c38f32a2b3b03e99c056
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-14 22:10:40 +0000
+
+    release v0.011 
+
+  Change: 6437210e352426f947c4075d479b2edf178b5c83
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-14 21:11:36 +0000
+
+    still show the topbar if site lacks main nav 
+
+  Change: 910541a6f81ac0172a2500f6596a9f090c635ecf
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-14 19:52:18 +0000
+
+    add crosspost links to the default blog templates
+
+    Fixes #56 
+
+  Change: 7fe8c0d050ff15723aa0cdbe95011752926d41de
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-14 19:52:10 +0000
+
+    everything used in template should have default
+
+    This makes it a lot simpler to check for membership in a hash and/or
+    loop over an array. Instead of first checking for existence, we can
+    go right to dereferencing. There is probably a better way, maybe via
+    helpers... 
+
+  Change: a340950ed7c1d781973db4610f509ba7eca8f8df
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-14 19:29:06 +0000
+
+    reorganize template vars to prefer objects
+
+    This does increase some confusion, which I'm loathe to do, but it
+    allows any future Page/Document object to Just Work with the default
+    templates, and it solves needing to explicitly add new attributes in
+    various places in the code before being able to reach them in the
+    template.
+
+    Fixes #58 
+
+  Change: c8db0251f228b3259b80392175bf132a9e45b8b9
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-14 18:41:54 +0000
+
+    remove unused dump method
+
+    We just use the object as the underlying hashref it is 
+
+  Change: 2bf706edcb7751dda2c7b0ebe7aea1bd963d39ff
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-14 18:37:03 +0000
+
+    add crosspost links to documents
+
+    This is just the bare minimum of what is desired here. We will
+    eventually need to be able to link documents by relative path and not
+    by page URL (page url may be changed based on unrelated things, like
+    a simple copy/paste of a document).
+
+    Fixes #56 
+
+  Change: 75926433f80050d029bb5e7a230a9b89ac63d953
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-14 18:13:42 +0000
+
+    add last_modified attribute to documents
+
+    We were testing for it, but we never actually added it... 
+
+  Change: 08b02fc22550198d3c16055ff64da10fdaab8e55
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-08 21:37:34 +0000
+
+    defaults must be subref
+
+    I need to find a way to validate this before the release, because it
+    keeps happening... 
+
+  Change: e93ab1e1f933d83fa76d32b46e959218894f0d39
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-07 04:35:10 +0000
+
+    fix bad link to YAML 
+
+------------------------------------------
+version 0.010 at 2014-06-07 09:27:29 +0000
 ------------------------------------------
 
   Change: 16abfada34306b37e5d3ddecc5b77ee8de9be394
