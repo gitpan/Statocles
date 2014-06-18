@@ -1,6 +1,6 @@
 package Statocles::Page::Document;
 # ABSTRACT: Render documents into HTML
-$Statocles::Page::Document::VERSION = '0.011';
+$Statocles::Page::Document::VERSION = '0.012';
 use Statocles::Class;
 with 'Statocles::Page';
 use Text::Markdown;
@@ -54,7 +54,7 @@ Statocles::Page::Document - Render documents into HTML
 
 =head1 VERSION
 
-version 0.011
+version 0.012
 
 =head1 DESCRIPTION
 

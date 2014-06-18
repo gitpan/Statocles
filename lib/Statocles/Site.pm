@@ -1,6 +1,6 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.011';
+$Statocles::Site::VERSION = '0.012';
 use Statocles::Class;
 
 
@@ -103,7 +103,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.011
+version 0.012
 
 =head1 SYNOPSIS
 

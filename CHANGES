@@ -1,9 +1,70 @@
 ==================================================
-Changes from 2013-06-15 00:00:00 +0000 to present.
+Changes from 2013-06-18 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.011 at 2014-06-15 03:10:51 +0000
+version 0.012 at 2014-06-18 06:15:30 +0000
+------------------------------------------
+
+  Change: cbdaa7e5f4210e8aa55fccfc79f4763ebea17faf
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-18 01:15:07 +0000
+
+    release v0.012 
+
+  Change: f528692ac66a3de52c29b8e208a426fa1b14893e
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-18 00:50:52 +0000
+
+    deploy now performs 'git push'
+
+    We should look to reduce the number of steps necessary in updating
+    the site some more.
+
+    Fixes #57 
+
+  Change: 70d125b98283e1634c55ecb4848de61d9d178db1
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-17 23:47:36 +0000
+
+    add rel next/prev to pagination links
+
+    rel="next" and rel="prev" give the browser some metadata about how
+    the series of pages works.
+
+    Fixes #66 
+
+  Change: 4572102d3c9e99fe1be622dc93f4a04dc5a50bd8
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-17 23:42:34 +0000
+
+    better format for crosspost links
+
+    Had to rearrange the post headers for this
+
+    Fixes #70 
+
+  Change: a0229023194d02dcc66945d396720aa7e1e56289
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-17 23:15:26 +0000
+
+    put the list of guides first in the documentation
+
+    Also expound on the main docs a bit
+
+    Fixes #72 
+
+  Change: 19e239787c57c84cff9786345345f53a45de8720
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-15 21:26:05 +0000
+
+    we moved the core of 'render' to 'vars'
+
+    Why didn't this get caught by my tests? There has to be some kind of
+    version mismatch I'm not catching... 
+
+------------------------------------------
+version 0.011 at 2014-06-15 03:10:40 +0000
 ------------------------------------------
 
   Change: 00072473b9c15d1432c6c38f32a2b3b03e99c056

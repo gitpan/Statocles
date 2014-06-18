@@ -1,6 +1,6 @@
 package Statocles::Site::Git;
 # ABSTRACT: A git-based site
-$Statocles::Site::Git::VERSION = '0.011';
+$Statocles::Site::Git::VERSION = '0.012';
 use Statocles::Class;
 extends 'Statocles::Site';
 
@@ -48,6 +48,11 @@ sub deploy {
     dircopy( "$build_dir", "$deploy_dir" );
     _git_run( $git, add => @files );
     _git_run( $git, commit => -m => 'Site update' );
+
+    if ( _has_remote( $git, 'origin' ) ) {
+        _git_run( $git, push => origin => $self->deploy_branch );
+    }
+
     _git_run( $git, checkout => $current_branch );
 
     return;
@@ -55,12 +60,14 @@ sub deploy {
 
 sub _git_run {
     my ( $git, @args ) = @_;
+    my $cmdline = join " ", 'git', @args;
     my $cmd = $git->command( @args );
     my $stdout = readline( $cmd->stdout ) // '';
     my $stderr = readline( $cmd->stderr ) // '';
     $cmd->close;
-    if ( my $exit = $cmd->exit ) {
-        warn "git $args[0] exited with $exit\n-- STDOUT --\n$stdout\n-- STDERR --\n$stderr\n";
+    my $exit = $cmd->exit;
+    if ( $exit ) {
+        warn "git $args[0] exited with $exit\n-- CMD --\n$cmdline\n-- STDOUT --\n$stdout\n-- STDERR --\n$stderr\n";
     }
     return $cmd->exit;
 }
@@ -76,6 +83,11 @@ sub _has_branch {
     return !!grep { $_ eq $branch } map { s/^[\*\s]\s+//; $_ } $git->run( 'branch' );
 }
 
+sub _has_remote {
+    my ( $git, $remote ) = @_;
+    return !!grep { $_ eq $remote } map { s/^[\*\s]\s+//; $_ } $git->run( 'remote' );
+}
+
 1;
 
 __END__
@@ -88,7 +100,7 @@ Statocles::Site::Git - A git-based site
 
 =head1 VERSION
 
-version 0.011
+version 0.012
 
 =head1 DESCRIPTION
 
