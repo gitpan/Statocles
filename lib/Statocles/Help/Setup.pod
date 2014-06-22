@@ -11,7 +11,7 @@ Statocles::Help::Setup - A guide to setting up a new Statocles site
 
 =head1 VERSION
 
-version 0.012
+version 0.013
 
 =head1 DESCRIPTION
 
@@ -97,8 +97,8 @@ from the config file").
 =head2 A Destination
 
 Before we can generate pages, we need a place to put them. Statocles needs two
-places, a build directory, a staging area, an a deploy directory, the final
-destination for the site.
+places, a build directory (a staging area), and a deploy directory (the final
+destination for the site).
 
     build:
         class: Statocles::Store
@@ -112,7 +112,7 @@ destination for the site.
 
 For our site, we've got a C<build> directory for our staging area, where we can
 verify that our site looks correct before we deploy. Our deploy will happen in
-the root directory of our site. This is good for GitHub Pages site.
+the root directory of our site. This is good for a GitHub Pages site.
 
 Though stores are usually just directories, they could also perform an SFTP or
 FTP or transfer the pages to a CDN (I think I have some evolution to do here).
@@ -128,7 +128,7 @@ site|Statocles::Site::Git> knows how to deploy to git repositories.
         args:
             apps:
                 blog:
-                    $ref: blog
+                    $ref: blog_app
             build_store:
                 $ref: build
             deploy_store:
@@ -155,8 +155,8 @@ default template uses the C<main> nav across the top.
 
 =head2 The Complete site.yml
 
-Combine it all together and you get. Feel free to copy and paste to start your
-own site.
+Combine it all together and you get this. Feel free to copy and paste to start
+your own site.
 
     theme:
         class: Statocles::Theme
@@ -187,7 +187,7 @@ own site.
         args:
             apps:
                 blog:
-                    $ref: blog
+                    $ref: blog_app
             build_store:
                 $ref: build
             deploy_store:

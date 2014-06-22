@@ -1,10 +1,16 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.012';
+$Statocles::Site::VERSION = '0.013';
 use Statocles::Class;
 
 
 has title => (
+    is => 'ro',
+    isa => Str,
+);
+
+
+has base_url => (
     is => 'ro',
     isa => Str,
 );
@@ -81,14 +87,20 @@ sub write {
             if ( $index_path && $page->path eq $index_path ) {
                 # Rename the app's page so that we don't get two pages with identical
                 # content
-                $page = Statocles::Page::List->new(
-                    %{ $page },
-                    path => '/index.html',
-                );
+                $page->path( '/index.html' );
             }
             $store->write_page( $page->path, $page->render( %args ) );
         }
     }
+}
+
+
+sub url {
+    my ( $self, $path ) = @_;
+    my $base = $self->base_url;
+    $base =~ s{/$}{};
+    $path =~ s{^/}{};
+    return join "/", $base, $path;
 }
 
 1;
@@ -103,7 +115,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.012
+version 0.013
 
 =head1 SYNOPSIS
 
@@ -129,6 +141,10 @@ A Statocles::Site is a collection of L<applications|Statocles::App>.
 =head2 title
 
 The site title, used in templates.
+
+=head2 base_url
+
+The base URL of the site, including protocol and domain. Used mostly for feeds.
 
 =head2 apps
 
@@ -188,6 +204,10 @@ Write each application to its destination.
 =head2 write( store )
 
 Write the application to the given L<store|Statocles::Store>.
+
+=head2 url( path )
+
+Get the full URL to the given path by prepending the C<base_url>.
 
 =head1 AUTHOR
 

@@ -46,10 +46,11 @@ subtest 'site index and navigation' => sub {
         },
     );
     my $blog = $site->app( 'blog' );
+    my $page = ( $blog->index )[0];
 
     subtest 'build' => sub {
         $site->build;
-        subtest 'site index content' => test_content( $tmpdir, $site, $blog->index, build => 'index.html' );
+        subtest 'site index content' => test_content( $tmpdir, $site, $page, build => 'index.html' );
         ok !$tmpdir->child( 'deploy', 'index.html' )->exists, 'not deployed yet';
         ok !$tmpdir->child( 'build', 'blog', 'index.html' )->exists,
             'site index renames app page';
@@ -57,10 +58,21 @@ subtest 'site index and navigation' => sub {
 
     subtest 'deploy' => sub {
         $site->deploy;
-        subtest 'site index content' => test_content( $tmpdir, $site, $blog->index, deploy => 'index.html' );
+        subtest 'site index content' => test_content( $tmpdir, $site, $page, deploy => 'index.html' );
         ok !$tmpdir->child( 'deploy', 'blog', 'index.html' )->exists,
             'site index renames app page';
     };
+};
+
+subtest 'site urls' => sub {
+    my $tmpdir = tempdir;
+    my $site = site( $tmpdir,
+        base_url => 'http://example.com/',
+    );
+    is $site->url( '/index.html' ),
+       'http://example.com/index.html';
+    is $site->url( '/blog/2014/01/01/a-page.html' ),
+       'http://example.com/blog/2014/01/01/a-page.html';
 };
 
 done_testing;

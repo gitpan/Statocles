@@ -1,9 +1,163 @@
 ==================================================
-Changes from 2013-06-18 00:00:00 +0000 to present.
+Changes from 2013-06-22 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.012 at 2014-06-18 06:15:30 +0000
+version 0.013 at 2014-06-22 08:01:36 +0000
+------------------------------------------
+
+  Change: c4629e0a63ec1832439b52c7ce3593253515e650
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-22 03:01:13 +0000
+
+    release v0.013 
+
+  Change: a53402ba79dc32f9009f52803538bea6013e188c
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-22 02:59:23 +0000
+
+    add feed titles and links to feeds in the page
+
+    Also remove the <nav> around the Tags, because apparently <nav> is
+    supposed to be use for "major navigation", whatever that means... 
+
+  Change: 107a1968045631e9466f038b508104e81d2e6953
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-22 02:22:32 +0000
+
+    add RSS and Atom feeds to blog index and tag pages
+
+    The current feeds pass the [Feed
+    Validator](http://feedvalidator.org), but there could be some better
+    descriptions and future enhancements later.
+
+    Since feeds need to be linked by the pages they syndicate, they must
+    be created as part of the same routine.
+
+    Fixes #11 
+
+  Change: 0be2b6f738faaf8e37e3f0709bb65401068f3cfa
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-22 02:14:14 +0000
+
+    add generic page links hashref
+
+    This is similar to the document links hashref (in fact, we might
+    combine them into one to make things easier).
+
+    This will let us add feed links and other <HEAD> links. 
+
+  Change: cd958bd4693035f5bce403532c345ad254f28465
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-22 02:13:20 +0000
+
+    put self and app in all pages
+
+    We're going to use these in the layout, so they must be in every page
+    exactly as $self and $app. 
+
+  Change: e016b7de25a7349747aff31d2bec96c184e5ae31
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-21 23:30:00 +0000
+
+    add site method to get a full URL for feeds
+
+    Feeds require a full http://example.com/path/to/page.html, so we need
+    to know where the site will be deployed. 
+
+  Change: 6486b26553336c8575d1859ea8647a97292c3d6f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-21 21:50:55 +0000
+
+    cache page objects so we can modify them
+
+    This is explicitly for spooky action at a distance to fix the
+    following problem:
+
+    * Blog app creates an index page and a feed page for that index *
+    Site takes the index page and creates a new page with the same
+
+    information but a new URL * Feed page no longer knows where the index
+    page is
+
+    Instead, the app gives us the same Page object whenever we ask, so we
+    can modify it to make it our site index. 
+
+  Change: faccb8d3737d5d8f0810a1460e48867bcd7b588d
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-21 20:46:30 +0000
+
+    add feed pages
+
+    Feed pages wrap a list page to provide another view of the page. This
+    allows us to keep track of the list page's URL in case it changes, so
+    that the feed page can link the user to the right location. 
+
+  Change: aa809e76a30713da148d1de363781123a98d1241
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-21 00:08:41 +0000
+
+    ignore blog directories that aren't YYYY/MM/DD
+
+    This allows me to put a /drafts folder at least and not have it
+    picked up by the blog app. In the future, we'll make a way to manage
+    the drafts, but for now let's allow any directory that doesn't look
+    like what we want it to be.
+
+    We may in the future support just YYYY/MM, but we will probably never
+    support just YYYY. 
+
+  Change: a466cbeac29e77f4d007e59d226de76383196dfd
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-20 23:11:58 +0000
+
+    fix setup help - blog -> blog_app 
+
+  Change: 4a7b57ee3c463f33f48b5439b57ef30223768f90
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-20 23:11:01 +0000
+
+    Merge pull request #79 from tadegenban/patch-1
+
+    Fix setup help - blog -> blog_app 
+
+  Change: dafdb96618b917b0ce61ac6fb9c86d052470916f
+  Author: tadegenban <youyouken@126.com>
+  Date : 2014-06-21 12:07:21 +0000
+
+    blog -> blog_app
+
+    Maybe this should be blog_app? 
+
+  Change: da41e2ceb1862556682789a99a9d34e3a73eca2f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-19 22:33:38 +0000
+
+    die with an error if we can't make a slug
+
+    If we don't have enough information to make a slug, we shouldn't
+    allow leaving the file name blank.
+
+    Fixes #76 
+
+  Change: 7bc476b93f4fdd2d2bf19154417e6e0529405225
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-19 22:33:10 +0000
+
+    return the exit code from called sub
+
+    The caller should return the exit code it wants to set 
+
+  Change: 07bb5c45940df43c1f982bce1df04466a6664e4a
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-19 22:10:42 +0000
+
+    fix some typos in the setup help
+
+    Fixes #77 
+
+------------------------------------------
+version 0.012 at 2014-06-18 06:15:07 +0000
 ------------------------------------------
 
   Change: cbdaa7e5f4210e8aa55fccfc79f4763ebea17faf

@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.012';
+$Statocles::Command::VERSION = '0.013';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -43,6 +43,7 @@ sub main {
         my $method = $argv[0];
         if ( grep { $_ eq $method } qw( build deploy ) ) {
             $cmd->site->$method;
+            return 0;
         }
         elsif ( $method eq 'apps' ) {
             my $apps = $cmd->site->apps;
@@ -52,11 +53,12 @@ sub main {
                 my $class = ref $app;
                 print "$app_name ($root -- $class)\n";
             }
+            return 0;
         }
     }
     else {
         my $app_name = $argv[0];
-        $cmd->site->apps->{ $app_name }->command( @argv );
+        return $cmd->site->apps->{ $app_name }->command( @argv );
     }
 
     return 0;
@@ -74,7 +76,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.012
+version 0.013
 
 =head1 SYNOPSIS
 

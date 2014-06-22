@@ -25,6 +25,7 @@ requires:
   Git::Repository: '0'
   Import::Base: '0'
   List::MoreUtils: '0'
+  Memoize: '0'
   Mojolicious: '0'
   Moo::Lax: '0'
   Path::Tiny: '0.054'
@@ -40,4 +41,4 @@ resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: https://github.com/preaction/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: '0.012'
+version: '0.013'

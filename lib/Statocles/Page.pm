@@ -1,6 +1,6 @@
 package Statocles::Page;
 # ABSTRACT: Render documents into HTML
-$Statocles::Page::VERSION = '0.012';
+$Statocles::Page::VERSION = '0.013';
 use Statocles::Role;
 use Statocles::Template;
 use Text::Markdown;
@@ -15,9 +15,16 @@ has app => (
 
 
 has path => (
-    is => 'ro',
+    is => 'rw',
     isa => Path,
     coerce => Path->coercion,
+);
+
+
+has links => (
+    is => 'ro',
+    isa => HashRef[ArrayRef[HashRef]],
+    default => sub { {} },
 );
 
 
@@ -55,10 +62,14 @@ sub render {
     my ( $self, %args ) = @_;
     my $content = $self->template->render(
         %args,
+        self => $self,
+        app => $self->app,
         $self->vars,
     );
     return $self->layout->render(
         %args,
+        self => $self,
+        app => $self->app,
         $self->vars,
         content => $content,
     );
@@ -76,7 +87,7 @@ Statocles::Page - Render documents into HTML
 
 =head1 VERSION
 
-version 0.012
+version 0.013
 
 =head1 DESCRIPTION
 
@@ -93,6 +104,17 @@ The application this page came from, so we can give it to the templates.
 =head2 path
 
 The absolute URL path to save this page to.
+
+=head2 links
+
+A hash of arrays of links to pages related to this page. Possible keys:
+
+    feed        - Feed pages related to this page
+
+Each item in the array is a hash with the following keys:
+
+    href        - The page for the link
+    type        - The MIME type of the link, optional
 
 =head2 markdown
 

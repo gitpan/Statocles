@@ -1,6 +1,6 @@
 package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
-$Statocles::Page::List::VERSION = '0.012';
+$Statocles::Page::List::VERSION = '0.013';
 use Statocles::Class;
 with 'Statocles::Page';
 use List::MoreUtils qw( part );
@@ -64,9 +64,7 @@ sub paginate {
 sub vars {
     my ( $self ) = @_;
     return (
-        self => $self,
         pages => $self->pages,
-        app => $self->app,
     );
 }
 
@@ -82,7 +80,7 @@ Statocles::Page::List - A page presenting a list of other pages
 
 =head1 VERSION
 
-version 0.012
+version 0.013
 
 =head1 DESCRIPTION
 
