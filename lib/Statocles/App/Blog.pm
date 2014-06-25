@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.013';
+$Statocles::App::Blog::VERSION = '0.014';
 use Statocles::Class;
 use Memoize qw( memoize );
 use Getopt::Long qw( GetOptionsFromArray );
@@ -285,11 +285,46 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.013
+version 0.014
 
 =head1 DESCRIPTION
 
 This is a simple blog application for Statocles.
+
+=head2 FEATURES
+
+=over
+
+=item *
+
+Content dividers. By dividing your main content with "---", you create
+sections. Only the first section will show up on the index page or in RSS
+feeds.
+
+=item *
+
+RSS and Atom syndication feeds.
+
+=item *
+
+Tags to organize blog posts. Tags have their own custom feeds so users can
+subscribe to only those posts they care about.
+
+=item *
+
+Crosspost links to redirect users to a syndicated blog. Useful when you
+participate in many blogs and want to drive traffic to them.
+
+=item *
+
+Post-dated blog posts to appear automatically when the date is passed. If a
+blog post is set in the future, it will not be added to the site when running
+C<build> or C<deploy>.
+
+In order to ensure that post-dated blogs get added, you may want to run
+C<deploy> in a nightly cron job.
+
+=back
 
 =head1 ATTRIBUTES
 

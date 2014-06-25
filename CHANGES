@@ -1,9 +1,91 @@
 ==================================================
-Changes from 2013-06-22 00:00:00 +0000 to present.
+Changes from 2013-06-25 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.013 at 2014-06-22 08:01:36 +0000
+version 0.014 at 2014-06-25 05:41:30 +0000
+------------------------------------------
+
+  Change: 5b35ab07bf128ec61fb1693d7c2fc2c8f013f1cc
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-25 00:40:52 +0000
+
+    release v0.014 
+
+  Change: 73fce66b6b5b3073bc3b50ed4b46092523e2fc2c
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-25 00:40:07 +0000
+
+    squelch some warnings in the new test templates
+
+    Another drawback of the @sections array: if we have fewer sections
+    than we want, we're going to get a warning... 
+
+  Change: 6a14f8c8e0995b1e6b524201cfdbf395fde86386
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-25 00:27:54 +0000
+
+    add content sections to the default templates
+
+    Now only the first section will appear on index/list pages and in the
+    feeds, and a bunch of links to continue reading will be shown.
+
+    Fixes #26 
+
+  Change: 04c5a01901404dd3b481078f73c67e52b24f20aa
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-24 23:52:16 +0000
+
+    add sectioned content to document pages
+
+    Instead of using `content()`, you can get sectioned content using
+    `sections()`. This doesn't add anything to the default theme yet.
+
+    I'm not sure I like the syntax here. I considered doing `content(
+    sections => 2 );` or something, but this was easier.
+
+    Fixes #26 
+
+  Change: e88d47386ca0b9e01103bc6748a35239ac848e69
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-24 22:02:04 +0000
+
+    remove the default templates
+
+    Move the template coercion to Statocles::Template, like Type::Tiny
+    types do.
+
+    template is not a required attribute because pages are sometimes used
+    to ferry template variables to other pages.
+
+    Fixes #82 
+
+  Change: 83727836c08b77f55cae1b46c1722ea5f9da7c58
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-24 21:30:27 +0000
+
+    remove the custom test templates
+
+    Everything should use the templates from t/share/theme
+
+    Fixes #83 
+
+  Change: 00fdc67f42d38318cd4e52cc8cc1e3dca754f54f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-24 21:18:59 +0000
+
+    add a feature list for marketing purposes
+
+    Fixes #84 
+
+  Change: 3c150354a5ac8bac84d3e218f7e399b8d648ef54
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-22 03:07:53 +0000
+
+    add a link to the feed page in the main doc 
+
+------------------------------------------
+version 0.013 at 2014-06-22 08:01:13 +0000
 ------------------------------------------
 
   Change: c4629e0a63ec1832439b52c7ce3593253515e650

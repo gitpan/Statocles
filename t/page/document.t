@@ -18,18 +18,14 @@ This is a paragraph of markdown.
 ## Subtitle 2
 
 This is another paragraph of markdown.
+
+---
+
+This is a second section of content
+
 MARKDOWN
 );
 my $md = Text::Markdown->new;
-
-subtest 'simple page (default template)' => sub {
-    my $page = Statocles::Page::Document->new(
-        document => $doc,
-    );
-
-    my $output = $page->render;
-    eq_or_diff $output, $md->markdown( $doc->content ) . "\n\n";
-};
 
 subtest 'template string' => sub {
     my $tp = Time::Piece->new;
@@ -88,13 +84,23 @@ subtest 'extra args' => sub {
     eq_or_diff $output, $expect;
 };
 
-subtest 'invalid template coercions' => sub {
-    throws_ok {
-        Statocles::Page::Document->new(
-            document => $doc,
-            template => undef,
-        );
-    } qr{Template is undef};
+subtest 'content sections' => sub {
+    my $page = Statocles::Page::Document->new(
+        document => $doc,
+        path => '/path/to/page.html',
+        template => <<'ENDTEMPLATE',
+% my @sections = $self->sections;
+<%= $sections[0] %>
+% if ( @sections > 1 ) {
+MORE...
+% }
+ENDTEMPLATE
+    );
+
+    my $output = $page->render;
+    my @sections = split /\n---\n/, $doc->content;
+    my $expect = join "\n", $md->markdown( $sections[0] ), "MORE...", "", "";
+    eq_or_diff $output, $expect;
 };
 
 done_testing;

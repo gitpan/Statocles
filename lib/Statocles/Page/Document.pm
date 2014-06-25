@@ -1,6 +1,6 @@
 package Statocles::Page::Document;
 # ABSTRACT: Render documents into HTML
-$Statocles::Page::Document::VERSION = '0.013';
+$Statocles::Page::Document::VERSION = '0.014';
 use Statocles::Class;
 with 'Statocles::Page';
 use Text::Markdown;
@@ -19,13 +19,6 @@ has document => (
 );
 
 
-has '+template' => (
-    default => sub {
-        Statocles::Template->new( content => '<%= $content %>' );
-    },
-);
-
-
 sub content {
     my ( $self ) = @_;
     return $self->markdown->markdown( $self->document->content );
@@ -40,6 +33,13 @@ sub vars {
     );
 }
 
+
+sub sections {
+    my ( $self ) = @_;
+    my @sections = split /\n---\n/, $self->document->content;
+    return map { $self->markdown->markdown( $_ ) } @sections;
+}
+
 1;
 
 __END__
@@ -52,7 +52,7 @@ Statocles::Page::Document - Render documents into HTML
 
 =head1 VERSION
 
-version 0.013
+version 0.014
 
 =head1 DESCRIPTION
 
@@ -68,11 +68,6 @@ The publish date/time of this page. A L<Time::Piece> object.
 
 The L<document|Statocles::Document> this page will render.
 
-=head2 template
-
-The L<template|Statocles::Template> to render the
-L<document|Statocles::Document>.
-
 =head1 METHODS
 
 =head2 content
@@ -82,6 +77,11 @@ Generate the document HTML by converting Markdown.
 =head2 vars
 
 Get the template variables for this page.
+
+=head2 sections
+
+Get a list of content divided into sections. The Markdown "---" marker divides
+sections.
 
 =head1 AUTHOR
 

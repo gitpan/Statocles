@@ -1,6 +1,6 @@
 package Statocles::Page::Feed;
 # ABSTRACT: A page for a feed of another page
-$Statocles::Page::Feed::VERSION = '0.013';
+$Statocles::Page::Feed::VERSION = '0.014';
 use Statocles::Class;
 with 'Statocles::Page';
 
@@ -14,20 +14,6 @@ has page => (
 has type => (
     is => 'ro',
     isa => Str,
-);
-
-
-has '+template' => (
-    default => sub {
-        Statocles::Template->new(
-            content => <<'ENDTEMPLATE'
-% for my $page ( @$pages ) {
-% my $doc = $page->document;
-<%= $page->published %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
-% }
-ENDTEMPLATE
-        );
-    },
 );
 
 
@@ -50,7 +36,7 @@ Statocles::Page::Feed - A page for a feed of another page
 
 =head1 VERSION
 
-version 0.013
+version 0.014
 
 =head1 DESCRIPTION
 
@@ -69,11 +55,6 @@ The MIME type of this feed.
 
     application/rss+xml     - RSS feed
     application/atom+xml    - Atom feed
-
-=head2 template
-
-The body template for this list. Should be a string or a Statocles::Template
-object.
 
 =head1 METHODS
 

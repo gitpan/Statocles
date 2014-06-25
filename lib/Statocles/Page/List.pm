@@ -1,6 +1,6 @@
 package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
-$Statocles::Page::List::VERSION = '0.013';
+$Statocles::Page::List::VERSION = '0.014';
 use Statocles::Class;
 with 'Statocles::Page';
 use List::MoreUtils qw( part );
@@ -17,20 +17,6 @@ has [qw( next prev )] => (
     is => 'ro',
     isa => Path,
     coerce => Path->coercion,
-);
-
-
-has '+template' => (
-    default => sub {
-        Statocles::Template->new(
-            content => <<'ENDTEMPLATE'
-% for my $page ( @$pages ) {
-% my $doc = $page->document;
-<%= $page->published %> <%= $page->path %> <%= $doc->title %> <%= $doc->author %> <%= $page->content %>
-% }
-ENDTEMPLATE
-        );
-    },
 );
 
 
@@ -80,7 +66,7 @@ Statocles::Page::List - A page presenting a list of other pages
 
 =head1 VERSION
 
-version 0.013
+version 0.014
 
 =head1 DESCRIPTION
 
@@ -100,11 +86,6 @@ The path to the next page in the pagination series.
 =head2 prev
 
 The path to the previous page in the pagination series.
-
-=head2 template
-
-The body template for this list. Should be a string or a Statocles::Template
-object.
 
 =head1 METHODS
 

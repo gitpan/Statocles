@@ -1,6 +1,6 @@
 package Statocles::Template;
 # ABSTRACT: A template object to pass around
-$Statocles::Template::VERSION = '0.013';
+$Statocles::Template::VERSION = '0.014';
 use Statocles::Class;
 use Mojo::Template;
 
@@ -62,6 +62,18 @@ sub _vars {
     return join " ", 'my $vars = shift;', map { "my \$$_ = \$vars->{'$_'};" } @vars;
 }
 
+
+sub coercion {
+    my ( $class ) = @_;
+    return sub {
+        die "Template is undef" unless defined $_[0];
+        return !ref $_[0]
+            ? Statocles::Template->new( content => $_[0] )
+            : $_[0]
+            ;
+    };
+}
+
 1;
 
 __END__
@@ -74,7 +86,7 @@ Statocles::Template - A template object to pass around
 
 =head1 VERSION
 
-version 0.013
+version 0.014
 
 =head1 DESCRIPTION
 
@@ -101,6 +113,11 @@ Set the default path to something useful for in-memory templates.
 
 Render this template, passing in %args. Each key in %args will be available as
 a scalar in the template.
+
+=head2 coercion
+
+A class method to returns a coercion sub to convert strings into template
+objects.
 
 =head1 TEMPLATE LANGUAGE
 
