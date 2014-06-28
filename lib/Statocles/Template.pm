@@ -1,8 +1,9 @@
 package Statocles::Template;
 # ABSTRACT: A template object to pass around
-$Statocles::Template::VERSION = '0.014';
+$Statocles::Template::VERSION = '0.015';
 use Statocles::Class;
 use Mojo::Template;
+use Scalar::Util qw( blessed );
 
 
 has content => (
@@ -51,7 +52,11 @@ sub render {
         name => $self->path,
     );
     $t->prepend( $self->_vars( keys %args ) );
-    return $t->render( $self->content, \%args );
+    my $content = $t->render( $self->content, \%args );
+    if ( blessed $content && $content->isa( 'Mojo::Exception' ) ) {
+        die "Error in template: " . $content;
+    }
+    return $content;
 }
 
 # Build the Perl string that will unpack the passed-in args
@@ -86,7 +91,7 @@ Statocles::Template - A template object to pass around
 
 =head1 VERSION
 
-version 0.014
+version 0.015
 
 =head1 DESCRIPTION
 

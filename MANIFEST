@@ -53,9 +53,11 @@ t/share/theme/blog/index.html.ep
 t/share/theme/blog/index.rss.ep
 t/share/theme/blog/post.html.ep
 t/share/theme/site/layout.html.ep
+t/share/tmpl/error.html.ep
 t/share/tmpl/page.html.ep
 t/site.t
 t/site/git.t
 t/store.t
 t/template.t
 t/theme.t
+t/theme/check.t

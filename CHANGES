@@ -1,9 +1,90 @@
 ==================================================
-Changes from 2013-06-25 00:00:00 +0000 to present.
+Changes from 2013-06-28 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.014 at 2014-06-25 05:41:30 +0000
+version 0.015 at 2014-06-28 06:12:31 +0000
+------------------------------------------
+
+  Change: c3faed0a03ecbe0f428341c8386c8c69de7b794e
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 01:12:23 +0000
+
+    release v0.015 
+
+  Change: 23a425055dbb69f33d495cbfaf43d19917ab496a
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 01:10:01 +0000
+
+    fix default layout error if no main nav
+
+    All navs should be optional. This was revealed by the new theme check
+    test. Yay! 
+
+  Change: f5c31c74a2dffadc85c232de14282cc4c534437f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 01:07:09 +0000
+
+    add test to check default theme syntax
+
+    Found a lot of horrible design choices in this test, and even
+    revealed a bug in the template! Excellent idea this.
+
+    We need to do more purturbation of the variables, add/remove navs,
+    links, and otherwise, in order to get a good coverage of the themes.
+
+    Fixes #86 
+
+  Change: 4867e02d61034e6ffac61ea56a6d022f2d9d953b
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-27 23:44:56 +0000
+
+    fix exception in test template
+
+    So how long has this been an issue I wonder... 
+
+  Change: 6513645c493a119a930e43b9b92a4f232b971f68
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-27 23:43:03 +0000
+
+    throw an exception when template fails to render
+
+    If the templates are bad, we should stop building. Building a website
+    with a bunch of error messages is pretty pointless...
+
+    Fixes #85 
+
+  Change: 099ea92f7b0c13e994cb647a503b7b699eb63b25
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-27 22:58:55 +0000
+
+    add a line to help with the continue reading link
+
+    It's hard to know where to continue reading if the blog post doesn't
+    quite make it all the way to the bottom of the screen. 
+
+  Change: fd78c0e2039e82995d4d7497fb7a6c373fbacf4a
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-27 22:58:29 +0000
+
+    fix bottom-border on post header
+
+    The post header needs to stand out from any h1 inside the post's
+    content sections 
+
+  Change: 1e093bd0a3618da094bda391552bd0f8be8b11a7
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-27 22:43:45 +0000
+
+    remove crosspost links from the bottom of list
+
+    The crosspost links are already on the top of the article, we do not
+    need them also on the bottom.
+
+    Fixes #87 
+
+------------------------------------------
+version 0.014 at 2014-06-25 05:40:52 +0000
 ------------------------------------------
 
   Change: 5b35ab07bf128ec61fb1693d7c2fc2c8f013f1cc
