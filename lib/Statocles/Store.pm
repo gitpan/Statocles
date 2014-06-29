@@ -1,7 +1,8 @@
 package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
-$Statocles::Store::VERSION = '0.015';
+$Statocles::Store::VERSION = '0.016';
 use Statocles::Class;
+use Scalar::Util qw( blessed );
 use Statocles::Document;
 use YAML;
 use File::Spec::Functions qw( splitdir );
@@ -116,6 +117,15 @@ sub write_page {
     return;
 }
 
+
+sub coercion {
+    my ( $class ) = @_;
+    return sub {
+        return $_[0] if blessed $_[0] and $_[0]->isa( $class );
+        return $class->new( path => $_[0] );
+    };
+}
+
 1;
 
 __END__
@@ -128,7 +138,7 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.015
+version 0.016
 
 =head1 DESCRIPTION
 
@@ -183,6 +193,11 @@ The document is written in Frontmatter format.
 =head2 write_page( $path, $html )
 
 Write the L<page|Statocles::Page> C<html> to the given C<path>.
+
+=head2 coercion
+
+Class method to coerce a string representing a path into a Statocles::Store
+object. Returns a subref suitable to be used as a type coercion in an attriute.
 
 =head1 AUTHOR
 

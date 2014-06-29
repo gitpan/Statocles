@@ -1,7 +1,9 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.015';
+$Statocles::Site::VERSION = '0.016';
 use Statocles::Class;
+use Statocles::Store;
+use Mojo::DOM;
 
 
 has title => (
@@ -40,6 +42,7 @@ has build_store => (
     is => 'ro',
     isa => InstanceOf['Statocles::Store'],
     required => 1,
+    coerce => Statocles::Store->coercion,
 );
 
 
@@ -48,6 +51,7 @@ has deploy_store => (
     isa => InstanceOf['Statocles::Store'],
     lazy => 1,
     default => sub { $_[0]->build_store },
+    coerce => Statocles::Store->coercion,
 );
 
 
@@ -72,6 +76,7 @@ sub deploy {
 sub write {
     my ( $self, $store ) = @_;
     my $apps = $self->apps;
+    my @pages;
     my %args = (
         site => $self,
     );
@@ -90,8 +95,46 @@ sub write {
                 $page->path( '/index.html' );
             }
             $store->write_page( $page->path, $page->render( %args ) );
+            push @pages, $page;
         }
     }
+
+    # Build the sitemap.xml
+    my $sitemap = Mojo::DOM->new->xml(1);
+    for my $page ( @pages ) {
+        next if $page->isa( 'Statocles::Page::Feed' );
+        my $node = Mojo::DOM->new->xml(1);
+
+        my ( $changefreq, $priority, $lastmod ) = ( 'never', '0.5', undef );
+        if ( $page->isa( 'Statocles::Page::List' ) ) {
+            $changefreq = 'daily';
+            $priority = '0.3';
+        }
+        elsif ( $page->isa( 'Statocles::Page::Document' ) ) {
+            $lastmod = $page->document->last_modified
+                     ? $page->document->last_modified->strftime( '%Y-%m-%d' )
+                     : $page->published->strftime( '%Y-%m-%d' );
+        }
+
+        $node->type( 'url' );
+        $node->append_content( '<loc>' . $self->url( $page->path ) . '</loc>' );
+        $node->append_content( '<changefreq>' . $changefreq . '</changefreq>' );
+        $node->append_content( '<priority>' . $priority . '</priority>' );
+        if ( $lastmod ) {
+            $node->append_content( '<lastmod>' . $lastmod . '</lastmod>' );
+        }
+
+        $sitemap->append_content( "<url>$node</url>" );
+    }
+    $sitemap = $sitemap->wrap( '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>' );
+    $store->write_page( 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>' . $sitemap->to_string );
+
+    my @robots = (
+        "Sitemap: " . $self->url( 'sitemap.xml' ),
+        "User-Agent: *",
+        "Disallow: ",
+    );
+    $store->write_page( 'robots.txt', join "\n", @robots );
 }
 
 
@@ -115,7 +158,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.015
+version 0.016
 
 =head1 SYNOPSIS
 

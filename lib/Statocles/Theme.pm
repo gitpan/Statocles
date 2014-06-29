@@ -1,11 +1,12 @@
 package Statocles::Theme;
 # ABSTRACT: Templates, headers, footers, and navigation
-$Statocles::Theme::VERSION = '0.015';
+$Statocles::Theme::VERSION = '0.016';
 use Statocles::Class;
 use File::Share qw( dist_dir );
+use Scalar::Util qw( blessed );
 
 
-has source_dir => (
+has path => (
     is => 'ro',
     isa => Path,
     coerce => Path->coercion,
@@ -23,9 +24,9 @@ has templates => (
 around BUILDARGS => sub {
     my ( $orig, $self, @args ) = @_;
     my $args = $self->$orig( @args );
-    if ( $args->{source_dir} && $args->{source_dir} =~ /^::/ ) {
-        my $name = substr $args->{source_dir}, 2;
-        $args->{source_dir} = Path::Tiny->new( dist_dir( 'Statocles' ) )->child( 'theme', $name );
+    if ( $args->{path} && $args->{path} =~ /^::/ ) {
+        my $name = substr $args->{path}, 2;
+        $args->{path} = Path::Tiny->new( dist_dir( 'Statocles' ) )->child( 'theme', $name );
     }
     return $args;
 };
@@ -34,7 +35,7 @@ around BUILDARGS => sub {
 sub read {
     my ( $self ) = @_;
     my %tmpl;
-    my $iter = $self->source_dir->iterator({ recurse => 1, follow_symlinks => 1 });
+    my $iter = $self->path->iterator({ recurse => 1, follow_symlinks => 1 });
     while ( my $path = $iter->() ) {
         if ( $path =~ /[.]ep$/ ) {
             my $name = $path->basename( '.ep' ); # remove extension
@@ -53,6 +54,15 @@ sub template {
     return $self->templates->{ $app }{ $template };
 }
 
+
+sub coercion {
+    my ( $class ) = @_;
+    return sub {
+        return $_[0] if blessed $_[0] and $_[0]->isa( $class );
+        return $class->new( path => $_[0] );
+    };
+}
+
 1;
 
 __END__
@@ -65,7 +75,7 @@ Statocles::Theme - Templates, headers, footers, and navigation
 
 =head1 VERSION
 
-version 0.015
+version 0.016
 
 =head1 SYNOPSIS
 
@@ -85,16 +95,16 @@ A Theme contains all the L<templates|Statocles::Template> that
 L<applications|Statocles::App> need. This class handles finding and parsing
 files into L<template objects|Statocles::Template>.
 
-When the L</source_dir> is read, the templates inside are organized based on
+When the L</path> is read, the templates inside are organized based on
 their name and their parent directory.
 
 =head1 ATTRIBUTES
 
-=head2 source_dir
+=head2 path
 
 The source directory for this theme.
 
-If the source_dir begins with ::, will pull one of the Statocles default
+If the path begins with ::, will pull one of the Statocles default
 themes from the Statocles share directory.
 
 =head2 templates
@@ -105,17 +115,22 @@ The template objects for this theme.
 
 =head2 BUILDARGS
 
-Handle the source_dir :: share theme.
+Handle the path :: share theme.
 
 =head2 read()
 
-Read the C<source_dir> and create the L<template|Statocles::Template> objects
+Read the C<path> and create the L<template|Statocles::Template> objects
 inside.
 
 =head2 template( $section => $name )
 
 Get the L<template|Statocles::Template> from the given C<section> with the
 given C<name>.
+
+=head2 coercion
+
+Class method to coerce a string representing a path into a Statocles::Theme
+object. Returns a subref suitable to be used as a type coercion in an attriute.
 
 =head1 AUTHOR
 

@@ -1,9 +1,111 @@
 ==================================================
-Changes from 2013-06-28 00:00:00 +0000 to present.
+Changes from 2013-06-29 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.015 at 2014-06-28 06:12:31 +0000
+version 0.016 at 2014-06-29 04:58:44 +0000
+------------------------------------------
+
+  Change: 8f9031575576c28def5dc3700581efaaf10182ff
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 23:58:34 +0000
+
+    release v0.016 
+
+  Change: 56729313d2537c09b14d0f9dab6a8205729e35ce
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 23:57:52 +0000
+
+    quiet some warnings
+
+    I'm not sure what should happen about sitemap.xml and robots.txt if
+    there is no base_url... 
+
+  Change: 6e4079a1640d26411f45c74b573fb1214393b05e
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 23:34:05 +0000
+
+    add a simple robots.txt
+
+    The main purpose of this is to point search engines at the
+    sitemap.xml, but in the future we'll be able to mark documents as
+    noindex or something.
+
+    Fixes #62 
+
+  Change: 62e726c478c845bfc29d3c4c4b6f22ad99a06948
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 23:14:51 +0000
+
+    add sitemap.xml generation
+
+    Right now this is absolutely not customizable by applications in any
+    way. In the future, we may add Page-level metadata so that apps can
+    decide what the sitemap looks like.
+
+    I'm not sure I'm using Mojo::DOM to create these things correctly.
+
+    Fixes #61 
+
+  Change: 918ca5f32e8f7e4ae0f6873213e4b5b8d0325a65
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 20:35:53 +0000
+
+    change theme source_dir -> path
+
+    Internal consistency is good.
+
+    Fixes #90 
+
+  Change: c2cc9ee01e8a311da68a832252c4f18f902739de
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 20:25:21 +0000
+
+    add coercions for Theme and Store
+
+    Since these objects are mostly just paths, why not coerce the real
+    object from the simple path string? It makes the initial setup a lot
+    easier.
+
+    The only tradeoff is that it's not as obvious what is happening in
+    the site config file, so it may discourage others from creating their
+    own Theme or Store.
+
+    Fixes #69 
+
+  Change: bda2aaac30366766aa5db535d44cf7f01fbfd011
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 19:34:40 +0000
+
+    fix pre and code wrapping
+
+    Fixes #89 
+
+  Change: 1115d583cbb91e6ee7dfce41913c2d578e1b5a97
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 19:15:03 +0000
+
+    blog source -> store
+
+    "store" is far more appropriate, since it's the Statocles::Store
+    object for the application
+
+    Fixes #88 
+
+  Change: 25cc32bb6f8e526bcb1936aec24e0009eeb76284
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 01:31:19 +0000
+
+    add test prereq found by kwalitee 
+
+  Change: b1c92f169121174b2ae85c2232a4069e49135830
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-28 01:28:05 +0000
+
+    fix pod error found by kwalitee 
+
+------------------------------------------
+version 0.015 at 2014-06-28 06:12:23 +0000
 ------------------------------------------
 
   Change: c3faed0a03ecbe0f428341c8386c8c69de7b794e

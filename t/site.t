@@ -4,6 +4,7 @@ use Statocles::Site;
 use Statocles::Theme;
 use Statocles::Store;
 use Statocles::App::Blog;
+use Mojo::DOM;
 my $SHARE_DIR = path( __DIR__, 'share' );
 
 subtest 'site writes application' => sub {
@@ -64,6 +65,94 @@ subtest 'site index and navigation' => sub {
     };
 };
 
+subtest 'sitemap.xml and robots.txt' => sub {
+    my $tmpdir = tempdir;
+    my $site = site( $tmpdir, index => 'blog' );
+
+    my @pages = map { $_->pages } values %{ $site->apps };
+    my $today = Time::Piece->new->strftime( '%Y-%m-%d' );
+    my $to_href = sub {
+        my $lastmod = $_->at('lastmod');
+        return {
+            loc => $_->at('loc')->text,
+            changefreq => $_->at('changefreq')->text,
+            priority => $_->at('priority')->text,
+            ( $lastmod ? ( lastmod => $lastmod->text ) : () ),
+        };
+    };
+
+    my %page_mod = (
+        '/blog/2014/04/23/slug.html' => '2014-04-30',
+        '/blog/2014/04/30/plug.html' => '2014-04-30',
+        '/blog/2014/05/22/(regex)[name].file.html' => '2014-05-22',
+        '/blog/2014/06/02/more_tags.html' => '2014-06-02',
+    );
+    my @lists = qw(
+        /index.html
+        /blog/page-2.html
+        /blog/tag/more/index.html
+        /blog/tag/better/index.html
+        /blog/tag/better/page-2.html
+        /blog/tag/error-message/index.html
+        /blog/tag/even-more-tags/index.html
+    );
+
+    my @expect = (
+        ( # List pages
+            map {;
+                {
+                    loc => "http://example.com$_",
+                    priority => '0.3',
+                    changefreq => 'daily',
+                }
+            }
+            @lists
+        ),
+        ( # Post pages
+            map {
+                {
+                    loc => "http://example.com$_",
+                    priority => '0.5',
+                    changefreq => 'never',
+                    lastmod => $page_mod{ $_ },
+                }
+            }
+            keys %page_mod
+        )
+    );
+
+    subtest 'build' => sub {
+        $site->build;
+        my $dom = Mojo::DOM->new( $tmpdir->child( 'build', 'sitemap.xml' )->slurp );
+        is $dom->at('urlset')->type, 'urlset';
+        my @urls = $dom->at('urlset')->children->map( $to_href )->each;
+        cmp_deeply \@urls, bag( @expect ) or diag explain \@urls;
+        cmp_deeply
+            [ $tmpdir->child( 'build', 'robots.txt' )->lines ],
+            [
+                "Sitemap: http://example.com/sitemap.xml\n",
+                "User-Agent: *\n",
+                "Disallow: ",
+            ];
+        ok !$tmpdir->child( 'deploy', 'sitemap.xml' )->exists, 'not deployed yet';
+        ok !$tmpdir->child( 'deploy', 'robots.txt' )->exists, 'not deployed yet';
+    };
+    subtest 'deploy' => sub {
+        $site->deploy;
+        my $dom = Mojo::DOM->new( $tmpdir->child( 'deploy', 'sitemap.xml' )->slurp );
+        is $dom->at('urlset')->type, 'urlset';
+        my @urls = $dom->at('urlset')->children->map( $to_href )->each;
+        cmp_deeply \@urls, bag( @expect ) or diag explain \@urls;
+        cmp_deeply
+            [ $tmpdir->child( 'deploy', 'robots.txt' )->lines ],
+            [
+                "Sitemap: http://example.com/sitemap.xml\n",
+                "User-Agent: *\n",
+                "Disallow: ",
+            ];
+    };
+};
+
 subtest 'site urls' => sub {
     my $tmpdir = tempdir;
     my $site = site( $tmpdir,
@@ -80,27 +169,19 @@ done_testing;
 sub site {
     my ( $tmpdir, %site_args ) = @_;
 
-    my $theme = Statocles::Theme->new(
-        source_dir => $SHARE_DIR->child( 'theme' ),
-    );
-
     my $blog = Statocles::App::Blog->new(
-        source => Statocles::Store->new(
-            path => $SHARE_DIR->child( 'blog' ),
-        ),
+        store => $SHARE_DIR->child( 'blog' ),
         url_root => '/blog',
-        theme => $theme,
+        theme => $SHARE_DIR->child( 'theme' ),
+        page_size => 2,
     );
 
     my $site = Statocles::Site->new(
         title => 'Test Site',
         apps => { blog => $blog },
-        build_store => Statocles::Store->new(
-            path => $tmpdir->child( 'build' ),
-        ),
-        deploy_store => Statocles::Store->new(
-            path => $tmpdir->child( 'deploy' ),
-        ),
+        build_store => $tmpdir->child( 'build' ),
+        deploy_store => $tmpdir->child( 'deploy' ),
+        base_url => 'http://example.com',
         %site_args,
     );
 

@@ -1,9 +1,11 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.015';
+$Statocles::App::Blog::VERSION = '0.016';
 use Statocles::Class;
 use Memoize qw( memoize );
 use Getopt::Long qw( GetOptionsFromArray );
+use Statocles::Store;
+use Statocles::Theme;
 use Statocles::Page::Document;
 use Statocles::Page::List;
 use Statocles::Page::Feed;
@@ -11,9 +13,10 @@ use Statocles::Page::Feed;
 extends 'Statocles::App';
 
 
-has source => (
+has store => (
     is => 'ro',
     isa => InstanceOf['Statocles::Store'],
+    coerce => Statocles::Store->coercion,
 );
 
 
@@ -28,6 +31,7 @@ has theme => (
     is => 'ro',
     isa => InstanceOf['Statocles::Theme'],
     required => 1,
+    coerce => Statocles::Theme->coercion,
 );
 
 
@@ -95,7 +99,7 @@ ENDHELP
             title => $title,
             last_modified => Time::Piece->new,
         );
-        my $full_path = $self->source->write_document( $path => \%doc );
+        my $full_path = $self->store->write_document( $path => \%doc );
         print "New post at: $full_path\n";
         if ( $ENV{EDITOR} ) {
             system $ENV{EDITOR}, $full_path;
@@ -109,7 +113,7 @@ sub post_pages {
     my ( $self ) = @_;
     my $today = Time::Piece->new->ymd;
     my @pages;
-    for my $doc ( @{ $self->source->documents } ) {
+    for my $doc ( @{ $self->store->documents } ) {
         my $path = join "/", $self->url_root, $doc->path;
         $path =~ s{/{2,}}{/}g;
         $path =~ s{[.]\w+$}{.html};
@@ -285,7 +289,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.015
+version 0.016
 
 =head1 DESCRIPTION
 
@@ -328,7 +332,7 @@ C<deploy> in a nightly cron job.
 
 =head1 ATTRIBUTES
 
-=head2 source
+=head2 store
 
 The L<store|Statocles::Store> to read for documents.
 
@@ -434,6 +438,8 @@ The post title
 =item author
 
 The post author
+
+=back
 
 =back
 
