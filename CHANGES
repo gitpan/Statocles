@@ -3,7 +3,29 @@ Changes from 2013-06-29 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.016 at 2014-06-29 04:58:44 +0000
+version 0.017 at 2014-06-29 23:27:42 +0000
+------------------------------------------
+
+  Change: e09fce9902b52f4769947cda3d1a0439105eb03b
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-29 18:27:27 +0000
+
+    release v0.017 
+
+  Change: 0dd706b725b7eb2b07e462dd487b2b0a67452e30
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-29 18:26:38 +0000
+
+    add basic daemon command
+
+    This version does not yet auto-build the site when content changes,
+    we'll need to do some event emitting for that. But for now I'm going
+    to consider this good enough to close the ticket.
+
+    Fixes #1 
+
+------------------------------------------
+version 0.016 at 2014-06-29 04:58:34 +0000
 ------------------------------------------
 
   Change: 8f9031575576c28def5dc3700581efaaf10182ff

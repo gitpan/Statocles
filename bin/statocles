@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # ABSTRACT: Run Statocles commands
 package statocles;
-$statocles::VERSION = '0.016';
+$statocles::VERSION = '0.017';
 use Statocles::Command;
 exit Statocles::Command->main( @ARGV );
 
@@ -15,7 +15,7 @@ statocles - Run Statocles commands
 
 =head1 VERSION
 
-version 0.016
+version 0.017
 
 =head1 SYNOPSIS
 
@@ -31,6 +31,7 @@ version 0.016
 The command to run. Available commands:
 
     build       - Build the site
+    daemon      - Run an HTTP daemon to test the built site
     deploy      - Deploy the site
     apps        - List the applications in this site
     <app> help  - Get help for a specific application

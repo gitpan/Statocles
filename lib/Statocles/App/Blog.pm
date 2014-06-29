@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.016';
+$Statocles::App::Blog::VERSION = '0.017';
 use Statocles::Class;
 use Memoize qw( memoize );
 use Getopt::Long qw( GetOptionsFromArray );
@@ -289,7 +289,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.016
+version 0.017
 
 =head1 DESCRIPTION
 

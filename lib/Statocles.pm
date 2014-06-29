@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.016';
+$Statocles::VERSION = '0.017';
 # This module exists for both documentation and to help File::Share
 # find the right share dir
 
@@ -16,7 +16,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.016
+version 0.017
 
 =head1 DESCRIPTION
 
@@ -35,6 +35,10 @@ A simple format combining YAML and Markdown for editing site content.
 =item *
 
 A command-line application for building, deploying, and editing the site.
+
+=item *
+
+A simple daemon to display a test site before it goes live.
 
 =item *
 
