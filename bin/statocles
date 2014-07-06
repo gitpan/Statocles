@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # ABSTRACT: Run Statocles commands
 package statocles;
-$statocles::VERSION = '0.017';
+$statocles::VERSION = '0.018';
 use Statocles::Command;
 exit Statocles::Command->main( @ARGV );
 
@@ -15,7 +15,7 @@ statocles - Run Statocles commands
 
 =head1 VERSION
 
-version 0.017
+version 0.018
 
 =head1 SYNOPSIS
 

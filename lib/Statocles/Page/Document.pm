@@ -1,6 +1,6 @@
 package Statocles::Page::Document;
 # ABSTRACT: Render documents into HTML
-$Statocles::Page::Document::VERSION = '0.017';
+$Statocles::Page::Document::VERSION = '0.018';
 use Statocles::Class;
 with 'Statocles::Page';
 use Text::Markdown;
@@ -16,6 +16,13 @@ has published => (
 has document => (
     is => 'ro',
     isa => InstanceOf['Statocles::Document'],
+);
+
+
+has tags => (
+    is => 'ro',
+    isa => ArrayRef[HashRef],
+    default => sub { [] },
 );
 
 
@@ -52,7 +59,7 @@ Statocles::Page::Document - Render documents into HTML
 
 =head1 VERSION
 
-version 0.017
+version 0.018
 
 =head1 DESCRIPTION
 
@@ -67,6 +74,14 @@ The publish date/time of this page. A L<Time::Piece> object.
 =head2 document
 
 The L<document|Statocles::Document> this page will render.
+
+=head2 tags
+
+The tag links for this document. An array of link hashes with the following
+keys:
+
+    title   - The title of the link
+    href    - The page of the link
 
 =head1 METHODS
 

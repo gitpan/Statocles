@@ -13,7 +13,7 @@ configure_requires:
   File::ShareDir::Install: '0.06'
   Module::Build: '0.3601'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.141520'
+generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.140640'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -42,4 +42,4 @@ resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: https://github.com/preaction/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: '0.017'
+version: '0.018'

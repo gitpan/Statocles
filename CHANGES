@@ -1,9 +1,110 @@
 ==================================================
-Changes from 2013-06-29 00:00:00 +0000 to present.
+Changes from 2013-07-06 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.017 at 2014-06-29 23:27:42 +0000
+version 0.018 at 2014-07-06 03:38:42 +0000
+------------------------------------------
+
+  Change: 6f27d7e7b65167b5dc375aa4aceb165861d24f30
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-05 22:38:29 +0000
+
+    release v0.018 
+
+  Change: 1112fb3ee62fcd75a879cfdd052d4814a251f297
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-05 22:37:56 +0000
+
+    add blog page tags to the default theme
+
+    Fixes #64 
+
+  Change: bb1a6e29158c508dd1f52858a022bd6940165cb2
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-05 22:24:04 +0000
+
+    add page tags to the blog 
+
+  Change: d93f12db304cafeab5b059e8a7adff6100aa38d3
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-05 22:10:47 +0000
+
+    add tags to pages
+
+    This allows us to link to the tags the current document has, which is
+    a nice thing to have. 
+
+  Change: be99aa4c22aee6d3c27ca5f5919a28c478dde8a5
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-01 00:57:33 +0000
+
+    let someone else test blead
+
+    Can't read
+    /home/travis/build/preaction/Statocles/build_dir/cover_db/digests
+    with JSON::PP: garbage after JSON object, at character offset 12061
+    (before "f.pm","3e9c9fc1c7769...") at
+    /home/travis/perl5/perlbrew/perls/blead/lib/site_perl/5.21.2/x86_64-l
+    inux/Devel/Cover/DB/IO/JSON.pm line 40. BEGIN failed--compilation
+    aborted at t/store.t line 2.
+
+    Do I even want to know? 
+
+  Change: 722a2605cd4fb4a791b18aabfb6808b53a96e200
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-01 00:49:36 +0000
+
+    Mojolicious requires at least 5.10
+
+    Because of that, so do we, so we get 'say' and 'state', which is
+    nice. 
+
+  Change: 12fc098a588d77b9190587db34ac17cf6730dba0
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-01 00:40:04 +0000
+
+    no more SurgicalPodWeaver, use regular PodWeaver
+
+    I can't get SurgicalPodWeaver to work with Travis, and all my modules
+    and scripts should be using PodWeaver anyway. 
+
+  Change: a4ac624d3b3a5167618d7c3c69d748b526bf7605
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-01 00:33:00 +0000
+
+    get podweaver before we install 
+
+  Change: 4252f628eb527690fc77c8fc4dec0bb755c4a5a4
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-01 00:29:25 +0000
+
+    PodWeaver still isn't specified by SurgicalPodWeaver 
+
+  Change: 0aeaa44d090925bd9fe44cfc2f23305d8a586960
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-01 00:25:27 +0000
+
+    fix yaml syntax for travis.yml
+
+    Maybe this will make it build... 
+
+  Change: 9ca9c77e65ad444170e852fa063d485f6f7c7679
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-01 00:17:38 +0000
+
+    possibly fix `daemon` test by randomizing the port 
+
+  Change: 50e076de78e493f76c76b115e2907a8fe0c8434f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-06-30 23:09:14 +0000
+
+    add travis-ci and coveralls
+
+    Fixes #52 
+
+------------------------------------------
+version 0.017 at 2014-06-29 23:27:27 +0000
 ------------------------------------------
 
   Change: e09fce9902b52f4769947cda3d1a0439105eb03b

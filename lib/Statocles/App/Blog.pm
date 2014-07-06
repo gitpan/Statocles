@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.017';
+$Statocles::App::Blog::VERSION = '0.018';
 use Statocles::Class;
 use Memoize qw( memoize );
 use Getopt::Long qw( GetOptionsFromArray );
@@ -124,6 +124,14 @@ sub post_pages {
 
         next if $date gt $today;
 
+        my @tags;
+        for my $tag ( @{ $doc->tags } ) {
+            push @tags, {
+                title => $tag,
+                href => $self->_tag_url( $tag ),
+            };
+        }
+
         push @pages, Statocles::Page::Document->new(
             app => $self,
             layout => $self->theme->template( site => 'layout.html' ),
@@ -131,6 +139,7 @@ sub post_pages {
             document => $doc,
             path => $path,
             published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
+            tags => \@tags,
         );
     }
     return @pages;
@@ -289,7 +298,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.017
+version 0.018
 
 =head1 DESCRIPTION
 
