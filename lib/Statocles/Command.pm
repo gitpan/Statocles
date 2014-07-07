@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.018';
+$Statocles::Command::VERSION = '0.019';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -76,7 +76,7 @@ sub main {
 }
 
 package Statocles::Command::_MOJOAPP;
-$Statocles::Command::_MOJOAPP::VERSION = '0.018';
+$Statocles::Command::_MOJOAPP::VERSION = '0.019';
 use Mojo::Base 'Mojolicious';
 has 'site';
 
@@ -104,7 +104,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.018
+version 0.019
 
 =head1 SYNOPSIS
 

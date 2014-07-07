@@ -1,9 +1,38 @@
 ==================================================
-Changes from 2013-07-06 00:00:00 +0000 to present.
+Changes from 2013-07-07 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.018 at 2014-07-06 03:38:42 +0000
+version 0.019 at 2014-07-07 03:16:04 +0000
+------------------------------------------
+
+  Change: f0539c1ae9dec029b56158f871108f4d82ebca63
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-06 22:15:50 +0000
+
+    release v0.019 
+
+  Change: 6e6246c7da8a7d3fd39e863ba9b43a6457974667
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-06 22:11:57 +0000
+
+    allow filtering of tags on the index page
+
+    We can exclude tags on the index page now, with some overrides if our
+    excludes become too zealous.
+
+    Fixes #12 
+
+  Change: f64c24be631626c9d0668a731384d69aa9352bbe
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-06 21:31:09 +0000
+
+    require Mojolicious 4.76
+
+    This version added the Mojo::DOM->wrap method. 
+
+------------------------------------------
+version 0.018 at 2014-07-06 03:38:29 +0000
 ------------------------------------------
 
   Change: 6f27d7e7b65167b5dc375aa4aceb165861d24f30

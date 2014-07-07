@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.018';
+$Statocles::App::Blog::VERSION = '0.019';
 use Statocles::Class;
 use Memoize qw( memoize );
 use Getopt::Long qw( GetOptionsFromArray );
@@ -39,6 +39,13 @@ has page_size => (
     is => 'ro',
     isa => Int,
     default => sub { 5 },
+);
+
+
+has index_tags => (
+    is => 'ro',
+    isa => ArrayRef[Str],
+    default => sub { [] },
 );
 
 
@@ -163,12 +170,26 @@ my %FEEDS = (
 sub index {
     my ( $self ) = @_;
 
+    # Filter the index_tags
+    my @post_pages;
+    PAGE: for my $page ( $self->post_pages ) {
+        my $add = 1;
+        for my $tag_spec ( @{ $self->index_tags } ) {
+            my $flag = substr $tag_spec, 0, 1;
+            my $tag = substr $tag_spec, 1;
+            if ( grep { $_ eq $tag } @{ $page->document->tags } ) {
+                $add = $flag eq '-' ? 0 : 1;
+            }
+        }
+        push @post_pages, $page if $add;
+    }
+
     my @pages = Statocles::Page::List->paginate(
         after => $self->page_size,
         path => join( "/", $self->url_root, 'page-%i.html' ),
         index => join( "/", $self->url_root, 'index.html' ),
         # Sorting by path just happens to also sort by date
-        pages => [ sort { $b->path cmp $a->path } $self->post_pages ],
+        pages => [ sort { $b->path cmp $a->path } @post_pages ],
         app => $self,
         template => $self->theme->template( blog => 'index.html' ),
         layout => $self->theme->template( site => 'layout.html' ),
@@ -298,7 +319,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.018
+version 0.019
 
 =head1 DESCRIPTION
 
@@ -359,6 +380,20 @@ uses.
 
 The number of posts to put in a page (the main page and the tag pages). Defaults
 to 5.
+
+=head2 index_tags
+
+Filter the tags shown in the index page. An array of tags prefixed with either
+a + or a -. By prefixing the tag with a "-", it will be removed from the index,
+unless a later tag prefixed with a "+" also matches.
+
+By default, all tags are shown on the index page.
+
+So, given a document with tags "foo", and "bar":
+
+    index_tags => [ ];                  # document will be included
+    index_tags => [ '-foo' ];           # document will not be included
+    index_tags => [ '-foo', '+bar' ];   # document will be included
 
 =head1 METHODS
 
