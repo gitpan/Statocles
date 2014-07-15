@@ -5,6 +5,7 @@ my $SHARE_DIR = path( __DIR__, 'share' );
 use Statocles::Store;
 use Statocles::Page::Document;
 use File::Copy::Recursive qw( dircopy );
+use Capture::Tiny qw( capture );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
 
@@ -80,6 +81,13 @@ subtest 'read documents' => sub {
         path => $SHARE_DIR->child( 'blog' ),
     );
     cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+
+    subtest 'bad documents' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( 'error' ),
+        );
+        throws_ok { $store->documents } qr{Error parsing YAML in};
+    };
 };
 
 subtest 'read with relative directory' => sub {
@@ -115,8 +123,8 @@ subtest 'write document' => sub {
     subtest 'simple path' => sub {
         my $full_path = $store->write_document( 'example.yml' => $doc  );
         is $full_path, $store->path->child( 'example.yml' );
-        cmp_deeply $store->read_document( $full_path ), $doc
-            or diag explain $store->read_document( $full_path );
+        cmp_deeply $store->read_document( 'example.yml' ), $doc
+            or diag explain $store->read_document( 'example.yml' );
         eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar
@@ -135,7 +143,7 @@ ENDFILE
         my $path = path(qw( blog 2014 05 28 example.yml ));
         my $full_path = $store->write_document( $path => $doc );
         is $full_path, $tmpdir->child( $path );
-        cmp_deeply $store->read_document( $full_path ), $doc;
+        cmp_deeply $store->read_document( $path ), $doc;
         eq_or_diff path( $full_path )->slurp, <<ENDFILE
 ---
 foo: bar
@@ -152,7 +160,7 @@ ENDFILE
     };
 };
 
-subtest 'write pages' => sub {
+subtest 'write files' => sub {
     my $tmpdir = tempdir;
     my $store = Statocles::Store->new(
         path => $tmpdir,
@@ -166,7 +174,7 @@ subtest 'write pages' => sub {
         ),
         template => '<%= $content %>',
     );
-    $store->write_page( $page->path, $page->render );
+    $store->write_file( $page->path, $page->render );
     my $path = $tmpdir->child( '2014', '04', '23', 'slug.html' );
     cmp_deeply $path->slurp, $page->render;
 };
@@ -186,6 +194,45 @@ subtest 'store coercion' => sub {
     my $store = $coerce->( $SHARE_DIR->child( 'blog' ) );
     isa_ok $store, 'Statocles::Store';
     is $store->path, $SHARE_DIR->child( 'blog' );
+};
+
+subtest 'verbose' => sub {
+    no warnings qw( once );
+    local $Statocles::VERBOSE = 1;
+
+    subtest 'write' => sub {
+        my $tmpdir = tempdir;
+        my $store = Statocles::Store->new(
+            path => $tmpdir,
+        );
+
+        subtest 'write_file' => sub {
+            my ( $out, $err, $exit ) = capture {
+                $store->write_file( 'path.html' => 'HTML' );
+            };
+            ok !$err, 'no output on stderr' or diag $err;
+            is $out, "Write file: path.html\n";
+        };
+
+        subtest 'write_document' => sub {
+            my ( $out, $err, $exit ) = capture {
+                $store->write_document( 'path.yml' => { foo => 'BAR' } );
+            };
+            ok !$err, 'no output on stderr' or diag $err;
+            is $out, "Write document: path.yml\n";
+        };
+    };
+
+    subtest 'read document' => sub {
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( 'blog' ),
+        );
+        my ( $out, $err, $exit ) = capture {
+            $store->read_document( path( qw( 2014 04 23 slug.yml ) ) );
+        };
+        ok !$err, 'no output on stderr' or diag $err;
+        is $out, 'Read document: ' . path( qw( 2014 04 23 slug.yml ) ) . "\n";
+    };
 };
 
 done_testing;

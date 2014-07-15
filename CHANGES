@@ -1,9 +1,81 @@
 ==================================================
-Changes from 2013-07-07 00:00:00 +0000 to present.
+Changes from 2013-07-15 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.019 at 2014-07-07 03:16:04 +0000
+version 0.020 at 2014-07-15 05:02:02 +0000
+------------------------------------------
+
+  Change: a11171f89d60c955e8f1b119d42c4481aa492d33
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-15 00:01:49 +0000
+
+    Release v0.020 
+
+  Change: 4484c4c5b178398727bb694ef6c9624cbb4284b7
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-15 00:00:32 +0000
+
+    add docs about --verbose flag 
+
+  Change: 86a6d5489f7cdc1be1cc2cd7205c8009ee015795
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-14 23:53:55 +0000
+
+    add --verbose flag to show some useful information
+
+    This shows some messages when we read and write files.
+
+    Fixes #93 
+
+  Change: f8017582a678130e9e23b3aacb2ad13b1c5c0ede
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-14 23:03:37 +0000
+
+    make read_document take a relative path
+
+    This makes read_document work like write_document and write_file, and
+    protects us from breaking out of the store's directory like we
+    should. 
+
+  Change: aba59bfeb7d10f5cc5e779c716fb8a94c8226366
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-14 22:48:10 +0000
+
+    silence warning when no content in the document
+
+    Content isn't everything 
+
+  Change: d3c2bda116993b20029e7d87bfe288c484e3cf29
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-12 21:03:01 +0000
+
+    write_page -> write_file
+
+    We write more than just pages using this, and we are going to add a
+    read_file method (probably a find_file method too). 
+
+  Change: e134df749641185671a9a9ce08563aac47dccebe
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-11 23:47:05 +0000
+
+    better reporting on YAML loading errors
+
+    Fixes #94
+
+    We may want to try to load _all_ documents and then report on which
+    ones were bad. Maybe that's what the `check` command could do... 
+
+  Change: a264f117aa5ff5615657fad859e2a61caa3dccf5
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-07 22:31:49 +0000
+
+    fix post images breaking the layout
+
+    Fixes #80 
+
+------------------------------------------
+version 0.019 at 2014-07-07 03:15:50 +0000
 ------------------------------------------
 
   Change: f0539c1ae9dec029b56158f871108f4d82ebca63

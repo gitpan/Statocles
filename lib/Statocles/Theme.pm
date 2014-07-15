@@ -1,6 +1,6 @@
 package Statocles::Theme;
 # ABSTRACT: Templates, headers, footers, and navigation
-$Statocles::Theme::VERSION = '0.019';
+$Statocles::Theme::VERSION = '0.020';
 use Statocles::Class;
 use File::Share qw( dist_dir );
 use Scalar::Util qw( blessed );
@@ -75,7 +75,7 @@ Statocles::Theme - Templates, headers, footers, and navigation
 
 =head1 VERSION
 
-version 0.019
+version 0.020
 
 =head1 SYNOPSIS
 

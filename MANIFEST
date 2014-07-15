@@ -47,6 +47,7 @@ t/share/blog/2014/05/22/(regex)[name].file.yml
 t/share/blog/2014/06/02/more_tags.yml
 t/share/blog/9999/12/31/forever-is-a-long-time.yml
 t/share/blog/draft/a-draft-post.yml
+t/share/error/bad.yml
 t/share/multi.yml
 t/share/theme/blog/index.atom.ep
 t/share/theme/blog/index.html.ep

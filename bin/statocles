@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # ABSTRACT: Run Statocles commands
 package statocles;
-$statocles::VERSION = '0.019';
+$statocles::VERSION = '0.020';
 use Statocles::Command;
 exit Statocles::Command->main( @ARGV );
 
@@ -15,11 +15,11 @@ statocles - Run Statocles commands
 
 =head1 VERSION
 
-version 0.019
+version 0.020
 
 =head1 SYNOPSIS
 
-    statocles [--config <file>] [--site <site>] <command>
+    statocles [-v] [--config <file>] [--site <site>] <command>
     statocles -h|--help
 
 =head1 DESCRIPTION
@@ -48,6 +48,18 @@ The configuration file is a L<Beam::Wire> container file.
 
 The site to use, which is the name of an object in the config file. Defaults to
 C<site>.
+
+=head2 -v | --verbose
+
+Display diagnostic information:
+
+=over
+
+=item *
+
+Reading and writing files
+
+=back
 
 =head2 -h | --help
 

@@ -1,6 +1,6 @@
 package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
-$Statocles::Store::VERSION = '0.019';
+$Statocles::Store::VERSION = '0.020';
 use Statocles::Class;
 use Scalar::Util qw( blessed );
 use Statocles::Document;
@@ -33,8 +33,8 @@ sub read_documents {
     my $iter = $root_path->iterator( { recurse => 1, follow_symlinks => 1 } );
     while ( my $path = $iter->() ) {
         if ( $path =~ /[.]ya?ml$/ ) {
-            my $data = $self->read_document( $path );
             my $rel_path = rootdir->child( $path->relative( $root_path ) );
+            my $data = $self->read_document( $rel_path );
             push @docs, Statocles::Document->new( path => $rel_path, %$data );
         }
     }
@@ -44,13 +44,20 @@ sub read_documents {
 
 sub read_document {
     my ( $self, $path ) = @_;
-    open my $fh, '<', $path or die "Could not open '$path' for reading: $!\n";
+    diag( 1, "Read document: ", $path );
+    my $full_path = $self->path->child( $path );
+    open my $fh, '<', $full_path or die "Could not open '$full_path' for reading: $!\n";
     my $doc;
     my $buffer = '';
     while ( my $line = <$fh> ) {
         if ( !$doc ) { # Building YAML
             if ( $line =~ /^---/ && $buffer ) {
-                $doc = YAML::Load( $buffer );
+                eval {
+                    $doc = YAML::Load( $buffer );
+                };
+                if ( $@ ) {
+                    die "Error parsing YAML in '$full_path'\n$@";
+                }
                 $buffer = '';
             }
             else {
@@ -65,7 +72,12 @@ sub read_document {
 
     # Clear the remaining buffer
     if ( !$doc && $buffer ) { # Must be only YAML
-        $doc = YAML::Load( $buffer );
+        eval {
+            $doc = YAML::Load( $buffer );
+        };
+        if ( $@ ) {
+            die "Error parsing YAML in '$full_path'\n$@";
+        }
     }
     elsif ( !$doc->{content} && $buffer ) {
         $doc->{content} = $buffer;
@@ -89,9 +101,10 @@ sub write_document {
     if ( $path->is_absolute ) {
         die "Cannot write document '$path': Path must not be absolute";
     }
+    diag( 1, "Write document: ", $path );
 
     $doc = { %{ $doc } }; # Shallow copy for safety
-    my $content = delete $doc->{content};
+    my $content = delete( $doc->{content} ) // '';
     my $header = YAML::Dump( $self->_freeze_document( $doc ) );
     chomp $header;
 
@@ -110,10 +123,11 @@ sub _freeze_document {
 }
 
 
-sub write_page {
-    my ( $self, $path, $html ) = @_;
+sub write_file {
+    my ( $self, $path, $content ) = @_;
+    diag( 1, "Write file: ", $path );
     my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew( $html );
+    $full_path->touchpath->spew( $content );
     return;
 }
 
@@ -138,12 +152,12 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.019
+version 0.020
 
 =head1 DESCRIPTION
 
 A Statocles::Store reads and writes L<documents|Statocles::Document> and
-L<pages|Statocles::Page>.
+files (mostly L<pages|Statocles::Page>).
 
 This class handles the parsing and inflating of
 L<"document objects"|Statocles::Document>.
@@ -190,9 +204,10 @@ the newly-updated document.
 
 The document is written in Frontmatter format.
 
-=head2 write_page( $path, $html )
+=head2 write_file( $path, $content )
 
-Write the L<page|Statocles::Page> C<html> to the given C<path>.
+Write the given C<content> to the given C<path>. This is mostly used to write
+out L<page objects|Statocles::Page>.
 
 =head2 coercion
 

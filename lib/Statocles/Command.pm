@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.019';
+$Statocles::Command::VERSION = '0.020';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -19,12 +19,14 @@ sub main {
     my %opt = (
         config => 'site.yml',
         site => 'site',
+        verbose => 0,
     );
     GetOptionsFromArray( \@argv, \%opt,
         'config:s',
         'site:s',
         'help|h',
         'version',
+        'verbose|v+',
     );
     return pod2usage(0) if $opt{help};
 
@@ -32,6 +34,8 @@ sub main {
         print "Statocles version $Statocles::Command::VERSION (Perl $^V)\n";
         return 0;
     }
+
+    local $Statocles::VERBOSE = $opt{verbose};
 
     my $wire = Beam::Wire->new( file => $opt{config} );
 
@@ -76,7 +80,7 @@ sub main {
 }
 
 package Statocles::Command::_MOJOAPP;
-$Statocles::Command::_MOJOAPP::VERSION = '0.019';
+$Statocles::Command::_MOJOAPP::VERSION = '0.020';
 use Mojo::Base 'Mojolicious';
 has 'site';
 
@@ -104,7 +108,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.019
+version 0.020
 
 =head1 SYNOPSIS
 
