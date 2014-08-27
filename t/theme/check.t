@@ -35,7 +35,7 @@ my $store = Statocles::Store->new(
 my $blog = Statocles::App::Blog->new(
     url_root => '/blog',
     store => $store,
-    theme => Statocles::Theme->new( path => 'DUMMY' ),
+    theme => Statocles::Theme->new( store => 'DUMMY' ),
 );
 
 my $site = Statocles::Site->new(
@@ -108,19 +108,25 @@ my %app_vars = (
     },
 );
 
-my $iter = $THEME_DIR->iterator({ recurse => 1 });
-while ( my $path = $iter->() ) {
-    next unless $path->is_file;
-    next unless $path->basename =~ /[.]ep$/;
-    my $tmpl = Statocles::Template->new(
-        path => $path,
-    );
-    my $name = $path->basename;
-    my $app = $path->parent->basename;
-    my %args = %{ $app_vars{ $app }{ $name } };
-    lives_ok {
-        $tmpl->render( %args );
-    } join " - ", $app, $name;
+my @themes = $THEME_DIR->children;
+for my $theme ( @themes ) {
+    subtest $theme->basename => sub {
+        my $iter = $theme->iterator({ recurse => 1 });
+        while ( my $path = $iter->() ) {
+            next unless $path->is_file;
+            next unless $path->basename =~ /[.]ep$/;
+            my $tmpl = Statocles::Template->new(
+                path => $path,
+                include_dirs => [ $theme ],
+            );
+            my $name = $path->basename;
+            my $app = $path->parent->basename;
+            my %args = %{ $app_vars{ $app }{ $name } };
+            lives_ok {
+                $tmpl->render( %args );
+            } join " - ", $app, $name;
+        }
+    };
 }
 
 done_testing;

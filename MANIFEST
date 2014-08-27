@@ -33,10 +33,15 @@ share/theme/default/blog/index.atom.ep
 share/theme/default/blog/index.html.ep
 share/theme/default/blog/index.rss.ep
 share/theme/default/blog/post.html.ep
+share/theme/default/site/footer.html
+share/theme/default/site/header_after.html
 share/theme/default/site/layout.html.ep
+share/theme/default/site/sidebar_before.html
+share/zsh/_statocles
 site.yml
 t/00_compile.t
 t/app/blog.t
+t/bin/statocles.t
 t/command.t
 t/page/document.t
 t/page/feed.t
@@ -55,6 +60,10 @@ t/share/theme/blog/index.rss.ep
 t/share/theme/blog/post.html.ep
 t/share/theme/site/layout.html.ep
 t/share/tmpl/error.html.ep
+t/share/tmpl/include_with_html.html.ep
+t/share/tmpl/include_with_template.html.ep
+t/share/tmpl/included_html.html
+t/share/tmpl/included_template.html.ep
 t/share/tmpl/page.html.ep
 t/site.t
 t/site/git.t

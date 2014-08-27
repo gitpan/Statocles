@@ -1,9 +1,19 @@
 #!/usr/bin/env perl
 # ABSTRACT: Run Statocles commands
 package statocles;
-$statocles::VERSION = '0.020';
+$statocles::VERSION = '0.021';
+# Mojolicious::Commands currently calls GetOptions and clobbers a few of
+# our command-line options. Since I don't want to rely on the envvars
+# that get set in that process, we'll do this little dance here.
+#
+# This happens because we build a Mojolicious app inside the Statocles::Command
+# module, which loads Mojolicious, which loads Mojolicious::Commands, which
+# calls GetOptions on @ARGV
+my @argv;
+BEGIN { @argv = @ARGV };
+
 use Statocles::Command;
-exit Statocles::Command->main( @ARGV );
+exit Statocles::Command->main( @argv );
 
 __END__
 
@@ -15,7 +25,7 @@ statocles - Run Statocles commands
 
 =head1 VERSION
 
-version 0.020
+version 0.021
 
 =head1 SYNOPSIS
 
@@ -30,11 +40,12 @@ version 0.020
 
 The command to run. Available commands:
 
-    build       - Build the site
-    daemon      - Run an HTTP daemon to test the built site
-    deploy      - Deploy the site
-    apps        - List the applications in this site
-    <app> help  - Get help for a specific application
+    build                   - Build the site
+    daemon                  - Run an HTTP daemon to test the built site
+    deploy                  - Deploy the site
+    bundle theme <name>     - Bundle a theme in the site directory
+    apps                    - List the applications in this site
+    <app> help              - Get help for a specific application
 
 =head1 OPTIONS
 

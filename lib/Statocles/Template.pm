@@ -1,6 +1,6 @@
 package Statocles::Template;
 # ABSTRACT: A template object to pass around
-$Statocles::Template::VERSION = '0.020';
+$Statocles::Template::VERSION = '0.021';
 use Statocles::Class;
 use Mojo::Template;
 use Scalar::Util qw( blessed );
@@ -23,6 +23,13 @@ has path => (
     coerce => sub {
         return "$_[0]"; # Force stringify in case of Path::Tiny objects
     },
+);
+
+
+has include_dirs => (
+    is => 'ro',
+    isa => ArrayRef[Path],
+    default => sub { [] },
 );
 
 
@@ -51,8 +58,19 @@ sub render {
     my $t = Mojo::Template->new(
         name => $self->path,
     );
-    $t->prepend( $self->_vars( keys %args ) );
-    my $content = $t->render( $self->content, \%args );
+    $t->prepend( $self->_prelude( '_tmpl', keys %args ) );
+
+    my $content;
+    {
+        # Add the helper subs, like Mojolicious::Plugin::EPRenderer does
+        no strict 'refs';
+        no warnings 'redefine';
+        local *{"@{[$t->namespace]}::include"} = sub {
+            $self->_include( \%args, @_ );
+        };
+        $content = $t->render( $self->content, \%args );
+    }
+
     if ( blessed $content && $content->isa( 'Mojo::Exception' ) ) {
         die "Error in template: " . $content;
     }
@@ -62,9 +80,32 @@ sub render {
 # Build the Perl string that will unpack the passed-in args
 # This is how Mojolicious::Plugin::EPRenderer does it, but I'm probably
 # doing something wrong here...
-sub _vars {
+sub _prelude {
     my ( $self, @vars ) = @_;
-    return join " ", 'my $vars = shift;', map { "my \$$_ = \$vars->{'$_'};" } @vars;
+    return join " ",
+        'use strict; use warnings;',
+        'my $vars = shift;',
+        map( { "my \$$_ = \$vars->{'$_'};" } @vars ),
+        ;
+}
+
+
+# Find and include the given file. If it's a template, give it the given vars
+sub _include {
+    my ( $self, $vars, $name ) = @_;
+    for my $dir ( @{ $self->include_dirs } ) {
+        if ( $dir->child( "$name.ep" )->exists ) {
+            my $inner_tmpl = __PACKAGE__->new(
+                path => $dir->child( "$name.ep" ),
+                include_dirs => $self->include_dirs,
+            );
+            return $inner_tmpl->render( %$vars );
+        }
+        elsif ( $dir->child( $name )->exists ) {
+            return $dir->child( $name )->slurp;
+        }
+    }
+    die qq{Can not find include "$name" in directories: } . join " ", @{ $self->include_dirs };
 }
 
 
@@ -91,7 +132,7 @@ Statocles::Template - A template object to pass around
 
 =head1 VERSION
 
-version 0.020
+version 0.021
 
 =head1 DESCRIPTION
 
@@ -107,6 +148,10 @@ default.
 =head2 path
 
 The path to the file for this template. Optional.
+
+=head2 include_dirs
+
+An array of paths to search for includes in. Optional.
 
 =head1 METHODS
 

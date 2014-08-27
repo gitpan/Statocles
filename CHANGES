@@ -1,9 +1,128 @@
 ==================================================
-Changes from 2013-07-15 00:00:00 +0000 to present.
+Changes from 2013-08-27 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.020 at 2014-07-15 05:02:02 +0000
+version 0.021 at 2014-08-27 22:07:25 +0000
+------------------------------------------
+
+  Change: ae55f65cb810c7716b8b45b6671121046bff3a0c
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-08-27 17:07:14 +0000
+
+    release v0.021 
+
+  Change: c2accc41a1eb09592bdaee4801706c6b49ec873e
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-08-27 17:06:44 +0000
+
+    add a base zsh completion config
+
+    This is not ready, in-progress, and etc... 
+
+  Change: 20b8e678d085a7268cf4cc42cc5f3604644674ef
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-08-27 16:47:22 +0000
+
+    use $^X to invoke the currently-running perl
+
+    This should fix a possible problem with the bin/statocles test on
+    Windows. 
+
+  Change: 53adcff83d40127c7a71a5e3e47385d77391799f
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-08-27 16:25:34 +0000
+
+    fix --help not working
+
+    Mojolicious::Commands has to set some things up at startup, which may
+    come from arguments in @ARGV, so it runs GetOptions on @ARGV. Since
+    one of the tested options is "help|h", it removes that option from
+    @ARGV before we get to it.
+
+    For now, we save @ARGV before we load anything else, to make sure
+    that nobody can take something out of it. In the future, we might
+    change Mojolicious to not do this (if we can, it does it for a good
+    reason) or we can also fix this by moving our mojo app to another
+    module which gets loaded at runtime after we've done all our @ARGV
+    stuff.
+
+    Fixes: #106
+
+    Thanks to @tadegenban for all the help tracking this down! 
+
+  Change: 6b0df9faf9609e999428b0550f134f0602e87b67
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-27 00:16:02 +0000
+
+    add =sub to weaver.ini 
+
+  Change: de0382cfd7663c4b437534a18573da03c04df413
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-27 00:11:47 +0000
+
+    add 'bundle theme' command
+
+    This creates a place for users to edit the theme hooks. Subsequent
+    invocations of the 'bundle theme' command will update the theme
+    without overwriting the hooks. 
+
+  Change: d7d5768e24c91d7886bcf3c952bad9f747aabc81
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-26 23:09:44 +0000
+
+    add some hooks into the default theme
+
+    We probably need to document these somewhere... 
+
+  Change: 7b408604b511f724d665db5fda6494948bb3c3f6
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-26 20:58:05 +0000
+
+    add a standard of conduct to CONTRIBUTING
+
+    Fixes: #103 
+
+  Change: eb08e87f4544cc588e3c66f371e89a3fcf804ad7
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-26 20:14:12 +0000
+
+    fix redefine warning from include sub
+
+    This is directly lifted from Mojolicious::Plugin::EPRenderer. We
+    could probably do _some_ caching here.
+
+    Fixes: #104 
+
+  Change: 449c3d1dcd85c39ab3c9105788cc5ab458b09cc1
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-21 23:58:23 +0000
+
+    theme sets template include dir to theme dir
+
+    This breaks the Store abstraction being used by Theme, so we're going
+    to need to use the Store in the Template now too... 
+
+  Change: cd115203795cdf2d862c074e59d1a29e714f2c63
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-21 23:54:49 +0000
+
+    add template includes
+
+    The include can either be static or another template (if it ends with
+    ".ep"). 
+
+  Change: cb201c0aed5fed5a24869fe340a260ffc49e18cc
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-07-16 23:31:46 +0000
+
+    have Theme use a Store instead of a raw path
+
+    This is another step on the path to Store fully encapsulating
+    reading/writing of files. 
+
+------------------------------------------
+version 0.020 at 2014-07-15 05:01:49 +0000
 ------------------------------------------
 
   Change: a11171f89d60c955e8f1b119d42c4481aa492d33

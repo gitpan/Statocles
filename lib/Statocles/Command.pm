@@ -1,9 +1,11 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.020';
+$Statocles::Command::VERSION = '0.021';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
+use File::Share qw( dist_dir );
+use File::Copy::Recursive qw( dircopy );
 use Beam::Wire;
 
 
@@ -43,57 +45,85 @@ sub main {
         site => $wire->get( $opt{site} ),
     );
 
-    if ( @argv == 1 ) {
-        my $method = $argv[0];
-        if ( grep { $_ eq $method } qw( build deploy ) ) {
-            $cmd->site->$method;
-            return 0;
+    my $method = $argv[0];
+    if ( grep { $_ eq $method } qw( build deploy ) ) {
+        $cmd->site->$method;
+        return 0;
+    }
+    elsif ( $method eq 'apps' ) {
+        my $apps = $cmd->site->apps;
+        for my $app_name ( keys %{ $apps } ) {
+            my $app = $apps->{$app_name};
+            my $root = $app->url_root;
+            my $class = ref $app;
+            print "$app_name ($root -- $class)\n";
         }
-        elsif ( $method eq 'apps' ) {
-            my $apps = $cmd->site->apps;
-            for my $app_name ( keys %{ $apps } ) {
-                my $app = $apps->{$app_name};
-                my $root = $app->url_root;
-                my $class = ref $app;
-                print "$app_name ($root -- $class)\n";
+        return 0;
+    }
+    elsif ( $method eq 'daemon' ) {
+        require Mojo::Server::Daemon;
+        my $daemon = Mojo::Server::Daemon->new(
+            silent => 1,
+            app => Statocles::Command::_MOJOAPP->new(
+                site => $cmd->site,
+            ),
+        );
+        print "Listening on " . $daemon->listen->[0] . "\n";
+        $daemon->run;
+    }
+    elsif ( $method eq 'bundle' ) {
+        my $what = $argv[1];
+        if ( $what eq 'theme' ) {
+            my $theme_name = $argv[2];
+            my $theme_root = Path::Tiny->new( dist_dir( 'Statocles' ), 'theme', $theme_name );
+            my $site_root = Path::Tiny->new( $opt{config} )->parent;
+            my $theme_dest = $site_root->child(qw( share theme ), $theme_name );
+            my $iter = $theme_root->iterator({ recurse => 1 });
+            while ( my $path = $iter->() ) {
+                next unless $path->is_file;
+                my $relative = $path->relative( $theme_root );
+                my $dest = $theme_dest->child( $relative );
+                # Don't overwrite site-customized hooks
+                next if ( $path->stat->size == 0 && $dest->exists );
+                $dest->touchpath;
+                $path->copy( $dest );
             }
-            return 0;
-        }
-        elsif ( $method eq 'daemon' ) {
-            require Mojo::Server::Daemon;
-            my $daemon = Mojo::Server::Daemon->new(
-                silent => 1,
-                app => Statocles::Command::_MOJOAPP->new(
-                    site => $cmd->site,
-                ),
-            );
-            print "Listening on " . $daemon->listen->[0] . "\n";
-            $daemon->run;
+            say qq{Theme "$theme_name" written to "share/theme/$theme_name"};
+            say qq{Make sure to update "$opt{config}"};
         }
     }
     else {
-        my $app_name = $argv[0];
+        my $app_name = $method;
         return $cmd->site->apps->{ $app_name }->command( @argv );
     }
 
     return 0;
 }
 
-package Statocles::Command::_MOJOAPP;
-$Statocles::Command::_MOJOAPP::VERSION = '0.020';
-use Mojo::Base 'Mojolicious';
-has 'site';
+{
+    package Statocles::Command::_MOJOAPP;
+$Statocles::Command::_MOJOAPP::VERSION = '0.021';
+    # Currently, as of Mojolicious 5.12, loading the Mojolicious module here
+    # will load the Mojolicious::Commands module, which calls GetOptions, which
+    # will remove -h, --help, -m, and -s from @ARGV. We fix this by copying
+    # @ARGV in bin/statocles before we call Statocles::Command.
+    #
+    # We could fix this in the future by moving this out into its own module,
+    # that is only loaded after we are done passing @ARGV into main(), above.
+    use Mojo::Base 'Mojolicious';
+    has 'site';
 
-sub startup {
-    my ( $self ) = @_;
-    $self->routes->get( '/', sub { $_[0]->redirect_to( '/index.html' ) } );
-    unshift @{ $self->static->paths },
-        $self->site->build_store->path,
-        # Add the deploy store for non-Statocles content
-        # This won't work in certain situations, like a Git repo on another branch, but
-        # this is convenience until we can track image directories and other non-generated
-        # content.
-        $self->site->deploy_store->path;
+    sub startup {
+        my ( $self ) = @_;
+        $self->routes->get( '/', sub { $_[0]->redirect_to( '/index.html' ) } );
+        unshift @{ $self->static->paths },
+            $self->site->build_store->path,
+            # Add the deploy store for non-Statocles content
+            # This won't work in certain situations, like a Git repo on another branch, but
+            # this is convenience until we can track image directories and other non-generated
+            # content.
+            $self->site->deploy_store->path;
+    }
 }
 
 1;
@@ -108,7 +138,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.020
+version 0.021
 
 =head1 SYNOPSIS
 

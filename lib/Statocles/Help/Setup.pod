@@ -11,7 +11,7 @@ Statocles::Help::Setup - A guide to setting up a new Statocles site
 
 =head1 VERSION
 
-version 0.020
+version 0.021
 
 =head1 DESCRIPTION
 

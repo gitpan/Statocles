@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.020';
+$Statocles::VERSION = '0.021';
 use Statocles::Base;
 use base 'Exporter';
 our @EXPORT_OK = qw( diag );
@@ -27,7 +27,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.020
+version 0.021
 
 =head1 DESCRIPTION
 
@@ -175,7 +175,9 @@ reads documents in YAML and writes pages to a file, but stores could read
 documents as JSON, or from a Mongo database, and write pages to a database, or
 whereever you want!
 
-=sub diag( level, message )
+=head1 SUBROUTINES
+
+=head2 diag( level, message )
 
 Write a diagnostic message to STDOUT, but only if C<$Statocles::VERBOSE> is set.
 
