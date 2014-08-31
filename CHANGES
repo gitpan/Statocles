@@ -1,9 +1,28 @@
 ==================================================
-Changes from 2013-08-27 00:00:00 +0000 to present.
+Changes from 2013-08-31 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.021 at 2014-08-27 22:07:25 +0000
+version 0.022 at 2014-08-31 07:50:39 +0000
+------------------------------------------
+
+  Change: 5855b0d18534692264c4d0f5ac55591d594cf70b
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-08-31 02:49:50 +0000
+
+    release v0.022 
+
+  Change: ed4260624cd64a92da0f3346c2be5df271f4aa88
+  Author: Doug Bell <madcityzen@gmail.com>
+  Date : 2014-08-31 02:47:09 +0000
+
+    fix t/command.t dying on Win32
+
+    kill() on Windows does not send a signal. It just kills the process,
+    making the tests fail. 
+
+------------------------------------------
+version 0.021 at 2014-08-27 22:07:14 +0000
 ------------------------------------------
 
   Change: ae55f65cb810c7716b8b45b6671121046bff3a0c

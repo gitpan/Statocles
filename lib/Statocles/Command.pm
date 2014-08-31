@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.021';
+$Statocles::Command::VERSION = '0.022';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -69,7 +69,9 @@ sub main {
             ),
         );
         print "Listening on " . $daemon->listen->[0] . "\n";
-        $daemon->run;
+        # Using start() instead of run() so we can stop() inside the tests
+        $daemon->start;
+        Mojo::IOLoop->start;
     }
     elsif ( $method eq 'bundle' ) {
         my $what = $argv[1];
@@ -102,7 +104,7 @@ sub main {
 
 {
     package Statocles::Command::_MOJOAPP;
-$Statocles::Command::_MOJOAPP::VERSION = '0.021';
+$Statocles::Command::_MOJOAPP::VERSION = '0.022';
     # Currently, as of Mojolicious 5.12, loading the Mojolicious module here
     # will load the Mojolicious::Commands module, which calls GetOptions, which
     # will remove -h, --help, -m, and -s from @ARGV. We fix this by copying
@@ -138,7 +140,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.021
+version 0.022
 
 =head1 SYNOPSIS
 
