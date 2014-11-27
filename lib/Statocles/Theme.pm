@@ -1,6 +1,6 @@
 package Statocles::Theme;
 # ABSTRACT: Templates, headers, footers, and navigation
-$Statocles::Theme::VERSION = '0.022';
+$Statocles::Theme::VERSION = '0.023';
 use Statocles::Class;
 use Statocles::Store;
 use File::Share qw( dist_dir );
@@ -11,14 +11,14 @@ has store => (
     is => 'ro',
     isa => InstanceOf['Statocles::Store'],
     coerce => Statocles::Store->coercion,
+    required => 1,
 );
 
 
-has templates => (
+has _templates => (
     is => 'ro',
     isa => HashRef[HashRef[InstanceOf['Statocles::Template']]],
-    lazy => 1,
-    builder => 'read',
+    default => sub { {} },
 );
 
 
@@ -34,26 +34,20 @@ around BUILDARGS => sub {
 
 
 sub read {
-    my ( $self ) = @_;
-    my %tmpl;
-    my $iter = $self->store->path->iterator({ recurse => 1, follow_symlinks => 1 });
-    while ( my $path = $iter->() ) {
-        if ( $path =~ /[.]ep$/ ) {
-            my $name = $path->basename( '.ep' ); # remove extension
-            my $group = $path->parent->basename;
-            $tmpl{ $group }{ $name } = Statocles::Template->new(
-                path => $path,
-                include_dirs => [ $self->store->path ],
-            );
-        }
-    }
-    return \%tmpl;
+    my ( $self, $app, $template ) = @_;
+    my $path = Path::Tiny->new( $app, $template . ".ep" );
+    my $content = $self->store->read_file( $path );
+    return Statocles::Template->new(
+        path => $path,
+        content => $content,
+        store => $self->store,
+    );
 }
 
 
 sub template {
     my ( $self, $app, $template ) = @_;
-    return $self->templates->{ $app }{ $template };
+    return $self->_templates->{ $app }{ $template } ||= $self->read( $app, $template );
 }
 
 
@@ -77,7 +71,7 @@ Statocles::Theme - Templates, headers, footers, and navigation
 
 =head1 VERSION
 
-version 0.022
+version 0.023
 
 =head1 SYNOPSIS
 
@@ -109,9 +103,9 @@ The source L<store|Statocles::Store> for this theme.
 If the path begins with ::, will pull one of the Statocles default
 themes from the Statocles share directory.
 
-=head2 templates
+=head2 _templates
 
-The template objects for this theme.
+The cached template objects for this theme.
 
 =head1 METHODS
 
@@ -119,10 +113,10 @@ The template objects for this theme.
 
 Handle the path :: share theme.
 
-=head2 read()
+=head2 read( $section => $name )
 
-Read the C<path> and create the L<template|Statocles::Template> objects
-inside.
+Read the template for the given C<section> and C<name> and create the
+L<template|Statocles::Template> object.
 
 =head2 template( $section => $name )
 

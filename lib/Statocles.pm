@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.022';
+$Statocles::VERSION = '0.023';
 use Statocles::Base;
 use base 'Exporter';
 our @EXPORT_OK = qw( diag );
@@ -27,7 +27,24 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.022
+version 0.023
+
+=head1 SYNOPSIS
+
+    # !!! Read the Getting Started guide to set up a site.yml config file
+
+    # Create a new blog post
+    export EDITOR=vim
+    statocles blog post
+
+    # Build the site
+    statocles build
+
+    # Test the site in a local web browser
+    statocles daemon
+
+    # Deploy the site
+    statocles deploy
 
 =head1 DESCRIPTION
 

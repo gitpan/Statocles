@@ -5,23 +5,10 @@ use Statocles::Template;
 use Cwd qw( getcwd );
 my $SHARE_DIR = path( __DIR__, 'share' );
 
-subtest 'getting templates' => sub {
-    my $line = __LINE__ + 1;
-    my $theme = Statocles::Theme->new(
-        templates => {
-            blog => {
-                post => Statocles::Template->new(
-                    content => '<% $content %>',
-                ),
-            },
-        },
-    );
-
-    cmp_deeply $theme->template( blog => 'post' ),
-        Statocles::Template->new(
-            path => 't/theme.t line ' . $line,
-            content => '<% $content %>',
-        );
+subtest 'attributes' => sub {
+    subtest 'store is required' => sub {
+        throws_ok { Statocles::Theme->new( ) } qr/store/ or diag $@;
+    };
 };
 
 subtest 'theme coercion' => sub {
@@ -32,34 +19,43 @@ subtest 'theme coercion' => sub {
 };
 
 sub read_templates {
-    my ( $dir ) = @_;
+    my ( $store ) = @_;
 
-    $dir = path( $dir );
+    my $dir = $store->path;
 
     my $tmpl_fn = $dir->child( 'blog', 'post.html.ep' );
     my $tmpl = Statocles::Template->new(
-        path => $tmpl_fn,
-        include_dirs => [ $dir ],
+        path => $tmpl_fn->relative( $dir ),
+        content => $tmpl_fn->slurp,
+        store => $store,
     );
+
     my $index_fn = $dir->child( 'blog', 'index.html.ep' );
     my $index = Statocles::Template->new(
-        path => $index_fn,
-        include_dirs => [ $dir ],
+        path => $index_fn->relative( $dir ),
+        content => $index_fn->slurp,
+        store => $store,
     );
+
     my $rss_fn = $dir->child( 'blog', 'index.rss.ep' );
     my $rss = Statocles::Template->new(
-        path => $rss_fn,
-        include_dirs => [ $dir ],
+        path => $rss_fn->relative( $dir ),
+        content => $rss_fn->slurp,
+        store => $store,
     );
+
     my $atom_fn = $dir->child( 'blog', 'index.atom.ep' );
     my $atom = Statocles::Template->new(
-        path => $atom_fn,
-        include_dirs => [ $dir ],
+        path => $atom_fn->relative( $dir ),
+        content => $atom_fn->slurp,
+        store => $store,
     );
+
     my $layout_fn = $dir->child( 'site', 'layout.html.ep' );
     my $layout = Statocles::Template->new(
-        path => $layout_fn,
-        include_dirs => [ $dir ],
+        path => $layout_fn->relative( $dir ),
+        content => $layout_fn->slurp,
+        store => $store,
     );
 
     return (
@@ -76,34 +72,42 @@ sub read_templates {
 }
 
 subtest 'templates from directory' => sub {
-    subtest 'absolute directory' => sub {
-        my %exp_templates = read_templates( $SHARE_DIR->child( 'theme' ) );
-        my $theme = Statocles::Theme->new(
-            store => $SHARE_DIR->child( 'theme' ),
-        );
-        cmp_deeply $theme->templates, \%exp_templates;
-        cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
-    };
+    my @templates = (
+        [ blog => 'post.html' ],
+        [ blog => 'index.html' ],
+        [ blog => 'index.rss' ],
+        [ blog => 'index.atom' ],
+        [ site => 'layout.html' ],
+    );
 
     subtest 'absolute directory' => sub {
-        my %exp_templates = read_templates( $SHARE_DIR->child( 'theme' ) );
-        my $theme = Statocles::Theme->new(
-            store => Statocles::Store->new( path => $SHARE_DIR->child( 'theme' ) ),
+        my $store = Statocles::Store->new(
+            path => $SHARE_DIR->child( 'theme' ),
         );
-        cmp_deeply $theme->templates, \%exp_templates;
-        cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
+        my %exp_templates = read_templates( $store );
+        my $theme = Statocles::Theme->new(
+            store => $store,
+        );
+        for my $tmpl ( @templates ) {
+            cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
+        }
     };
 
     subtest 'relative directory' => sub {
         my $cwd = getcwd();
         chdir $SHARE_DIR;
 
-        my %exp_templates = read_templates( 'theme' );
+        my $store = Statocles::Store->new(
+            path => 'theme',
+        );
+
+        my %exp_templates = read_templates( $store );
         my $theme = Statocles::Theme->new(
             store => 'theme',
         );
-        cmp_deeply $theme->templates, \%exp_templates;
-        cmp_deeply $theme->template( blog => 'post.html' ), $exp_templates{blog}{'post.html'};
+        for my $tmpl ( @templates ) {
+            cmp_deeply $theme->template( @$tmpl ), $exp_templates{ $tmpl->[0] }{ $tmpl->[1] };
+        }
 
         chdir $cwd;
     };

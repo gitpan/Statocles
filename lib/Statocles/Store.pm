@@ -1,6 +1,6 @@
 package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
-$Statocles::Store::VERSION = '0.022';
+$Statocles::Store::VERSION = '0.023';
 use Statocles::Class;
 use Scalar::Util qw( blessed );
 use Statocles::Document;
@@ -123,6 +123,19 @@ sub _freeze_document {
 }
 
 
+sub read_file {
+    my ( $self, $path ) = @_;
+    diag( 1, "Read file: ", $path );
+    return $self->path->child( $path )->slurp;
+}
+
+
+sub has_file {
+    my ( $self, $path ) = @_;
+    return $self->path->child( $path )->is_file;
+}
+
+
 sub write_file {
     my ( $self, $path, $content ) = @_;
     diag( 1, "Write file: ", $path );
@@ -152,7 +165,7 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.022
+version 0.023
 
 =head1 DESCRIPTION
 
@@ -203,6 +216,17 @@ Write a L<document|Statocles::Document> to the store. Returns the full path to
 the newly-updated document.
 
 The document is written in Frontmatter format.
+
+=head2 read_file( $path )
+
+Read the file from the given C<path>.
+
+=head2 has_file( $path )
+
+Returns true if a file exists with the given C<path>.
+
+NOTE: This should not be used to check for directories, as not all stores have
+directories.
 
 =head2 write_file( $path, $content )
 

@@ -1,2069 +1,283 @@
-==================================================
-Changes from 2013-08-31 00:00:00 +0000 to present.
-==================================================
+Changelog for Statocles
+
+0.023 2014-11-27T07:06:06
+ - set up Statocles website
+ - require a store in the Theme
+ - use store instead of include_dirs to find includes
+ - add has_file method to Store
+ - use store read_file in theme
+ - add read_file method to store
+ - do not preload all theme templates
+ - fix --version to work without a method
+ - make blog usage look like pod2usage
+ - show an error and usage if no command given
+ - move unexpected errors to STDERR
+ - show an error when missing/incorrect blog command
+ - open post in editor before deciding its location
+ - we do need some stinkin badges!
+ - add a SYNOPSIS section so we get our badges
+ - add new build artifacts
+ - update dist.ini for new best practices
+ - break up Test::Most
+ - 5.8 is not supported by Statocles
+ - update travis.yml for new perl travis helpers
+
+0.022 2014-08-31T07:49:50
+ - release v0.022
+ - fix t/command.t dying on Win32
+
+0.021 2014-08-27T22:07:14
+ - release v0.021
+ - add a base zsh completion config
+ - use $^X to invoke the currently-running perl
+ - fix --help not working
+ - add =sub to weaver.ini
+ - add 'bundle theme' command
+ - add some hooks into the default theme
+ - add a standard of conduct to CONTRIBUTING
+ - fix redefine warning from include sub
+ - theme sets template include dir to theme dir
+ - add template includes
+ - have Theme use a Store instead of a raw path
+
+0.020 2014-07-15T05:01:49
+ - add docs about --verbose flag
+ - add --verbose flag to show some useful information
+ - make read_document take a relative path
+ - silence warning when no content in the document
+ - write_page -> write_file
+ - better reporting on YAML loading errors
+ - fix post images breaking the layout
+
+0.019 2014-07-07T03:15:50
+ - release v0.019
+ - allow filtering of tags on the index page
+ - require Mojolicious 4.76
+
+0.018 2014-07-06T03:38:29
+ - release v0.018
+ - add blog page tags to the default theme
+ - add page tags to the blog
+ - add tags to pages
+ - let someone else test blead
+ - Mojolicious requires at least 5.10
+ - no more SurgicalPodWeaver, use regular PodWeaver
+ - get podweaver before we install
+ - PodWeaver still isn't specified by SurgicalPodWeaver
+ - fix yaml syntax for travis.yml
+ - possibly fix `daemon` test by randomizing the port
+ - add travis-ci and coveralls
+
+0.017 2014-06-29T23:27:27
+ - release v0.017
+ - add basic daemon command
+
+0.016 2014-06-29T04:58:34
+ - release v0.016
+ - quiet some warnings
+ - add a simple robots.txt
+ - add sitemap.xml generation
+ - change theme source_dir -> path
+ - add coercions for Theme and Store
+ - fix pre and code wrapping
+ - blog source -> store
+ - add test prereq found by kwalitee
+ - fix pod error found by kwalitee
+
+0.015 2014-06-28T06:12:23
+ - release v0.015
+ - fix default layout error if no main nav
+ - add test to check default theme syntax
+ - fix exception in test template
+ - throw an exception when template fails to render
+ - add a line to help with the continue reading link
+ - fix bottom-border on post header
+ - remove crosspost links from the bottom of list
+
+0.014 2014-06-25T05:40:52
+ - release v0.014
+ - squelch some warnings in the new test templates
+ - add content sections to the default templates
+ - add sectioned content to document pages
+ - remove the default templates
+ - remove the custom test templates
+ - add a feature list for marketing purposes
+ - add a link to the feed page in the main doc
+
+0.013 2014-06-22T08:01:13
+ - release v0.013
+ - add feed titles and links to feeds in the page
+ - add RSS and Atom feeds to blog index and tag pages
+ - add generic page links hashref
+ - put self and app in all pages
+ - add site method to get a full URL for feeds
+ - cache page objects so we can modify them
+ - add feed pages
+ - ignore blog directories that aren't YYYY/MM/DD
+ - fix setup help - blog -> blog_app
+ - blog -> blog_app
+ - die with an error if we can't make a slug
+ - return the exit code from called sub
+ - fix some typos in the setup help
+
+0.012 2014-06-18T06:15:07
+ - release v0.012
+ - deploy now performs 'git push'
+ - add rel next/prev to pagination links
+ - better format for crosspost links
+ - put the list of guides first in the documentation
+ - we moved the core of 'render' to 'vars'
+
+0.011 2014-06-15T03:10:40
+ - release v0.011
+ - still show the topbar if site lacks main nav
+ - add crosspost links to the default blog templates
+ - everything used in template should have default
+ - reorganize template vars to prefer objects
+ - remove unused dump method
+ - add crosspost links to documents
+ - add last_modified attribute to documents
+ - defaults must be subref
+ - fix bad link to YAML
+
+0.010 2014-06-07T09:27:29
+ - release v0.010
+ - add a setup guide until we get a create command
+ - add named navs, so we can add more nav lists later
+ - add next/prev to list page render()
+ - mark html templates as such; use .ep like Mojo
+ - add paginate() constructor for paginated lists
+ - fix the pagination links in the default blog theme
+ - add pagination to the blog
+ - enforce an order on the paginated pages
+ - add optional index path to pagination
+ - do not build posts whose day has not yet come
+ - allow setting the date when creating a new post
+
+0.009 2014-06-06T20:15:15
+ - release v0.009
+ - add the published date to the blog pages
+ - add published date to pages
+ - add last_modified and tags to default blog post
+ - add last_modified to documents
+ - make the default templates more semantic
+
+0.008 2014-06-05T04:35:12
+ - release v0.008
+ - add tag navigation to the blog
+ - add tag pages to the blog
+ - avoid swp files when scanning for documents
+ - bump Path::Tiny version to 0.054
+ - remove the site/ directory from the release
+ - handle older versions of git better
+ - Git::Repository requires git 1.5 or higher
+
+0.007 2014-06-02T05:07:23
+ - add tags attr to document
+ - remove hard-coded document paths in test
+ - remove unused attribute
+ - add/update links in documentation
+ - migrate to Path::Tiny
+ - Set a real git config user name/email
+ - switch to Type::Tiny. thanks mst!
+ - fix link to Jekyll. Thanks buu!
+
+0.006 2014-05-29T06:01:50
+ - sort blog index page by post date
+ - use frontmatter format in addition to pure YAML
+ - open $EDITOR for the user creating a blog post
+ - add 'blog post' command to add new posts to a blog
+ - return the full path to the document
+ - add write_document method to Store
+ - add application command delegation
+ - add 'apps' command to list the apps in a site
+
+0.005 2014-05-26T06:29:14
+ - docs and pages do not need to be in any order
+ - use canon dirsep in template path
+ - doc paths are files; page paths are URLs
+ - remove warning if source_dir is undefined
+ - Moo only allows subrefs as default
+ - preset git name/email
+
+0.004 2014-05-25T06:28:44
+ - get themes from Statocles share dir
+ - add another caller to ignore finding template path
+ - move the pager controls to the blog index
+ - add the page path to the template
+ - add missing ABSTRACT
+
+0.003 2014-05-25T03:26:39
+ - release v0.003
+ - fix git commands writing to stdout
+ - always specify a template path
+ - allow regex-unsafe characters in file path
+
+0.002 2014-05-21T04:17:39
+ - release v0.002
+ - fix one of the dir seperator problems on Win32
+ - check for git earlier in the test
+ - add missing prereqs
+
+0.001 2014-05-20T04:41:29
+ - make sure only built files get committed
+ - add a basic git-based site
+ - document Statocles::Template and everything else
+ - better default theme with more example content
+ - basic site navigation array
+ - reduce duplication in site test
+ - fix default site theme for Statocles::Template
+ - add --version command-line script option
+ - switch to Mojo::Template
+ - attribute -> attr
+ - add some missing documentation to Page classes
+ - change Page to a role
+ - add a base Role class
+ - refactor test to remove some duplication
+ - add missing layout template
+ - add site title
+ - pull the render() call out of the store
+ - add additional template arguments to pages
+ - add error checking to template fill_in()
+ - site index should not duplicate an app page
+ - remove the link because POD->Markdown does bad things
+ - add some introduction documentation
+ - add initial default theme and an example site.yml
+ - fix loading theme from a relative directory
+ - fix read documents from a relative directory
+ - set the execute bit
+ - add initial command-line interface
+ - break up build and deploy stores
+ - remove destination from apps to reduce duplication
+ - add missing index page to theme test
+ - add an index page to the entire site
+ - add index page to the blog
+ - all pages need paths
+ - add initial List page, for indexes
+ - test multiple blog posts in preparation for lists
+ - better description of what the method returns
+ - File -> Store to get all docs from a dir path
+ - add site class
+ - provide a single pages() method in applications
+ - fix template not being stored with the right group
+ - throw a better error when the template is undef
+ - fix broken tests
+ - allow loading of theme templates from a directory
+ - we don't need these imports
+ - add layouts to blog application
+ - add layout to page
+ - blog app can now read source files from directory
+ - add write() method to blog app
+ - make sure to create full paths when writing pages
+ - add theme to the blog app
+ - add themes - bundles of templates
+ - initial build artifacts
+ - initial work on a blog application
+ - add documentation
+ - rename project to Statocles
+ - add some documentation
+ - add ref to File that Document is read from/writ to
+ - write pages to disk
+ - add simple page rendering
+ - add base File and Document classes
 
-------------------------------------------
-version 0.022 at 2014-08-31 07:50:39 +0000
-------------------------------------------
-
-  Change: 5855b0d18534692264c4d0f5ac55591d594cf70b
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-08-31 02:49:50 +0000
-
-    release v0.022 
-
-  Change: ed4260624cd64a92da0f3346c2be5df271f4aa88
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-08-31 02:47:09 +0000
-
-    fix t/command.t dying on Win32
-
-    kill() on Windows does not send a signal. It just kills the process,
-    making the tests fail. 
-
-------------------------------------------
-version 0.021 at 2014-08-27 22:07:14 +0000
-------------------------------------------
-
-  Change: ae55f65cb810c7716b8b45b6671121046bff3a0c
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-08-27 17:07:14 +0000
-
-    release v0.021 
-
-  Change: c2accc41a1eb09592bdaee4801706c6b49ec873e
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-08-27 17:06:44 +0000
-
-    add a base zsh completion config
-
-    This is not ready, in-progress, and etc... 
-
-  Change: 20b8e678d085a7268cf4cc42cc5f3604644674ef
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-08-27 16:47:22 +0000
-
-    use $^X to invoke the currently-running perl
-
-    This should fix a possible problem with the bin/statocles test on
-    Windows. 
-
-  Change: 53adcff83d40127c7a71a5e3e47385d77391799f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-08-27 16:25:34 +0000
-
-    fix --help not working
-
-    Mojolicious::Commands has to set some things up at startup, which may
-    come from arguments in @ARGV, so it runs GetOptions on @ARGV. Since
-    one of the tested options is "help|h", it removes that option from
-    @ARGV before we get to it.
-
-    For now, we save @ARGV before we load anything else, to make sure
-    that nobody can take something out of it. In the future, we might
-    change Mojolicious to not do this (if we can, it does it for a good
-    reason) or we can also fix this by moving our mojo app to another
-    module which gets loaded at runtime after we've done all our @ARGV
-    stuff.
-
-    Fixes: #106
-
-    Thanks to @tadegenban for all the help tracking this down! 
-
-  Change: 6b0df9faf9609e999428b0550f134f0602e87b67
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-27 00:16:02 +0000
-
-    add =sub to weaver.ini 
-
-  Change: de0382cfd7663c4b437534a18573da03c04df413
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-27 00:11:47 +0000
-
-    add 'bundle theme' command
-
-    This creates a place for users to edit the theme hooks. Subsequent
-    invocations of the 'bundle theme' command will update the theme
-    without overwriting the hooks. 
-
-  Change: d7d5768e24c91d7886bcf3c952bad9f747aabc81
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-26 23:09:44 +0000
-
-    add some hooks into the default theme
-
-    We probably need to document these somewhere... 
-
-  Change: 7b408604b511f724d665db5fda6494948bb3c3f6
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-26 20:58:05 +0000
-
-    add a standard of conduct to CONTRIBUTING
-
-    Fixes: #103 
-
-  Change: eb08e87f4544cc588e3c66f371e89a3fcf804ad7
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-26 20:14:12 +0000
-
-    fix redefine warning from include sub
-
-    This is directly lifted from Mojolicious::Plugin::EPRenderer. We
-    could probably do _some_ caching here.
-
-    Fixes: #104 
-
-  Change: 449c3d1dcd85c39ab3c9105788cc5ab458b09cc1
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-21 23:58:23 +0000
-
-    theme sets template include dir to theme dir
-
-    This breaks the Store abstraction being used by Theme, so we're going
-    to need to use the Store in the Template now too... 
-
-  Change: cd115203795cdf2d862c074e59d1a29e714f2c63
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-21 23:54:49 +0000
-
-    add template includes
-
-    The include can either be static or another template (if it ends with
-    ".ep"). 
-
-  Change: cb201c0aed5fed5a24869fe340a260ffc49e18cc
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-16 23:31:46 +0000
-
-    have Theme use a Store instead of a raw path
-
-    This is another step on the path to Store fully encapsulating
-    reading/writing of files. 
-
-------------------------------------------
-version 0.020 at 2014-07-15 05:01:49 +0000
-------------------------------------------
-
-  Change: a11171f89d60c955e8f1b119d42c4481aa492d33
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-15 00:01:49 +0000
-
-    Release v0.020 
-
-  Change: 4484c4c5b178398727bb694ef6c9624cbb4284b7
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-15 00:00:32 +0000
-
-    add docs about --verbose flag 
-
-  Change: 86a6d5489f7cdc1be1cc2cd7205c8009ee015795
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-14 23:53:55 +0000
-
-    add --verbose flag to show some useful information
-
-    This shows some messages when we read and write files.
-
-    Fixes #93 
-
-  Change: f8017582a678130e9e23b3aacb2ad13b1c5c0ede
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-14 23:03:37 +0000
-
-    make read_document take a relative path
-
-    This makes read_document work like write_document and write_file, and
-    protects us from breaking out of the store's directory like we
-    should. 
-
-  Change: aba59bfeb7d10f5cc5e779c716fb8a94c8226366
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-14 22:48:10 +0000
-
-    silence warning when no content in the document
-
-    Content isn't everything 
-
-  Change: d3c2bda116993b20029e7d87bfe288c484e3cf29
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-12 21:03:01 +0000
-
-    write_page -> write_file
-
-    We write more than just pages using this, and we are going to add a
-    read_file method (probably a find_file method too). 
-
-  Change: e134df749641185671a9a9ce08563aac47dccebe
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-11 23:47:05 +0000
-
-    better reporting on YAML loading errors
-
-    Fixes #94
-
-    We may want to try to load _all_ documents and then report on which
-    ones were bad. Maybe that's what the `check` command could do... 
-
-  Change: a264f117aa5ff5615657fad859e2a61caa3dccf5
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-07 22:31:49 +0000
-
-    fix post images breaking the layout
-
-    Fixes #80 
-
-------------------------------------------
-version 0.019 at 2014-07-07 03:15:50 +0000
-------------------------------------------
-
-  Change: f0539c1ae9dec029b56158f871108f4d82ebca63
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-06 22:15:50 +0000
-
-    release v0.019 
-
-  Change: 6e6246c7da8a7d3fd39e863ba9b43a6457974667
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-06 22:11:57 +0000
-
-    allow filtering of tags on the index page
-
-    We can exclude tags on the index page now, with some overrides if our
-    excludes become too zealous.
-
-    Fixes #12 
-
-  Change: f64c24be631626c9d0668a731384d69aa9352bbe
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-06 21:31:09 +0000
-
-    require Mojolicious 4.76
-
-    This version added the Mojo::DOM->wrap method. 
-
-------------------------------------------
-version 0.018 at 2014-07-06 03:38:29 +0000
-------------------------------------------
-
-  Change: 6f27d7e7b65167b5dc375aa4aceb165861d24f30
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-05 22:38:29 +0000
-
-    release v0.018 
-
-  Change: 1112fb3ee62fcd75a879cfdd052d4814a251f297
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-05 22:37:56 +0000
-
-    add blog page tags to the default theme
-
-    Fixes #64 
-
-  Change: bb1a6e29158c508dd1f52858a022bd6940165cb2
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-05 22:24:04 +0000
-
-    add page tags to the blog 
-
-  Change: d93f12db304cafeab5b059e8a7adff6100aa38d3
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-05 22:10:47 +0000
-
-    add tags to pages
-
-    This allows us to link to the tags the current document has, which is
-    a nice thing to have. 
-
-  Change: be99aa4c22aee6d3c27ca5f5919a28c478dde8a5
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-01 00:57:33 +0000
-
-    let someone else test blead
-
-    Can't read
-    /home/travis/build/preaction/Statocles/build_dir/cover_db/digests
-    with JSON::PP: garbage after JSON object, at character offset 12061
-    (before "f.pm","3e9c9fc1c7769...") at
-    /home/travis/perl5/perlbrew/perls/blead/lib/site_perl/5.21.2/x86_64-l
-    inux/Devel/Cover/DB/IO/JSON.pm line 40. BEGIN failed--compilation
-    aborted at t/store.t line 2.
-
-    Do I even want to know? 
-
-  Change: 722a2605cd4fb4a791b18aabfb6808b53a96e200
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-01 00:49:36 +0000
-
-    Mojolicious requires at least 5.10
-
-    Because of that, so do we, so we get 'say' and 'state', which is
-    nice. 
-
-  Change: 12fc098a588d77b9190587db34ac17cf6730dba0
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-01 00:40:04 +0000
-
-    no more SurgicalPodWeaver, use regular PodWeaver
-
-    I can't get SurgicalPodWeaver to work with Travis, and all my modules
-    and scripts should be using PodWeaver anyway. 
-
-  Change: a4ac624d3b3a5167618d7c3c69d748b526bf7605
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-01 00:33:00 +0000
-
-    get podweaver before we install 
-
-  Change: 4252f628eb527690fc77c8fc4dec0bb755c4a5a4
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-01 00:29:25 +0000
-
-    PodWeaver still isn't specified by SurgicalPodWeaver 
-
-  Change: 0aeaa44d090925bd9fe44cfc2f23305d8a586960
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-01 00:25:27 +0000
-
-    fix yaml syntax for travis.yml
-
-    Maybe this will make it build... 
-
-  Change: 9ca9c77e65ad444170e852fa063d485f6f7c7679
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-07-01 00:17:38 +0000
-
-    possibly fix `daemon` test by randomizing the port 
-
-  Change: 50e076de78e493f76c76b115e2907a8fe0c8434f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-30 23:09:14 +0000
-
-    add travis-ci and coveralls
-
-    Fixes #52 
-
-------------------------------------------
-version 0.017 at 2014-06-29 23:27:27 +0000
-------------------------------------------
-
-  Change: e09fce9902b52f4769947cda3d1a0439105eb03b
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-29 18:27:27 +0000
-
-    release v0.017 
-
-  Change: 0dd706b725b7eb2b07e462dd487b2b0a67452e30
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-29 18:26:38 +0000
-
-    add basic daemon command
-
-    This version does not yet auto-build the site when content changes,
-    we'll need to do some event emitting for that. But for now I'm going
-    to consider this good enough to close the ticket.
-
-    Fixes #1 
-
-------------------------------------------
-version 0.016 at 2014-06-29 04:58:34 +0000
-------------------------------------------
-
-  Change: 8f9031575576c28def5dc3700581efaaf10182ff
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 23:58:34 +0000
-
-    release v0.016 
-
-  Change: 56729313d2537c09b14d0f9dab6a8205729e35ce
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 23:57:52 +0000
-
-    quiet some warnings
-
-    I'm not sure what should happen about sitemap.xml and robots.txt if
-    there is no base_url... 
-
-  Change: 6e4079a1640d26411f45c74b573fb1214393b05e
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 23:34:05 +0000
-
-    add a simple robots.txt
-
-    The main purpose of this is to point search engines at the
-    sitemap.xml, but in the future we'll be able to mark documents as
-    noindex or something.
-
-    Fixes #62 
-
-  Change: 62e726c478c845bfc29d3c4c4b6f22ad99a06948
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 23:14:51 +0000
-
-    add sitemap.xml generation
-
-    Right now this is absolutely not customizable by applications in any
-    way. In the future, we may add Page-level metadata so that apps can
-    decide what the sitemap looks like.
-
-    I'm not sure I'm using Mojo::DOM to create these things correctly.
-
-    Fixes #61 
-
-  Change: 918ca5f32e8f7e4ae0f6873213e4b5b8d0325a65
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 20:35:53 +0000
-
-    change theme source_dir -> path
-
-    Internal consistency is good.
-
-    Fixes #90 
-
-  Change: c2cc9ee01e8a311da68a832252c4f18f902739de
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 20:25:21 +0000
-
-    add coercions for Theme and Store
-
-    Since these objects are mostly just paths, why not coerce the real
-    object from the simple path string? It makes the initial setup a lot
-    easier.
-
-    The only tradeoff is that it's not as obvious what is happening in
-    the site config file, so it may discourage others from creating their
-    own Theme or Store.
-
-    Fixes #69 
-
-  Change: bda2aaac30366766aa5db535d44cf7f01fbfd011
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 19:34:40 +0000
-
-    fix pre and code wrapping
-
-    Fixes #89 
-
-  Change: 1115d583cbb91e6ee7dfce41913c2d578e1b5a97
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 19:15:03 +0000
-
-    blog source -> store
-
-    "store" is far more appropriate, since it's the Statocles::Store
-    object for the application
-
-    Fixes #88 
-
-  Change: 25cc32bb6f8e526bcb1936aec24e0009eeb76284
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 01:31:19 +0000
-
-    add test prereq found by kwalitee 
-
-  Change: b1c92f169121174b2ae85c2232a4069e49135830
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 01:28:05 +0000
-
-    fix pod error found by kwalitee 
-
-------------------------------------------
-version 0.015 at 2014-06-28 06:12:23 +0000
-------------------------------------------
-
-  Change: c3faed0a03ecbe0f428341c8386c8c69de7b794e
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 01:12:23 +0000
-
-    release v0.015 
-
-  Change: 23a425055dbb69f33d495cbfaf43d19917ab496a
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 01:10:01 +0000
-
-    fix default layout error if no main nav
-
-    All navs should be optional. This was revealed by the new theme check
-    test. Yay! 
-
-  Change: f5c31c74a2dffadc85c232de14282cc4c534437f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-28 01:07:09 +0000
-
-    add test to check default theme syntax
-
-    Found a lot of horrible design choices in this test, and even
-    revealed a bug in the template! Excellent idea this.
-
-    We need to do more purturbation of the variables, add/remove navs,
-    links, and otherwise, in order to get a good coverage of the themes.
-
-    Fixes #86 
-
-  Change: 4867e02d61034e6ffac61ea56a6d022f2d9d953b
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-27 23:44:56 +0000
-
-    fix exception in test template
-
-    So how long has this been an issue I wonder... 
-
-  Change: 6513645c493a119a930e43b9b92a4f232b971f68
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-27 23:43:03 +0000
-
-    throw an exception when template fails to render
-
-    If the templates are bad, we should stop building. Building a website
-    with a bunch of error messages is pretty pointless...
-
-    Fixes #85 
-
-  Change: 099ea92f7b0c13e994cb647a503b7b699eb63b25
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-27 22:58:55 +0000
-
-    add a line to help with the continue reading link
-
-    It's hard to know where to continue reading if the blog post doesn't
-    quite make it all the way to the bottom of the screen. 
-
-  Change: fd78c0e2039e82995d4d7497fb7a6c373fbacf4a
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-27 22:58:29 +0000
-
-    fix bottom-border on post header
-
-    The post header needs to stand out from any h1 inside the post's
-    content sections 
-
-  Change: 1e093bd0a3618da094bda391552bd0f8be8b11a7
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-27 22:43:45 +0000
-
-    remove crosspost links from the bottom of list
-
-    The crosspost links are already on the top of the article, we do not
-    need them also on the bottom.
-
-    Fixes #87 
-
-------------------------------------------
-version 0.014 at 2014-06-25 05:40:52 +0000
-------------------------------------------
-
-  Change: 5b35ab07bf128ec61fb1693d7c2fc2c8f013f1cc
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-25 00:40:52 +0000
-
-    release v0.014 
-
-  Change: 73fce66b6b5b3073bc3b50ed4b46092523e2fc2c
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-25 00:40:07 +0000
-
-    squelch some warnings in the new test templates
-
-    Another drawback of the @sections array: if we have fewer sections
-    than we want, we're going to get a warning... 
-
-  Change: 6a14f8c8e0995b1e6b524201cfdbf395fde86386
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-25 00:27:54 +0000
-
-    add content sections to the default templates
-
-    Now only the first section will appear on index/list pages and in the
-    feeds, and a bunch of links to continue reading will be shown.
-
-    Fixes #26 
-
-  Change: 04c5a01901404dd3b481078f73c67e52b24f20aa
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-24 23:52:16 +0000
-
-    add sectioned content to document pages
-
-    Instead of using `content()`, you can get sectioned content using
-    `sections()`. This doesn't add anything to the default theme yet.
-
-    I'm not sure I like the syntax here. I considered doing `content(
-    sections => 2 );` or something, but this was easier.
-
-    Fixes #26 
-
-  Change: e88d47386ca0b9e01103bc6748a35239ac848e69
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-24 22:02:04 +0000
-
-    remove the default templates
-
-    Move the template coercion to Statocles::Template, like Type::Tiny
-    types do.
-
-    template is not a required attribute because pages are sometimes used
-    to ferry template variables to other pages.
-
-    Fixes #82 
-
-  Change: 83727836c08b77f55cae1b46c1722ea5f9da7c58
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-24 21:30:27 +0000
-
-    remove the custom test templates
-
-    Everything should use the templates from t/share/theme
-
-    Fixes #83 
-
-  Change: 00fdc67f42d38318cd4e52cc8cc1e3dca754f54f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-24 21:18:59 +0000
-
-    add a feature list for marketing purposes
-
-    Fixes #84 
-
-  Change: 3c150354a5ac8bac84d3e218f7e399b8d648ef54
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-22 03:07:53 +0000
-
-    add a link to the feed page in the main doc 
-
-------------------------------------------
-version 0.013 at 2014-06-22 08:01:13 +0000
-------------------------------------------
-
-  Change: c4629e0a63ec1832439b52c7ce3593253515e650
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-22 03:01:13 +0000
-
-    release v0.013 
-
-  Change: a53402ba79dc32f9009f52803538bea6013e188c
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-22 02:59:23 +0000
-
-    add feed titles and links to feeds in the page
-
-    Also remove the <nav> around the Tags, because apparently <nav> is
-    supposed to be use for "major navigation", whatever that means... 
-
-  Change: 107a1968045631e9466f038b508104e81d2e6953
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-22 02:22:32 +0000
-
-    add RSS and Atom feeds to blog index and tag pages
-
-    The current feeds pass the [Feed
-    Validator](http://feedvalidator.org), but there could be some better
-    descriptions and future enhancements later.
-
-    Since feeds need to be linked by the pages they syndicate, they must
-    be created as part of the same routine.
-
-    Fixes #11 
-
-  Change: 0be2b6f738faaf8e37e3f0709bb65401068f3cfa
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-22 02:14:14 +0000
-
-    add generic page links hashref
-
-    This is similar to the document links hashref (in fact, we might
-    combine them into one to make things easier).
-
-    This will let us add feed links and other <HEAD> links. 
-
-  Change: cd958bd4693035f5bce403532c345ad254f28465
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-22 02:13:20 +0000
-
-    put self and app in all pages
-
-    We're going to use these in the layout, so they must be in every page
-    exactly as $self and $app. 
-
-  Change: e016b7de25a7349747aff31d2bec96c184e5ae31
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-21 23:30:00 +0000
-
-    add site method to get a full URL for feeds
-
-    Feeds require a full http://example.com/path/to/page.html, so we need
-    to know where the site will be deployed. 
-
-  Change: 6486b26553336c8575d1859ea8647a97292c3d6f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-21 21:50:55 +0000
-
-    cache page objects so we can modify them
-
-    This is explicitly for spooky action at a distance to fix the
-    following problem:
-
-    * Blog app creates an index page and a feed page for that index *
-    Site takes the index page and creates a new page with the same
-
-    information but a new URL * Feed page no longer knows where the index
-    page is
-
-    Instead, the app gives us the same Page object whenever we ask, so we
-    can modify it to make it our site index. 
-
-  Change: faccb8d3737d5d8f0810a1460e48867bcd7b588d
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-21 20:46:30 +0000
-
-    add feed pages
-
-    Feed pages wrap a list page to provide another view of the page. This
-    allows us to keep track of the list page's URL in case it changes, so
-    that the feed page can link the user to the right location. 
-
-  Change: aa809e76a30713da148d1de363781123a98d1241
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-21 00:08:41 +0000
-
-    ignore blog directories that aren't YYYY/MM/DD
-
-    This allows me to put a /drafts folder at least and not have it
-    picked up by the blog app. In the future, we'll make a way to manage
-    the drafts, but for now let's allow any directory that doesn't look
-    like what we want it to be.
-
-    We may in the future support just YYYY/MM, but we will probably never
-    support just YYYY. 
-
-  Change: a466cbeac29e77f4d007e59d226de76383196dfd
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-20 23:11:58 +0000
-
-    fix setup help - blog -> blog_app 
-
-  Change: 4a7b57ee3c463f33f48b5439b57ef30223768f90
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-20 23:11:01 +0000
-
-    Merge pull request #79 from tadegenban/patch-1
-
-    Fix setup help - blog -> blog_app 
-
-  Change: dafdb96618b917b0ce61ac6fb9c86d052470916f
-  Author: tadegenban <youyouken@126.com>
-  Date : 2014-06-21 12:07:21 +0000
-
-    blog -> blog_app
-
-    Maybe this should be blog_app? 
-
-  Change: da41e2ceb1862556682789a99a9d34e3a73eca2f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-19 22:33:38 +0000
-
-    die with an error if we can't make a slug
-
-    If we don't have enough information to make a slug, we shouldn't
-    allow leaving the file name blank.
-
-    Fixes #76 
-
-  Change: 7bc476b93f4fdd2d2bf19154417e6e0529405225
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-19 22:33:10 +0000
-
-    return the exit code from called sub
-
-    The caller should return the exit code it wants to set 
-
-  Change: 07bb5c45940df43c1f982bce1df04466a6664e4a
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-19 22:10:42 +0000
-
-    fix some typos in the setup help
-
-    Fixes #77 
-
-------------------------------------------
-version 0.012 at 2014-06-18 06:15:07 +0000
-------------------------------------------
-
-  Change: cbdaa7e5f4210e8aa55fccfc79f4763ebea17faf
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-18 01:15:07 +0000
-
-    release v0.012 
-
-  Change: f528692ac66a3de52c29b8e208a426fa1b14893e
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-18 00:50:52 +0000
-
-    deploy now performs 'git push'
-
-    We should look to reduce the number of steps necessary in updating
-    the site some more.
-
-    Fixes #57 
-
-  Change: 70d125b98283e1634c55ecb4848de61d9d178db1
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-17 23:47:36 +0000
-
-    add rel next/prev to pagination links
-
-    rel="next" and rel="prev" give the browser some metadata about how
-    the series of pages works.
-
-    Fixes #66 
-
-  Change: 4572102d3c9e99fe1be622dc93f4a04dc5a50bd8
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-17 23:42:34 +0000
-
-    better format for crosspost links
-
-    Had to rearrange the post headers for this
-
-    Fixes #70 
-
-  Change: a0229023194d02dcc66945d396720aa7e1e56289
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-17 23:15:26 +0000
-
-    put the list of guides first in the documentation
-
-    Also expound on the main docs a bit
-
-    Fixes #72 
-
-  Change: 19e239787c57c84cff9786345345f53a45de8720
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-15 21:26:05 +0000
-
-    we moved the core of 'render' to 'vars'
-
-    Why didn't this get caught by my tests? There has to be some kind of
-    version mismatch I'm not catching... 
-
-------------------------------------------
-version 0.011 at 2014-06-15 03:10:40 +0000
-------------------------------------------
-
-  Change: 00072473b9c15d1432c6c38f32a2b3b03e99c056
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-14 22:10:40 +0000
-
-    release v0.011 
-
-  Change: 6437210e352426f947c4075d479b2edf178b5c83
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-14 21:11:36 +0000
-
-    still show the topbar if site lacks main nav 
-
-  Change: 910541a6f81ac0172a2500f6596a9f090c635ecf
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-14 19:52:18 +0000
-
-    add crosspost links to the default blog templates
-
-    Fixes #56 
-
-  Change: 7fe8c0d050ff15723aa0cdbe95011752926d41de
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-14 19:52:10 +0000
-
-    everything used in template should have default
-
-    This makes it a lot simpler to check for membership in a hash and/or
-    loop over an array. Instead of first checking for existence, we can
-    go right to dereferencing. There is probably a better way, maybe via
-    helpers... 
-
-  Change: a340950ed7c1d781973db4610f509ba7eca8f8df
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-14 19:29:06 +0000
-
-    reorganize template vars to prefer objects
-
-    This does increase some confusion, which I'm loathe to do, but it
-    allows any future Page/Document object to Just Work with the default
-    templates, and it solves needing to explicitly add new attributes in
-    various places in the code before being able to reach them in the
-    template.
-
-    Fixes #58 
-
-  Change: c8db0251f228b3259b80392175bf132a9e45b8b9
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-14 18:41:54 +0000
-
-    remove unused dump method
-
-    We just use the object as the underlying hashref it is 
-
-  Change: 2bf706edcb7751dda2c7b0ebe7aea1bd963d39ff
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-14 18:37:03 +0000
-
-    add crosspost links to documents
-
-    This is just the bare minimum of what is desired here. We will
-    eventually need to be able to link documents by relative path and not
-    by page URL (page url may be changed based on unrelated things, like
-    a simple copy/paste of a document).
-
-    Fixes #56 
-
-  Change: 75926433f80050d029bb5e7a230a9b89ac63d953
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-14 18:13:42 +0000
-
-    add last_modified attribute to documents
-
-    We were testing for it, but we never actually added it... 
-
-  Change: 08b02fc22550198d3c16055ff64da10fdaab8e55
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-08 21:37:34 +0000
-
-    defaults must be subref
-
-    I need to find a way to validate this before the release, because it
-    keeps happening... 
-
-  Change: e93ab1e1f933d83fa76d32b46e959218894f0d39
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-07 04:35:10 +0000
-
-    fix bad link to YAML 
-
-------------------------------------------
-version 0.010 at 2014-06-07 09:27:29 +0000
-------------------------------------------
-
-  Change: 16abfada34306b37e5d3ddecc5b77ee8de9be394
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-07 04:27:29 +0000
-
-    release v0.010 
-
-  Change: 4efb0c92c473e362cacd707df923af8f7e5c6a05
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-07 04:26:14 +0000
-
-    add a setup guide until we get a create command
-
-    Fixes #50 
-
-  Change: 411107fb09695af6614634781244510278b0235c
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-07 03:55:53 +0000
-
-    add named navs, so we can add more nav lists later
-
-    This makes sense with the apps having names, and will allow us to
-    have more nav lists in the future. 
-
-  Change: 2d5c39ebd86d16cdaf4ce276e383abcd6865a71a
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-07 03:53:52 +0000
-
-    add next/prev to list page render()
-
-    This needing to update render() is becoming impossible, but it
-    wouldn't have been a problem if `git format-patch` didn't miss one of
-    my patches... 
-
-  Change: 1fcbf943e797da472cf0e7b3c2370054dcfaf61a
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-07 00:54:22 +0000
-
-    mark html templates as such; use .ep like Mojo
-
-    This is setup for supporting RSS and Atom feeds, so we have something
-    to call the templates. 
-
-  Change: 1fdac9cda6d7b4614a96135c0fce0a686c8e7dd3
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-06 23:53:03 +0000
-
-    fix the pagination links in the default blog theme 
-
-  Change: 615ca4fd116995303b0f96df7dfb93fd874b1cee
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-06 23:53:03 +0000
-
-    add pagination to the blog
-
-    The index page and the tag pages are paginated. The index page is now
-    the first page returned from index() (though this may need to be
-    changed, we are generating pages repetitively).
-
-    Fixes #9 
-
-  Change: 7ccf26b512964b9d52f8884a22d53c8bf16f9099
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-06 23:53:03 +0000
-
-    enforce an order on the paginated pages
-
-    We need to know which comes first in order to set our site index
-    page. 
-
-  Change: a2d6073c0151e21b0fe5f45c6286556335adcad8
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-06 23:50:13 +0000
-
-    add optional index path to pagination
-
-    This makes building the blog paginations a lot easier. Instead of
-    having to fix the URLs after they've been made, they get made
-    correctly in the first place. 
-
-  Change: c46caafec07eb140b8f26fe114ad58c9b5231a15
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-06 23:47:53 +0000
-
-    add paginate() constructor for paginated lists
-
-    The paginate constructor returns multiple Statocles::Page::List
-    objects based on an input set of pages. 
-
-  Change: 74d8d94fee3aeb85159a5aa6b3a5a849eb2d4f09
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-06 21:02:56 +0000
-
-    do not build posts whose day has not yet come
-
-    Now we should be able to make a nightly job to run "statocles deploy"
-    and blog posts will show up correctly.
-
-    Fixes #8 
-
-  Change: d8d4fb0fe3e7b6e769ac3886aaf1d8f9d7f566e1
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-06 20:19:30 +0000
-
-    allow setting the date when creating a new post
-
-    This is the start of being able to pre-date blog posts. 
-
-------------------------------------------
-version 0.009 at 2014-06-06 20:15:15 +0000
-------------------------------------------
-
-  Change: 4cbc0bb5ae54d96e12ea57eca7c46132da928d67
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-06 15:15:15 +0000
-
-    release v0.009
-
-    Got the readmes and everything in another commit. Damn! Gotta figure
-    out a Dist::Zilla way of fixing this. 
-
-  Change: be6663337d6974f42d8414e8f0a41e5f23f31529
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-05 20:41:05 +0000
-
-    add the published date to the blog pages
-
-    Fixes #25 
-
-  Change: ae82473bf82aa986d9f3cac46b4cae433048f116
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-05 20:38:57 +0000
-
-    add published date to pages
-
-    Adding each attribute explicitly to the render() sub is annoying, but
-    if they're lazy, they have to be generated... Something has to be
-    done... 
-
-  Change: ad6dcaf6e2741f38d8855ff657c74eb75f38c44c
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-05 20:05:46 +0000
-
-    add last_modified and tags to default blog post
-
-    The "blog post" now includes tags and last_modified. 
-
-  Change: a8211b56c767d96181a61e0cfde43c47a299fec9
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-05 19:46:46 +0000
-
-    add last_modified to documents
-
-    The last_modified field is a Time::Piece object serialized into
-    'YYYY-MM-DD HH:MM:SS'.
-
-    The _freeze_document and _thaw_document methods will probably need to
-    be improved to be more robust and DWIMmy. 
-
-  Change: af0e9bad0db6d19c95f6ebf5526e376ad7a9d46d
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-05 18:40:40 +0000
-
-    make the default templates more semantic
-
-    <main> should encapsulate the main content of the page. <article>
-    should fully encapsulate the given article when there are more than
-    one. 
-
-------------------------------------------
-version 0.008 at 2014-06-05 04:35:12 +0000
-------------------------------------------
-
-  Change: 93c6c2ae3689cb1654e719f2a56ab9017242638f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-04 23:35:12 +0000
-
-    release v0.008 
-
-  Change: 9861071352a4af5663d6ab46091225d66266965f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-04 23:01:28 +0000
-
-    add tag navigation to the blog
-
-    Applications are now attached to the pages that create them so we can
-    get application-level data like which tags are in this app.
-
-    This finishes #10 
-
-  Change: 22114ce39ae33db1ae95fab9d1dd5c2da3905b43
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-04 23:00:47 +0000
-
-    add tag pages to the blog
-
-    These pages list the posts matching the given tag.
-
-    This partly fixes #10 
-
-  Change: adc4d7e3d95b4c479b544e57adbb5277c6f70ebf
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-04 23:00:28 +0000
-
-    avoid swp files when scanning for documents 
-
-  Change: 23214c0d00128a265c9a192f3f591746c5ebf0f4
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-04 20:54:47 +0000
-
-    bump Path::Tiny version to 0.054
-
-    We rely on a few features of 0.054:
-
-    1) FREEZE/THAW/TO_JSON - YAML serialization in t/command.t 2)
-    basename( SUFFIX ) - Statocles::Theme
-
-    Fixes #55 
-
-  Change: f4184479e0884d39f3c657d6bfae996a5ed80c65
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-04 20:14:16 +0000
-
-    remove the site/ directory from the release
-
-    This directory is built by the example site.yml in the git repo, and
-    is only desirable for the git repo.
-
-    Fixes #53 
-
-  Change: 329fc41eb49ea3dfce5ca1878f4874c4f4d7c2dd
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-04 20:08:40 +0000
-
-    handle older versions of git better
-
-    Fixes #54 
-
-  Change: 7109e59fd1bd6f6cd64006fd03fe4402d9827713
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-04 20:08:30 +0000
-
-    Git::Repository requires git 1.5 or higher
-
-    Fixes #54 
-
-------------------------------------------
-version 0.007 at 2014-06-02 05:07:23 +0000
-------------------------------------------
-
-  Change: c7e0f947d10423d7587c21a9e977ad199ec18f1d
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-02 00:07:23 +0000
-
-    Release v0.007 
-
-  Change: 0c52f61716eeb5b8d6e4ece041f8b414b3bebe48
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-01 20:24:26 +0000
-
-    add tags attr to document
-
-    Tags are used to categorize documents. Tags may be specified as an
-    array in the YAML or as a comma-seperated string.
-
-    This does not actually add any additional display or special handling
-    of tags. 
-
-  Change: 5deb06f4b2e67e89ad7fe4f87c13d54301367f1b
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-01 20:23:35 +0000
-
-    remove hard-coded document paths in test
-
-    This will let us add new documents to the test blog without having to
-    explicitly specify them here. 
-
-  Change: 45daeb858af40b20c06d1679a879e39b5551d441
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-01 19:42:30 +0000
-
-    remove unused attribute
-
-    The git site uses the deploy store, not a simple dir as I first
-    imagined. 
-
-  Change: 87603007c4a57fbbf582182772fa890a3da91a8f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-01 19:41:10 +0000
-
-    add/update links in documentation
-
-    Fixed a couple wrong docs as well. I imagine a bunch of these are
-    broken links, but we won't know until metacpan renders them...
-
-    Fixes #44 
-
-  Change: 3db523e6d2b0d7ecf7bea3c8049fba51caa3e623
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-01 18:46:07 +0000
-
-    migrate to Path::Tiny
-
-    This makes a bunch of nicer code
-
-    Fixes #45 
-
-  Change: 634cc795870d78dbceb525aabbfa0b6f532f1528
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-06-01 15:23:16 +0000
-
-    Set a real git config user name/email
-
-    Just setting the environment variables does not seem to prevent the
-    problem of no user config. Hopefully this works...
-
-    Fixes #47 
-
-  Change: 418ef5bb4da0d0562fa3fbde22486498e55d9de7
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-30 01:05:34 +0000
-
-    switch to Type::Tiny. thanks mst! 
-
-  Change: 83a5142e0581a6d4303f6a18f1bcfd70298e9fdf
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-29 01:26:30 +0000
-
-    fix link to Jekyll. Thanks buu! 
-
-------------------------------------------
-version 0.006 at 2014-05-29 06:01:50 +0000
-------------------------------------------
-
-  Change: 8519cbbb196f627774bc2e11b05def5553421e37
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-29 01:01:50 +0000
-
-    Release v0.006 
-
-  Change: f89609be562591bb1f9a475b3b1dabb5c6588598
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-29 00:58:54 +0000
-
-    sort blog index page by post date
-
-    Technically they're sorted by path, but it's functionally the same
-    until someone wants to make two posts in one day...
-
-    Fixes #41 
-
-  Change: a85c74aef1ee521ee5b8ae3eadd8f075b5392fb9
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-28 23:47:42 +0000
-
-    use frontmatter format in addition to pure YAML
-
-    Frontmatter is the same format that Github's Jekyll uses. Luckily,
-    both are easy to support.
-
-    Fixes #43 
-
-  Change: ec134854f5e8b8572b2c5d8be671ef112eee8880
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-28 21:43:54 +0000
-
-    open $EDITOR for the user creating a blog post
-
-    I do not know how to properly test this. On UNIX I can use cat(1), on
-    Windows I could use `type`, but when am I on which and what about
-    Cygwin? 
-
-  Change: 79befdd898d6d4b470bab988b9ff8a3466e16318
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-28 21:28:31 +0000
-
-    add 'blog post' command to add new posts to a blog
-
-    The blog post document gets initialized with some boilerplate and the
-    user gets told where it is.
-
-    Fixes #7 
-
-  Change: 5f243ca8dcc7e041d1395677e7e8ebbbf4e27e39
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-28 21:16:55 +0000
-
-    return the full path to the document
-
-    This is so we can notify the user where this document is in case they
-    want to know. 
-
-  Change: 344aa39a2b71f0affdc57e6d6edc772e29bb0652
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-28 21:10:39 +0000
-
-    add write_document method to Store
-
-    Now applications can edit their own documents 
-
-  Change: 5f0942211b031a62f4a2c9a446f0351b7cd41eb7
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-28 20:17:45 +0000
-
-    add application command delegation
-
-    Test it by creating a blog command help document. I don't like
-    leaving it inline like that, I'd prefer it be part of the POD, but
-    this will work for now. 
-
-  Change: 42f0fce743ae3f8498a5d52bad6c7ea02f26f16f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-28 20:15:09 +0000
-
-    add 'apps' command to list the apps in a site
-
-    It also shows the URL root and the application class. This might be
-    subject to change in the future. 
-
-------------------------------------------
-version 0.005 at 2014-05-26 06:29:14 +0000
-------------------------------------------
-
-  Change: a6550d1cf8a4badf2a6b92c95ca015e95968a085
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-26 01:29:14 +0000
-
-    Release v0.005 
-
-  Change: b9f491caf86e7c36cce8f2b3c86e34d9d979a40a
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-26 01:27:41 +0000
-
-    docs and pages do not need to be in any order
-
-    So compare using Test::Deep bag().
-
-    Fixes #38 
-
-  Change: fc0e570b2ddb5a596d9238f3b31618b81e449a9e
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-26 01:24:34 +0000
-
-    use canon dirsep in template path
-
-    File::Find appears to use / even on Windows. This makes the output of
-    File::Spec->catfile() different from $File::Find::name.
-
-    Fixes #37 
-
-  Change: 4e2367e9f68555718eb3d32bb831bdcb00106d59
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-26 01:23:21 +0000
-
-    doc paths are files; page paths are URLs
-
-    Also, organize the test a bit better to prevent having to filter out
-    //.
-
-    Fixes #37 
-
-  Change: 519c2831ceaee1e241aa660423856cff92f6edea
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-26 00:35:30 +0000
-
-    remove warning if source_dir is undefined 
-
-  Change: 0e6b998443bebdf8750c05c7c2e8b8f31965c792
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-26 00:29:26 +0000
-
-    Moo only allows subrefs as default
-
-    This fixes a "Invalid default '' for ... - not a coderef or
-    code-convertible object" in some versions of
-    Method::Generate::Accessor.
-
-    Fixes #36 
-
-  Change: 8774956c6bdd891619acfcf3c52df0c022931d88
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-26 00:26:52 +0000
-
-    preset git name/email
-
-    This fixes a problem where the current git doesn't have a user.name
-    or user.email configuration during the tests.
-
-    Fixes #35 
-
-------------------------------------------
-version 0.004 at 2014-05-25 06:28:44 +0000
-------------------------------------------
-
-  Change: 46e4b1d8a7e7180a2d07fb3ab3bd274c76538243
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-25 01:28:44 +0000
-
-    Release v0.004 
-
-  Change: be7223bffc0cdee5307e63cacdac45f1ed8c356a
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-25 00:53:32 +0000
-
-    get themes from Statocles share dir
-
-    This makes it a lot easier to use the default themes.
-
-    In the future, we may include a way to get any dist's share dir, so
-    that other CPAN dists can bundle Statocles themes.
-
-    Fixes #33 
-
-  Change: 1f4b7485609f4522fbf9a59b9c3cb60f59f5a41f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-25 00:21:54 +0000
-
-    add another caller to ignore finding template path
-
-    We're trying to find the place where the template is being
-    instantiated, so we need to ignore all the Moo-y stuff in the middle. 
-
-  Change: 15cb9fa5b3d0f7aac931347e3dad6ce52a74d139
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-25 00:18:10 +0000
-
-    move the pager controls to the blog index
-
-    It was erroneously in the site layout 
-
-  Change: b656dd96ac1e27957986b323b24a9647623140d4
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-25 00:12:49 +0000
-
-    add the page path to the template
-
-    The page path should override the document path, since the document
-    path does not really apply once all the content is rendered.
-
-    Fixes #29 
-
-  Change: b74c407a7334cda8237ae28e1879d12d8c450274
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-24 22:41:43 +0000
-
-    add missing ABSTRACT 
-
-------------------------------------------
-version 0.003 at 2014-05-25 03:26:39 +0000
-------------------------------------------
-
-  Change: d20c95d8641c11b342557bbadab702b5f3301ab7
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-24 22:26:39 +0000
-
-    release v0.003 
-
-  Change: 802d6ec79fff5f84ea5bf6899685372f0598f72f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-24 22:25:51 +0000
-
-    fix git commands writing to stdout
-
-    Fixes #30 
-
-  Change: 104afaefcd0c1160dfca9411eb2d2015e4bec7c4
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-24 21:49:12 +0000
-
-    always specify a template path
-
-    This prevents uninitialized warnings when Mojo::Template tries to set
-    the current line with #line.
-
-    Fixes #31 
-
-  Change: 52ddf1d3bb83930fc557c0f5ba5c8856dbd4fa8a
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-24 21:46:30 +0000
-
-    allow regex-unsafe characters in file path
-
-    This should fix #32 on windows, though there is no exact test for
-    it...
-
-    Should we do platform-specific tests? 
-
-------------------------------------------
-version 0.002 at 2014-05-21 04:17:39 +0000
-------------------------------------------
-
-  Change: 1cb5ccbefd8f8a10e60d5229cdebf71ad0f62082
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-20 23:17:39 +0000
-
-    release v0.002 
-
-  Change: 2fb229f8c8ca6b39e1506bae921bb2ade8e6dde3
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-20 23:14:28 +0000
-
-    fix one of the dir seperator problems on Win32
-
-    URLs are always /, so we need to switch the \ on Win32 to /. 
-
-  Change: d66c25d78f1b3d122c695057154ea712906d0574
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-20 22:28:15 +0000
-
-    check for git earlier in the test
-
-    We could then make Git::Repository an optional prereq, but I'm not
-    sure if I want to do that... More likely I'll move
-    Statocles::Site::Git and other git-related modules to their own dist
-    and indicate what to install in the statocles command script. 
-
-  Change: 066f012afb40a6ec6ac501739388c430fb9d9351
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-20 22:25:36 +0000
-
-    add missing prereqs
-
-    Thanks CPANTS! 
-
-------------------------------------------
-version 0.001 at 2014-05-20 04:41:29 +0000
-------------------------------------------
-
-  Change: 3b5ad67e993cc08cc240c39a8c4cafdf3fabfb79
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-19 23:41:29 +0000
-
-    make sure only built files get committed
-
-    If we left any random dirty file in the git deploy dir, we would
-    commit it along with the deployed site, which is bad. Now we only
-    commit the files we moved from the build directory. 
-
-  Change: 18ab115c2953b1d7dee8d446e872007190f605df
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-19 23:31:27 +0000
-
-    add a basic git-based site
-
-    This is the very basic stuff to be added to in time.
-
-    Fixes #27 
-
-  Change: 1708388c9b36edb0a563f9f4ffa22dc3bdef9566
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-19 19:34:29 +0000
-
-    document Statocles::Template and everything else
-
-    Fixes #24 
-
-  Change: 99fbdb81bd6c6f34e1abe53cf3621354b0e593c2
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-19 02:36:04 +0000
-
-    better default theme with more example content 
-
-  Change: 3ad7fd44a0adc18d47c1a2f8c715b826db343ca7
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-18 03:46:08 +0000
-
-    basic site navigation array
-
-    I do not think this is going to be good enough for our needs. Perhaps
-    a set of named navigation lists (akin to the set of named
-    applications)?
-
-    Fixes #18 for now. 
-
-  Change: c5c4264dc59f89671bb4d5ea2effdc6a91dfc2bb
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-18 03:22:47 +0000
-
-    reduce duplication in site test 
-
-  Change: 140cfdd8d9c0af16b2dca82d40ff0b4e27f1bc90
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-18 02:40:47 +0000
-
-    fix default site theme for Statocles::Template
-
-    Pass the file path to Mojo::Template to improve debugging 
-
-  Change: cb953076a606186621ff58afbfd2306aec025d33
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-18 02:40:10 +0000
-
-    add --version command-line script option
-
-    Fixes #20 
-
-  Change: 692dd0095235f81c0c2798189c71bc5228739bcd
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-18 02:12:13 +0000
-
-    switch to Mojo::Template
-
-    A much better template for our purposes, even if the incantation to
-    render them is a bit obtuse.
-
-    See Mojolicious::Plugin::EPRenderer and
-    Mojolicious::Plugin::EPLRenderer for details on how to render
-    Mojo::Template, for when we need to add new things in the future...
-
-    Fixes #17 
-
-  Change: ef383801de072a7752a17b2eb8787bf42f8f31c8
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 23:51:07 +0000
-
-    attribute -> attr 
-
-  Change: 854e60dcb09478154b9d1041a98cc07e946615db
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 23:50:29 +0000
-
-    add some missing documentation to Page classes 
-
-  Change: 36e431c9e3eeb5b60f8a1b0522b2f3ff384f4579
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 23:43:56 +0000
-
-    change Page to a role
-
-    This reduces some of the duplication between the two Page classes.
-
-    Fixes #5 
-
-  Change: 9dc1f24947f0d3ccf871cfaded10a8109c514bd8
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 23:24:12 +0000
-
-    add a base Role class 
-
-  Change: 762c06733dca0916b6d5958a65c5bf4237e04ddf
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 02:02:42 +0000
-
-    refactor test to remove some duplication 
-
-  Change: 046cb62a6fe8fa8afdb03e3d8bd90c2be129c9b9
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 01:44:14 +0000
-
-    add missing layout template
-
-    Our gitignore was a bit over-zealous 
-
-  Change: fc94a4d9fe21a235f821a866eb08aeeaa84512fb
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 01:36:20 +0000
-
-    add site title
-
-    Text::Template does not seem to like blessed objects, another reason
-    why it is not the right template system for this thing...
-
-    We also need to make sure to test that the correct content is
-    present, and not just compare pages against each other. If the
-    template has an error, testing page renders against each other will
-    not reveal the problem, since they'll still be equal.
-
-    Fixes #19 
-
-  Change: b1894e954e388ba670c422ac2a94110880019834
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 01:20:40 +0000
-
-    pull the render() call out of the store
-
-    This way, Store does not need to know about Page objects, just plain
-    strings. This also prevents us from having to pass the extra template
-    arguments to write_page(), which is just awkward...
-
-    They still need to know about Document objects though, but those are
-    proper data structures, not just a string of content. 
-
-  Change: 286bfa4b2158c6046b375d9f013d1893abb1a90c
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 01:17:41 +0000
-
-    add additional template arguments to pages
-
-    This lets us add things after the Application gives us the Page 
-
-  Change: 570102312773fed9efa4ace883a9fe244eea8dc6
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-12 00:25:53 +0000
-
-    add error checking to template fill_in() 
-
-  Change: 05f8172298acf3d318713739b617ce909628253f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-11 01:21:57 +0000
-
-    site index should not duplicate an app page
-
-    So we move the app page to the right place. This may come back to
-    bite us when something assumes that the app page will be there...
-
-    Fixes #14 
-
-  Change: f732d3b7f3bae1b841462c7d8de3945c2d961909
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-11 01:10:00 +0000
-
-    remove the link because POD->Markdown does bad things 
-
-  Change: 1a32722c04bae3c945d31955d69cb108a2b940e8
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-11 01:01:22 +0000
-
-    add some introduction documentation
-
-    Fixes #3 
-
-  Change: a7fbc2986244796a2f107340295704023771d989
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-11 00:19:33 +0000
-
-    add initial default theme and an example site.yml
-
-    This more than anything proves that Text::Template is not the right
-    engine for this application 
-
-  Change: 44a2a8340d9687b5c8183e9e4592119be9e0842c
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-10 23:39:02 +0000
-
-    fix loading theme from a relative directory 
-
-  Change: ca4acc7044e5c5a4566be115bf9b0f142fe79997
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-10 23:23:50 +0000
-
-    fix read documents from a relative directory
-
-    find() does chdir, so we should always use $_ to read the file, but
-    we should use $File::Find::name to set the full path. 
-
-  Change: e5ef120c63113848ca9231ea88d0c88e2d10e735
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-10 23:17:20 +0000
-
-    set the execute bit 
-
-  Change: 015bc9508df4bd5d69afaa0836c986e634453e48
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-10 22:41:27 +0000
-
-    add initial command-line interface
-
-    Fixes #4 
-
-  Change: c89d0b28dcd781291f615e09c8a4fcad671f9510
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-10 21:31:35 +0000
-
-    break up build and deploy stores
-
-    build is step one. deploy is step two. We should be able to build to
-    any store we want, including a remote site, for validation, before we
-    finally call deploy.
-
-    Deploy is the finality. Except that a git repo is not a store... 
-
-  Change: eeb6794a5995104efa1e81bcabb5831cbba5296d
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-10 21:10:44 +0000
-
-    remove destination from apps to reduce duplication
-
-    Having to set the same destination on all the apps is horrible,
-    especially when the apps are already supposed to add their url_root
-    to the page's URL. 
-
-  Change: 10a5759d6e867751c4828e4aae15479715b3f4d4
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-10 21:06:32 +0000
-
-    add missing index page to theme test 
-
-  Change: 49860c815e64e0649c472c1011c21585cca50d58
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-04 02:31:36 +0000
-
-    add an index page to the entire site
-
-    Site indexes are just copies of a specific app index. This may come
-    back to bite me when the event stuff starts happening... 
-
-  Change: 54a742345ace3c3a7a7a216df7f62ace426a67bc
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 23:14:35 +0000
-
-    add index page to the blog 
-
-  Change: 66fcd3dff6ee7e569e061f1f6d7476eca38b1054
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 22:59:26 +0000
-
-    all pages need paths 
-
-  Change: 3ff9e9b9143d7281def5bc82672a2268f266d6aa
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 22:17:02 +0000
-
-    add initial List page, for indexes 
-
-  Change: 391ae2c1a780be526960c622c8eec5f51820ea3f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 21:23:15 +0000
-
-    test multiple blog posts in preparation for lists 
-
-  Change: 437c2142ce035d1cefe23f87c0f6eebb7d875e9f
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 19:48:31 +0000
-
-    better description of what the method returns 
-
-  Change: 14f920bbc0fe13e788f37d795167c94dc9dc92fb
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 19:38:55 +0000
-
-    File -> Store to get all docs from a dir path
-
-    The store will help with making an event-driven, responsive
-    application during preview time. It also makes it a lot easier to
-    implement different methods of storing documents and pages. 
-
-  Change: 22492f665c7a47c36877b0065e487753e10cd791
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 01:52:38 +0000
-
-    add site class
-
-    The Site class encapsulates a set of applications and handles the
-    deploy process.
-
-    Configuring a Site can be easily done using a DI container like
-    Beam::Wire. 
-
-  Change: 34b64f931e72adb2524460af9a2fffd9b6dad7ec
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 01:50:34 +0000
-
-    provide a single pages() method in applications
-
-    The pages() method returns all pages currently active in the
-    application. 
-
-  Change: d0b3ebf63b52a9279a87a27e8563f500c81216c0
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 01:33:14 +0000
-
-    fix template not being stored with the right group
-
-    The "dirs" from splitpath ends with a /, so the last item from
-    splitdir( dirs ) is the empty string. 
-
-  Change: 5698c7c159ea59124c83d1b9d779d679bf71e4e8
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 01:14:50 +0000
-
-    throw a better error when the template is undef
-
-    Previously, it would throw Text::Template's usage message, which
-    doesn't quite explain what the problem is. 
-
-  Change: 0baf9fecf75077fc0fb2129e7f41e82425919c5e
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 01:03:23 +0000
-
-    fix broken tests
-
-    Removing the unneeded imports from the tests revealed that the
-    classes were not importing the other classes they needed. There
-    should be some kind of module to scan for this...
-
-    read_file returns a list of lines in list context, which doesn't work
-    for eq_or_diff 
-
-  Change: 6b70869b9bcb6a4da17aeeba47e39da33b80a7b6
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-05-03 00:25:28 +0000
-
-    allow loading of theme templates from a directory 
-
-  Change: ffc15eb30fc61485c729c4d72047e322bb7d3c0d
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-30 01:55:44 +0000
-
-    we don't need these imports
-
-    The app encapsulates the model and view, as it rightly should. 
-
-  Change: 594944a261791771ced382dea7ee3da9b19a97a3
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-30 01:18:56 +0000
-
-    add layouts to blog application 
-
-  Change: 6a36ace21159d17f87ddd64cdc8c71d134da1968
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-30 01:17:37 +0000
-
-    add layout to page
-
-    A layout wraps the page's content and is shared throughout the site. 
-
-  Change: 570db15a491d7e657dfdaf06f014a7db2a89a6e8
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-30 00:01:37 +0000
-
-    blog app can now read source files from directory 
-
-  Change: 7f5f801489d04b463d17f43ac8d6fc3c94b2751e
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-29 23:36:47 +0000
-
-    add write() method to blog app
-
-    The blog app is now capable of taking documents and writing pages. 
-
-  Change: bc6abc54b6a04746cca8c877fc4f8af560b1a758
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-29 23:35:49 +0000
-
-    make sure to create full paths when writing pages 
-
-  Change: 9fd07e98da6570a20d8737ce7f988930f69d7c49
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-29 23:25:50 +0000
-
-    add theme to the blog app 
-
-  Change: 7a1021dd7d647a76a2b89c4b6de3f334bc52694b
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-29 23:12:20 +0000
-
-    add themes - bundles of templates 
-
-  Change: 88832da01659e23e150b194f4e963bf471931b99
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-29 01:34:20 +0000
-
-    initial build artifacts
-
-    We're going public on GitHub, but we are nowhere near ready for
-    actual site generation yet. 
-
-  Change: de0d315a1d7e3c2a01933da54c7bb0b88e8a9cc4
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-29 01:31:31 +0000
-
-    initial work on a blog application
-
-    We can change Documents into Pages via an API call. Lot more work to
-    be done... 
-
-  Change: c3b737189fa35b206302dbfc4f48869c21be85c8
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-28 01:12:00 +0000
-
-    add documentation 
-
-  Change: e27c2bd22362beb563035a9abf959b7cee5c1d73
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-28 01:07:08 +0000
-
-    rename project to Statocles
-
-    Then we can have Dynamocles, adding dynamically-generated site
-    features like users and sessions and what-not. 
-
-  Change: 91a125aafbeed25a1c11c036279d94e5a67964fe
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-28 00:56:29 +0000
-
-    add some documentation 
-
-  Change: e6e418256d100419483dd09d4274feebab6c806d
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-27 18:16:57 +0000
-
-    add ref to File that Document is read from/writ to
-
-    This way, Pages can get access to the path the Document was loaded
-    from, to help build a URL. 
-
-  Change: cb9e5cff7fb166ea53e8f351e55a628c21846c75
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-27 17:33:52 +0000
-
-    write pages to disk
-
-    Apps will be responsible for giving paths to Page objects. These
-    paths will probably correspond to the Document's source path, but
-    they are not required to (links in documents will probably fail if
-    they are not...) 
-
-  Change: 07d76c01dc6ae79be73529fa94f91e4f9cbc750e
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-27 17:17:32 +0000
-
-    add simple page rendering
-
-    Pages take one or more Documents and build HTML which will then be
-    written to disk (probably). The document's content is run through a
-    Markdown parser, and the document and rendered content is passed to a
-    Text::Template template. 
-
-  Change: 6650017a871bef029d214276a207e4a572966b6d
-  Author: Doug Bell <madcityzen@gmail.com>
-  Date : 2014-04-26 19:37:43 +0000
-
-    add base File and Document classes 
-
-================
-End of releases.
-================

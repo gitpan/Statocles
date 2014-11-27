@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.022';
+$Statocles::Command::VERSION = '0.023';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -37,6 +37,9 @@ sub main {
         return 0;
     }
 
+    my $method = $argv[0];
+    return pod2usage("ERROR: Missing command") unless $method;
+
     local $Statocles::VERBOSE = $opt{verbose};
 
     my $wire = Beam::Wire->new( file => $opt{config} );
@@ -45,7 +48,6 @@ sub main {
         site => $wire->get( $opt{site} ),
     );
 
-    my $method = $argv[0];
     if ( grep { $_ eq $method } qw( build deploy ) ) {
         $cmd->site->$method;
         return 0;
@@ -104,7 +106,7 @@ sub main {
 
 {
     package Statocles::Command::_MOJOAPP;
-$Statocles::Command::_MOJOAPP::VERSION = '0.022';
+$Statocles::Command::_MOJOAPP::VERSION = '0.023';
     # Currently, as of Mojolicious 5.12, loading the Mojolicious module here
     # will load the Mojolicious::Commands module, which calls GetOptions, which
     # will remove -h, --help, -m, and -s from @ARGV. We fix this by copying
@@ -140,7 +142,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.022
+version 0.023
 
 =head1 SYNOPSIS
 

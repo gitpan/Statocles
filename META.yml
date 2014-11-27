@@ -7,13 +7,16 @@ build_requires:
   Dir::Self: '0'
   Module::Build: '0.3601'
   Test::Compile: '0'
-  Test::Most: '0'
+  Test::Deep: '0'
+  Test::Differences: '0'
+  Test::Exception: '0'
+  Test::More: '0'
 configure_requires:
-  ExtUtils::MakeMaker: '6.30'
+  ExtUtils::MakeMaker: '0'
   File::ShareDir::Install: '0.06'
   Module::Build: '0.3601'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.140640'
+generated_by: 'Dist::Zilla version 5.023, CPAN::Meta::Converter version 2.142690'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -36,10 +39,12 @@ requires:
   Type::Tiny: '0'
   Types::Path::Tiny: '0'
   YAML: '0'
+  perl: '5.010'
   strict: '0'
   warnings: '0'
 resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: https://github.com/preaction/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: '0.022'
+version: '0.023'
+x_authority: cpan:PREACTION

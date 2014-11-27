@@ -306,6 +306,28 @@ subtest 'commands' => sub {
         theme => $theme,
     );
 
+    subtest 'errors' => sub {
+        subtest 'invalid command' => sub {
+            my @args = qw( blog foo );
+            my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+            ok !$out, 'blog error is on stderr' or diag $out;
+            isnt $exit, 0;
+            like $err, qr{\QERROR: Unknown command "foo"}, "contains error message";
+            like $err, qr{\Qblog post [--date YYYY-MM-DD] <title> -- Create a new blog post},
+                'contains blog usage information';
+        };
+
+        subtest 'missing command' => sub {
+            my @args = qw( blog );
+            my ( $out, $err, $exit ) = capture { $app->command( @args ) };
+            ok !$out, 'blog error is on stderr' or diag $out;
+            isnt $exit, 0;
+            like $err, qr{\QERROR: Missing command}, "contains error message";
+            like $err, qr{\Qblog post [--date YYYY-MM-DD] <title> -- Create a new blog post},
+                'contains blog usage information';
+        };
+    };
+
     subtest 'help' => sub {
         my @args = qw( blog help );
         my ( $out, $err, $exit ) = capture { $app->command( @args ) };

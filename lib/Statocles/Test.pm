@@ -1,6 +1,6 @@
 package Statocles::Test;
 # ABSTRACT: Base set of imports for all Statocles tests
-$Statocles::Test::VERSION = '0.022';
+$Statocles::Test::VERSION = '0.023';
 use strict;
 use warnings;
 
@@ -11,7 +11,7 @@ sub modules {
     my @modules = $class->SUPER::modules( %args );
     return (
         @modules,
-        'Test::Most',
+        qw( Test::More Test::Deep Test::Differences Test::Exception ),
         'Dir::Self' => [qw( __DIR__ )],
         'Path::Tiny' => [qw( path tempdir )],
     );
@@ -29,7 +29,7 @@ Statocles::Test - Base set of imports for all Statocles tests
 
 =head1 VERSION
 
-version 0.022
+version 0.023
 
 =head1 SYNOPSIS
 
@@ -44,9 +44,13 @@ In addition to all the imports from L<Statocles::Base>, this module imports:
 
 =over
 
-=item L<Test::Most>
+=item L<Test::More>
 
-Which includes Test::More, Test::Deep, Test::Differences, and Test::Exception.
+=item L<Test::Deep>
+
+=item L<Test::Differences>
+
+=item L<Test::Exception>
 
 =item L<Dir::Self>
 

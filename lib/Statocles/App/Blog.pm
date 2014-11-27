@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.022';
+$Statocles::App::Blog::VERSION = '0.023';
 use Statocles::Class;
 use Memoize qw( memoize );
 use Getopt::Long qw( GetOptionsFromArray );
@@ -57,13 +57,23 @@ Markdown content goes here.
 ENDCONTENT
 };
 
+my $USAGE_INFO = <<'ENDHELP';
+Usage:
+    $name help -- This help file
+    $name post [--date YYYY-MM-DD] <title> -- Create a new blog post with the given title
+ENDHELP
+
 sub command {
     my ( $self, $name, @argv ) = @_;
+
+    if ( !$argv[0] ) {
+        print STDERR "ERROR: Missing command\n";
+        print STDERR eval "qq{$USAGE_INFO}";
+        return 1;
+    }
+
     if ( $argv[0] eq 'help' ) {
-        print <<ENDHELP;
-$name help -- This help file
-$name post [--date YYYY-MM-DD] <title> -- Create a new blog post with the given title
-ENDHELP
+        print eval "qq{$USAGE_INFO}";
     }
     elsif ( $argv[0] eq 'post' ) {
         my %opt;
@@ -81,9 +91,6 @@ ENDHELP
             return 1;
         }
 
-        my $slug = lc $title;
-        $slug =~ s/\s+/-/g;
-
         my ( $year, $mon, $day );
         if ( $opt{ date } ) {
             ( $year, $mon, $day ) = split /-/, $opt{date};
@@ -100,18 +107,34 @@ ENDHELP
             sprintf( '%02i', $day ),
         );
 
-        my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
         my %doc = (
             %$default_post,
             title => $title,
             last_modified => Time::Piece->new,
         );
+
+        if ( $ENV{EDITOR} ) {
+            # I can see no good way to test this automatically
+            my $tmp_store = Statocles::Store->new( path => Path::Tiny->tempdir );
+            my $tmp_path = $tmp_store->write_document( new_post => \%doc );
+            system $ENV{EDITOR}, $tmp_path;
+            %doc = %{ $tmp_store->read_document( 'new_post' ) };
+            $title = $doc{title};
+        }
+
+        my $slug = lc $title;
+        $slug =~ s/\s+/-/g;
+        my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
         my $full_path = $self->store->write_document( $path => \%doc );
         print "New post at: $full_path\n";
-        if ( $ENV{EDITOR} ) {
-            system $ENV{EDITOR}, $full_path;
-        }
+
     }
+    else {
+        print STDERR qq{ERROR: Unknown command "$argv[0]"\n};
+        print STDERR eval "qq{$USAGE_INFO}";
+        return 1;
+    }
+
     return 0;
 }
 
@@ -319,7 +342,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.022
+version 0.023
 
 =head1 DESCRIPTION
 
