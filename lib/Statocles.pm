@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.023';
+$Statocles::VERSION = '0.024';
 use Statocles::Base;
 use base 'Exporter';
 our @EXPORT_OK = qw( diag );
@@ -27,7 +27,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.023
+version 0.024
 
 =head1 SYNOPSIS
 
@@ -100,6 +100,10 @@ language|Mojo::Template#SYNTAX>.
 =item *
 
 A clean default theme using L<Twitter Bootstrap|http://getbootstrap.com>.
+
+=item *
+
+SEO-friendly features such as L<sitemaps (sitemap.xml)|http://www.sitemaps.org>.
 
 =back
 

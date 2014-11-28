@@ -9,7 +9,17 @@ Makefile.PL
 README
 README.mkdn
 bin/statocles
+blog/2014/05/06/test-post.html
+blog/index.atom
+blog/index.rss
+blog/tag/default.atom
+blog/tag/default.rss
+blog/tag/default/index.html
+blog/tag/example.atom
+blog/tag/example.rss
+blog/tag/example/index.html
 cpanfile
+index.html
 lib/Statocles.pm
 lib/Statocles/App.pm
 lib/Statocles/App/Blog.pm
@@ -29,6 +39,7 @@ lib/Statocles/Store.pm
 lib/Statocles/Template.pm
 lib/Statocles/Test.pm
 lib/Statocles/Theme.pm
+robots.txt
 share/theme/default/blog/index.atom.ep
 share/theme/default/blog/index.html.ep
 share/theme/default/blog/index.rss.ep
@@ -39,6 +50,7 @@ share/theme/default/site/layout.html.ep
 share/theme/default/site/sidebar_before.html
 share/zsh/_statocles
 site.yml
+sitemap.xml
 t/00_compile.t
 t/app/blog.t
 t/bin/statocles.t

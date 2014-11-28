@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.023';
+$Statocles::Command::VERSION = '0.024';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -64,15 +64,22 @@ sub main {
     }
     elsif ( $method eq 'daemon' ) {
         require Mojo::Server::Daemon;
-        my $daemon = Mojo::Server::Daemon->new(
+        our $daemon = Mojo::Server::Daemon->new(
             silent => 1,
             app => Statocles::Command::_MOJOAPP->new(
                 site => $cmd->site,
             ),
         );
-        print "Listening on " . $daemon->listen->[0] . "\n";
+
         # Using start() instead of run() so we can stop() inside the tests
         $daemon->start;
+
+        # Find the port we're listening on
+        my $id = $daemon->acceptors->[0];
+        my $handle = $daemon->ioloop->acceptor( $id )->handle;
+        print "Listening on " . sprintf( 'http://%s:%d', $handle->sockhost || '127.0.0.1', $handle->sockport ) . "\n";
+
+        # Give control to the IOLoop
         Mojo::IOLoop->start;
     }
     elsif ( $method eq 'bundle' ) {
@@ -106,7 +113,7 @@ sub main {
 
 {
     package Statocles::Command::_MOJOAPP;
-$Statocles::Command::_MOJOAPP::VERSION = '0.023';
+$Statocles::Command::_MOJOAPP::VERSION = '0.024';
     # Currently, as of Mojolicious 5.12, loading the Mojolicious module here
     # will load the Mojolicious::Commands module, which calls GetOptions, which
     # will remove -h, --help, -m, and -s from @ARGV. We fix this by copying
@@ -119,7 +126,17 @@ $Statocles::Command::_MOJOAPP::VERSION = '0.023';
 
     sub startup {
         my ( $self ) = @_;
-        $self->routes->get( '/', sub { $_[0]->redirect_to( '/index.html' ) } );
+        my $base;
+        if ( $self->site->base_url ) {
+            $base = Mojo::URL->new( $self->site->base_url )->path;
+            $base =~ s{/$}{};
+        }
+
+        my $index = "/index.html";
+        if ( $base ) {
+            $index = $base . $index;
+        }
+
         unshift @{ $self->static->paths },
             $self->site->build_store->path,
             # Add the deploy store for non-Statocles content
@@ -127,7 +144,26 @@ $Statocles::Command::_MOJOAPP::VERSION = '0.023';
             # this is convenience until we can track image directories and other non-generated
             # content.
             $self->site->deploy_store->path;
+
+        $self->routes->get( '/', sub {
+            my ( $c ) = @_;
+            $c->redirect_to( $index );
+        } );
+
+        # Add a route for the "home" URL
+        if ( $base && $base ne '/' ) {
+            $self->routes->get( $base, sub {
+                my ( $c ) = @_;
+                $c->redirect_to( $index );
+            } );
+            $self->routes->get( $base . '/*path', sub {
+                my ( $c ) = @_;
+                $self->static->dispatch( $c );
+            } );
+        }
+
     }
+
 }
 
 1;
@@ -142,7 +178,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.023
+version 0.024
 
 =head1 SYNOPSIS
 

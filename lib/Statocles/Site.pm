@@ -1,8 +1,9 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.023';
+$Statocles::Site::VERSION = '0.024';
 use Statocles::Class;
 use Statocles::Store;
+use Mojo::URL;
 use Mojo::DOM;
 
 
@@ -80,6 +81,8 @@ sub write {
     my %args = (
         site => $self,
     );
+
+    # Collect all the pages for this site
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
 
@@ -91,12 +94,32 @@ sub write {
         for my $page ( $app->pages ) {
             if ( $index_path && $page->path eq $index_path ) {
                 # Rename the app's page so that we don't get two pages with identical
-                # content
+                # content, which is bad for SEO
                 $page->path( '/index.html' );
             }
-            $store->write_file( $page->path, $page->render( %args ) );
             push @pages, $page;
         }
+    }
+
+    # Rewrite page content to add base URL
+    my $base_path = Mojo::URL->new( $self->base_url )->path;
+    $base_path =~ s{/$}{};
+    for my $page ( @pages ) {
+        my $html = $page->render( %args );
+
+        if ( $base_path =~ /\S/ ) {
+            my $dom = Mojo::DOM->new( $html );
+            for my $attr ( qw( src href ) ) {
+                for my $el ( $dom->find( "[$attr]" )->each ) {
+                    my $url = $el->attr( $attr );
+                    next unless $url =~ m{^/};
+                    $el->attr( $attr, join "", $base_path, $url );
+                }
+            }
+            $html = $dom->to_string;
+        }
+
+        $store->write_file( $page->path, $html );
     }
 
     # Build the sitemap.xml
@@ -129,6 +152,8 @@ sub write {
     $sitemap = $sitemap->wrap( '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>' );
     $store->write_file( 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>' . $sitemap->to_string );
 
+    # robots.txt is the best way for crawlers to automatically discover sitemap.xml
+    # We should do more with this later...
     my @robots = (
         "Sitemap: " . $self->url( 'sitemap.xml' ),
         "User-Agent: *",
@@ -141,6 +166,7 @@ sub write {
 sub url {
     my ( $self, $path ) = @_;
     my $base = $self->base_url;
+    # Remove the / from both sides of the join so we don't double up
     $base =~ s{/$}{};
     $path =~ s{^/}{};
     return join "/", $base, $path;
@@ -158,7 +184,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.023
+version 0.024
 
 =head1 SYNOPSIS
 

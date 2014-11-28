@@ -1,11 +1,15 @@
 package Statocles::Base;
 # ABSTRACT: Base module for Statocles modules
-$Statocles::Base::VERSION = '0.023';
+$Statocles::Base::VERSION = '0.024';
 use strict;
 use warnings;
 use base 'Import::Base';
 
 sub modules {
+    # Disable spurious warnings on platforms that Net::DNS::Native does not
+    # support. We don't use this much mojo
+    $ENV{MOJO_NO_NDN} = 1;
+
     return (
         strict => [],
         warnings => [],
@@ -28,7 +32,7 @@ Statocles::Base - Base module for Statocles modules
 
 =head1 VERSION
 
-version 0.023
+version 0.024
 
 =head1 SYNOPSIS
 
