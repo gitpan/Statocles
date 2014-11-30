@@ -1,6 +1,6 @@
 package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
-$Statocles::Store::VERSION = '0.024';
+$Statocles::Store::VERSION = '0.025';
 use Statocles::Class;
 use Scalar::Util qw( blessed );
 use Statocles::Document;
@@ -165,7 +165,7 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.024
+version 0.025
 
 =head1 DESCRIPTION
 

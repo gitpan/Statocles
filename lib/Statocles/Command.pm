@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.024';
+$Statocles::Command::VERSION = '0.025';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -113,7 +113,7 @@ sub main {
 
 {
     package Statocles::Command::_MOJOAPP;
-$Statocles::Command::_MOJOAPP::VERSION = '0.024';
+$Statocles::Command::_MOJOAPP::VERSION = '0.025';
     # Currently, as of Mojolicious 5.12, loading the Mojolicious module here
     # will load the Mojolicious::Commands module, which calls GetOptions, which
     # will remove -h, --help, -m, and -s from @ARGV. We fix this by copying
@@ -128,7 +128,7 @@ $Statocles::Command::_MOJOAPP::VERSION = '0.024';
         my ( $self ) = @_;
         my $base;
         if ( $self->site->base_url ) {
-            $base = Mojo::URL->new( $self->site->base_url )->path;
+            $base = Mojo::URL->new( $self->site->base_url )->path->to_string;
             $base =~ s{/$}{};
         }
 
@@ -151,7 +151,7 @@ $Statocles::Command::_MOJOAPP::VERSION = '0.024';
         } );
 
         # Add a route for the "home" URL
-        if ( $base && $base ne '/' ) {
+        if ( $base ) {
             $self->routes->get( $base, sub {
                 my ( $c ) = @_;
                 $c->redirect_to( $index );
@@ -178,7 +178,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.024
+version 0.025
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,6 @@
 package Statocles::Page::Feed;
 # ABSTRACT: A page for a feed of another page
-$Statocles::Page::Feed::VERSION = '0.024';
+$Statocles::Page::Feed::VERSION = '0.025';
 use Statocles::Class;
 with 'Statocles::Page';
 
@@ -36,7 +36,7 @@ Statocles::Page::Feed - A page for a feed of another page
 
 =head1 VERSION
 
-version 0.024
+version 0.025
 
 =head1 DESCRIPTION
 
