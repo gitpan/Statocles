@@ -37,6 +37,30 @@ my @pages = (
     ),
 );
 
+subtest 'attribute defaults' => sub {
+    my $page = Statocles::Page::List->new(
+        path => '/blog/index.html',
+        pages => \@pages,
+    );
+
+    subtest 'search_change_frequency' => sub {
+        is $page->search_change_frequency, 'daily';
+    };
+
+    subtest 'search_priority' => sub {
+        is $page->search_priority, 0.3;
+    };
+};
+
+subtest 'last_modified' => sub {
+    my $list = Statocles::Page::List->new(
+        path => '/blog/index.html',
+        pages => \@pages,
+    );
+    isa_ok $list->last_modified, 'Time::Piece';
+    is $list->last_modified->datetime, $pages[0]->last_modified->datetime;
+};
+
 subtest 'extra args' => sub {
     my $list = Statocles::Page::List->new(
         path => '/blog/index.html',

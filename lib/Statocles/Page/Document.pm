@@ -1,21 +1,16 @@
 package Statocles::Page::Document;
 # ABSTRACT: Render documents into HTML
-$Statocles::Page::Document::VERSION = '0.025';
+$Statocles::Page::Document::VERSION = '0.026';
 use Statocles::Class;
 with 'Statocles::Page';
 use Text::Markdown;
 use Statocles::Template;
 
 
-has published => (
-    is => 'ro',
-    isa => InstanceOf['Time::Piece'],
-);
-
-
 has document => (
     is => 'ro',
     isa => InstanceOf['Statocles::Document'],
+    required => 1,
 );
 
 
@@ -47,6 +42,15 @@ sub sections {
     return map { $self->markdown->markdown( $_ ) } @sections;
 }
 
+
+sub last_modified {
+    my ( $self ) = @_;
+    if ( my $dt = $self->published ) {
+        return $dt;
+    }
+    return $self->document->last_modified;
+}
+
 1;
 
 __END__
@@ -59,17 +63,13 @@ Statocles::Page::Document - Render documents into HTML
 
 =head1 VERSION
 
-version 0.025
+version 0.026
 
 =head1 DESCRIPTION
 
 This page class takes a single L<document|Statocles::Document> and renders it as HTML.
 
 =head1 ATTRIBUTES
-
-=head2 published
-
-The publish date/time of this page. A L<Time::Piece> object.
 
 =head2 document
 
@@ -97,6 +97,11 @@ Get the template variables for this page.
 
 Get a list of content divided into sections. The Markdown "---" marker divides
 sections.
+
+=head2 last_modified
+
+Get the last modified date of this page by checking the document or using the page's
+publish date.
 
 =head1 AUTHOR
 

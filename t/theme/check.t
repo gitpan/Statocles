@@ -99,11 +99,21 @@ my %app_vars = (
             doc => $store->documents->[0],
         },
     },
+    perldoc => {
+        'pod.html.ep' => {
+            %common_vars,
+            content => 'Fake content',
+        },
+    },
     site => {
         'layout.html.ep' => {
             %common_vars,
             self => $page{ document },
             app => $blog,
+        },
+        'sitemap.xml.ep' => {
+            site => $site,
+            pages => [ $page{ list }, $page{ document } ],
         },
     },
 );

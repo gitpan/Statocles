@@ -11,6 +11,7 @@ my $doc = Statocles::Document->new(
     title => 'Page Title',
     author => 'preaction',
     tags => [qw( foo bar baz )],
+    last_modified => Time::Piece->new( time - 600 ),
     content => <<'MARKDOWN',
 # Subtitle
 
@@ -27,6 +28,75 @@ This is a second section of content
 MARKDOWN
 );
 my $md = Text::Markdown->new;
+
+subtest 'constructor' => sub {
+    my %required = (
+        path => '/path/to/page.html',
+        document => $doc,
+    );
+
+    subtest 'constructor errors' => sub {
+
+        subtest 'required attributes' => sub {
+            for my $key ( keys %required ) {
+                dies_ok {
+                    Statocles::Page::Document->new(
+                        map {; $_ => $required{ $_ } } grep { $_ ne $key } keys %required,
+                    );
+                } $key . ' is required';
+            }
+        };
+
+    };
+
+    subtest 'attribute defaults' => sub {
+        my $page = Statocles::Page::Document->new( %required );
+
+        subtest 'search_change_frequency' => sub {
+            is $page->search_change_frequency, 'weekly';
+        };
+
+        subtest 'search_priority' => sub {
+            is $page->search_priority, 0.5;
+        };
+
+        subtest 'layout' => sub {
+            isa_ok $page->layout, 'Statocles::Template';
+            is $page->layout->content, '<%= $content %>';
+        };
+
+        subtest 'template' => sub {
+            isa_ok $page->template, 'Statocles::Template';
+            is $page->template->content, '<%= $content %>';
+        };
+
+    };
+};
+
+subtest 'page last modified' => sub {
+    subtest 'defaults to document last modified' => sub {
+
+        my $page = Statocles::Page::Document->new(
+            document => $doc,
+            path => '/path/to/page.html',
+        );
+
+        isa_ok $page->last_modified, 'Time::Piece';
+        is $page->last_modified->datetime, $doc->last_modified->datetime;
+    };
+
+    subtest 'overridden by published date' => sub {
+        my $tp = Time::Piece->new;
+        my $page = Statocles::Page::Document->new(
+            document => $doc,
+            path => '/path/to/page.html',
+            published => $tp,
+        );
+
+        isa_ok $page->last_modified, 'Time::Piece';
+        is $page->last_modified->datetime, $tp->datetime;
+    };
+};
 
 subtest 'template string' => sub {
     my $tp = Time::Piece->new;

@@ -1,8 +1,9 @@
 package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
-$Statocles::Page::List::VERSION = '0.025';
+$Statocles::Page::List::VERSION = '0.026';
 use Statocles::Class;
 with 'Statocles::Page';
+use List::Util qw( max );
 use List::MoreUtils qw( part );
 use Statocles::Template;
 
@@ -17,6 +18,16 @@ has [qw( next prev )] => (
     is => 'ro',
     isa => Path,
     coerce => Path->coercion,
+);
+
+
+has '+search_change_frequency' => (
+    default => sub { 'daily' },
+);
+
+
+has '+search_priority' => (
+    default => sub { 0.3 },
 );
 
 
@@ -54,6 +65,12 @@ sub vars {
     );
 }
 
+
+sub last_modified {
+    my ( $self ) = @_;
+    return max map { $_->last_modified } @{ $self->pages };
+}
+
 1;
 
 __END__
@@ -66,7 +83,7 @@ Statocles::Page::List - A page presenting a list of other pages
 
 =head1 VERSION
 
-version 0.025
+version 0.026
 
 =head1 DESCRIPTION
 
@@ -86,6 +103,20 @@ The path to the next page in the pagination series.
 =head2 prev
 
 The path to the previous page in the pagination series.
+
+=head2 search_change_frequency
+
+Override the default L<search_change_frequency|Statocles::Page/search_change_frequency>
+to C<daily>, because these pages aggregate other pages.
+
+=head2 search_priority
+
+Override the default L<search_priority|Statocles::Page/search_priority> to reduce
+the rank of list pages to C<0.3>.
+
+It is more important for users to get to the full page than
+to get to this list page, which may contain truncated content, and whose relevant
+content may appear 3-4 items down the page.
 
 =head1 METHODS
 
@@ -107,6 +138,11 @@ page first (if any).
 =head2 vars
 
 Get the template variables for this page.
+
+=head2 last_modified
+
+Get the last modified date of this page. This will be the most recent last modified
+date of the pages inside this page.
 
 =head1 AUTHOR
 

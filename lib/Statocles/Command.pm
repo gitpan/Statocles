@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.025';
+$Statocles::Command::VERSION = '0.026';
 use Statocles::Class;
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -112,8 +112,9 @@ sub main {
 }
 
 {
-    package Statocles::Command::_MOJOAPP;
-$Statocles::Command::_MOJOAPP::VERSION = '0.025';
+    package # Do not index this
+        Statocles::Command::_MOJOAPP;
+
     # Currently, as of Mojolicious 5.12, loading the Mojolicious module here
     # will load the Mojolicious::Commands module, which calls GetOptions, which
     # will remove -h, --help, -m, and -s from @ARGV. We fix this by copying
@@ -145,21 +146,38 @@ $Statocles::Command::_MOJOAPP::VERSION = '0.025';
             # content.
             $self->site->deploy_store->path;
 
-        $self->routes->get( '/', sub {
+        my $serve_static = sub {
             my ( $c ) = @_;
-            $c->redirect_to( $index );
-        } );
+            my $path = Mojo::Path->new( $c->stash->{path} );
 
-        # Add a route for the "home" URL
+            # Taint check the path, just in case someone uses this "dev" tool to
+            # serve real content
+            return $c->render( status => 400, text => "You didn't say the magic word" )
+                if $path->canonicalize->parts->[0] eq '..';
+
+            my $asset = $self->static->file( $path );
+            if ( !$asset ) {
+                # Check for index.html
+                my $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
+                $asset = $self->static->file( $path );
+            }
+
+            if ( !$asset ) {
+                return $c->render( status => 404, text => 'Not found' );
+            }
+
+            return $c->reply->asset( $asset );
+        };
+
         if ( $base ) {
-            $self->routes->get( $base, sub {
+            $self->routes->get( '/', sub {
                 my ( $c ) = @_;
-                $c->redirect_to( $index );
+                $c->redirect_to( $base );
             } );
-            $self->routes->get( $base . '/*path', sub {
-                my ( $c ) = @_;
-                $self->static->dispatch( $c );
-            } );
+            $self->routes->get( $base . '/*path' )->to( path => 'index.html', cb => $serve_static );
+        }
+        else {
+            $self->routes->get( '/*path' )->to( path => 'index.html', cb => $serve_static );
         }
 
     }
@@ -178,7 +196,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.025
+version 0.026
 
 =head1 SYNOPSIS
 

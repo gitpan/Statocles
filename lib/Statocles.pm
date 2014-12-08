@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.025';
+$Statocles::VERSION = '0.026';
 use Statocles::Base;
 use base 'Exporter';
 our @EXPORT_OK = qw( diag );
@@ -27,7 +27,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.025
+version 0.026
 
 =head1 SYNOPSIS
 

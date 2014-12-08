@@ -1,6 +1,6 @@
 package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
-$Statocles::Store::VERSION = '0.025';
+$Statocles::Store::VERSION = '0.026';
 use Statocles::Class;
 use Scalar::Util qw( blessed );
 use Statocles::Document;
@@ -46,7 +46,7 @@ sub read_document {
     my ( $self, $path ) = @_;
     diag( 1, "Read document: ", $path );
     my $full_path = $self->path->child( $path );
-    open my $fh, '<', $full_path or die "Could not open '$full_path' for reading: $!\n";
+    open my $fh, '<:encoding(UTF-8)', $full_path or die "Could not open '$full_path' for reading: $!\n";
     my $doc;
     my $buffer = '';
     while ( my $line = <$fh> ) {
@@ -126,7 +126,7 @@ sub _freeze_document {
 sub read_file {
     my ( $self, $path ) = @_;
     diag( 1, "Read file: ", $path );
-    return $self->path->child( $path )->slurp;
+    return $self->path->child( $path )->slurp_utf8;
 }
 
 
@@ -140,7 +140,7 @@ sub write_file {
     my ( $self, $path, $content ) = @_;
     diag( 1, "Write file: ", $path );
     my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew( $content );
+    $full_path->touchpath->spew_utf8( $content );
     return;
 }
 
@@ -165,7 +165,7 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.025
+version 0.026
 
 =head1 DESCRIPTION
 

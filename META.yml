@@ -22,8 +22,13 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: '1.4'
 name: Statocles
+recommends:
+  PPI: '0'
+  Pod::Elemental: '0'
+  Pod::Weaver: '0'
 requires:
   Beam::Wire: '0'
+  Encode: '0'
   File::Copy::Recursive: '0'
   File::Share: '0'
   Git::Repository: '0'
@@ -43,8 +48,9 @@ requires:
   strict: '0'
   warnings: '0'
 resources:
+  IRC: irc://irc.perl.org/#statocles
   bugtracker: https://github.com/preaction/Statocles/issues
-  homepage: https://github.com/preaction/Statocles
+  homepage: http://preaction.github.io/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: '0.025'
+version: '0.026'
 x_authority: cpan:PREACTION
