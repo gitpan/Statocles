@@ -1,6 +1,6 @@
 package Statocles::App::Perldoc;
 # ABSTRACT: Render documentation for Perl modules
-$Statocles::App::Perldoc::VERSION = '0.026';
+$Statocles::App::Perldoc::VERSION = '0.027';
 use Statocles::Class;
 extends 'Statocles::App';
 use Statocles::Theme;
@@ -229,7 +229,7 @@ Statocles::App::Perldoc - Render documentation for Perl modules
 
 =head1 VERSION
 
-version 0.026
+version 0.027
 
 =head1 DESCRIPTION
 

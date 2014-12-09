@@ -1,6 +1,6 @@
 package Statocles::App::Plain;
 # ABSTRACT: Plain documents made into pages with no extras
-$Statocles::App::Plain::VERSION = '0.026';
+$Statocles::App::Plain::VERSION = '0.027';
 use Statocles::Class;
 extends 'Statocles::App';
 use List::Util qw( first );
@@ -83,7 +83,7 @@ Statocles::App::Plain - Plain documents made into pages with no extras
 
 =head1 VERSION
 
-version 0.026
+version 0.027
 
 =head1 SYNOPSIS
 

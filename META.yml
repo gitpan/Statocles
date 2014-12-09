@@ -35,7 +35,7 @@ requires:
   Import::Base: '0'
   List::MoreUtils: '0'
   Memoize: '0'
-  Mojolicious: '4.76'
+  Mojolicious: '5.41'
   Moo::Lax: '0'
   Path::Tiny: '0.054'
   Pod::Usage::Return: '0'
@@ -52,5 +52,5 @@ resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: http://preaction.github.io/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: '0.026'
+version: '0.027'
 x_authority: cpan:PREACTION
