@@ -1,7 +1,7 @@
 package Statocles::Site::Git;
 # ABSTRACT: A git-based site
-$Statocles::Site::Git::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::Site::Git::VERSION = '0.028';
+use Statocles::Base 'Class';
 extends 'Statocles::Site';
 
 use File::Copy::Recursive qw( dircopy );
@@ -102,7 +102,7 @@ Statocles::Site::Git - A git-based site
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 DESCRIPTION
 

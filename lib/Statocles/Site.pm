@@ -1,10 +1,11 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::Site::VERSION = '0.028';
+use Statocles::Base 'Class';
 use Statocles::Store;
 use Mojo::URL;
 use Mojo::DOM;
+use Mojo::Log;
 
 
 has title => (
@@ -41,19 +42,34 @@ has nav => (
 
 has build_store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
+    isa => Store,
     required => 1,
-    coerce => Statocles::Store->coercion,
+    coerce => Store->coercion,
 );
 
 
 has deploy_store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
+    isa => Store,
     lazy => 1,
     default => sub { $_[0]->build_store },
-    coerce => Statocles::Store->coercion,
+    coerce => Store->coercion,
 );
+
+
+has log => (
+    is => 'ro',
+    isa => InstanceOf['Mojo::Log'],
+    lazy => 1,
+    default => sub {
+        Mojo::Log->new( level => 'info' );
+    },
+);
+
+
+sub BUILD {
+    $Statocles::SITE = shift;
+}
 
 
 sub app {
@@ -86,19 +102,14 @@ sub write {
     for my $app_name ( keys %{ $apps } ) {
         my $app = $apps->{$app_name};
 
-        my $index_path;
+        my @app_pages = $app->pages;
         if ( $self->index eq $app_name ) {
-            $index_path = ($app->index)[0]->path;
+            # Rename the app's page so that we don't get two pages with identical
+            # content, which is bad for SEO
+            $app_pages[0]->path( '/index.html' );
         }
 
-        for my $page ( $app->pages ) {
-            if ( $index_path && $page->path eq $index_path ) {
-                # Rename the app's page so that we don't get two pages with identical
-                # content, which is bad for SEO
-                $page->path( '/index.html' );
-            }
-            push @pages, $page;
-        }
+        push @pages, @app_pages;
     }
 
     # Rewrite page content to add base URL
@@ -160,7 +171,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 SYNOPSIS
 
@@ -232,7 +243,15 @@ The L<store|Statocles::Store> object to use for C<build()>.
 
 The L<store|Statocles::Store> object to use for C<deploy()>. Defaults to L<build_store>.
 
+=head2 log
+
+A L<Mojo::Log> object to write logs to. Defaults to STDERR.
+
 =head1 METHODS
+
+=head2 BUILD
+
+Register this site as the global site.
 
 =head2 app( name )
 

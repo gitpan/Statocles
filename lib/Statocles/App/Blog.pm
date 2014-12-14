@@ -1,8 +1,7 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.027';
-use Statocles::Class;
-use Memoize qw( memoize );
+$Statocles::App::Blog::VERSION = '0.028';
+use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store;
 use Statocles::Theme;
@@ -15,8 +14,8 @@ extends 'Statocles::App';
 
 has store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
-    coerce => Statocles::Store->coercion,
+    isa => Store,
+    coerce => Store->coercion,
 );
 
 
@@ -29,9 +28,9 @@ has url_root => (
 
 has theme => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Theme'],
+    isa => Theme,
     required => 1,
-    coerce => Statocles::Theme->coercion,
+    coerce => Theme->coercion,
 );
 
 
@@ -67,13 +66,13 @@ sub command {
     my ( $self, $name, @argv ) = @_;
 
     if ( !$argv[0] ) {
-        print STDERR "ERROR: Missing command\n";
-        print STDERR eval "qq{$USAGE_INFO}";
+        say STDERR "ERROR: Missing command";
+        say STDERR eval "qq{$USAGE_INFO}";
         return 1;
     }
 
     if ( $argv[0] eq 'help' ) {
-        print eval "qq{$USAGE_INFO}";
+        say eval "qq{$USAGE_INFO}";
     }
     elsif ( $argv[0] eq 'post' ) {
         my %opt;
@@ -83,7 +82,7 @@ sub command {
 
         my $title = join " ", @argv[1..$#argv];
         if ( !$ENV{EDITOR} && !$title ) {
-            print STDERR <<"ENDHELP";
+            say STDERR <<"ENDHELP";
 Title is required when \$EDITOR is not set.
 
 Usage: $name post <title>
@@ -126,12 +125,12 @@ ENDHELP
         $slug =~ s/\s+/-/g;
         my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
         my $full_path = $self->store->write_document( $path => \%doc );
-        print "New post at: $full_path\n";
+        say "New post at: $full_path";
 
     }
     else {
-        print STDERR qq{ERROR: Unknown command "$argv[0]"\n};
-        print STDERR eval "qq{$USAGE_INFO}";
+        say STDERR qq{ERROR: Unknown command "$argv[0]"};
+        say STDERR eval "qq{$USAGE_INFO}";
         return 1;
     }
 
@@ -174,7 +173,6 @@ sub post_pages {
     }
     return @pages;
 }
-memoize( 'post_pages' );
 
 
 my %FEEDS = (
@@ -191,11 +189,11 @@ my %FEEDS = (
 );
 
 sub index {
-    my ( $self ) = @_;
+    my ( $self, @all_post_pages ) = @_;
 
     # Filter the index_tags
-    my @post_pages;
-    PAGE: for my $page ( $self->post_pages ) {
+    my @index_post_pages;
+    PAGE: for my $page ( @all_post_pages ) {
         my $add = 1;
         for my $tag_spec ( @{ $self->index_tags } ) {
             my $flag = substr $tag_spec, 0, 1;
@@ -204,7 +202,7 @@ sub index {
                 $add = $flag eq '-' ? 0 : 1;
             }
         }
-        push @post_pages, $page if $add;
+        push @index_post_pages, $page if $add;
     }
 
     my @pages = Statocles::Page::List->paginate(
@@ -212,7 +210,7 @@ sub index {
         path => join( "/", $self->url_root, 'page-%i.html' ),
         index => join( "/", $self->url_root, 'index.html' ),
         # Sorting by path just happens to also sort by date
-        pages => [ sort { $b->path cmp $a->path } @post_pages ],
+        pages => [ sort { $b->path cmp $a->path } @index_post_pages ],
         app => $self,
         template => $self->theme->template( blog => 'index.html' ),
         layout => $self->theme->template( site => 'layout.html' ),
@@ -244,13 +242,12 @@ sub index {
 
     return ( @pages, @feed_pages );
 }
-memoize( 'index' );
 
 
 sub tag_pages {
-    my ( $self ) = @_;
+    my ( $self, @post_pages ) = @_;
 
-    my %tagged_docs = $self->_tag_docs;
+    my %tagged_docs = $self->_tag_docs( @post_pages );
 
     my @pages;
     for my $tag ( keys %tagged_docs ) {
@@ -297,26 +294,29 @@ sub tag_pages {
 
     return @pages;
 }
-memoize( 'tag_pages' );
 
 
 sub pages {
     my ( $self ) = @_;
-    return map { $self->$_ } qw( post_pages index tag_pages );
+    my @post_pages = $self->post_pages;
+    return (
+        ( map { $self->$_( @post_pages ) } qw( index tag_pages ) ),
+        @post_pages,
+    );
 }
 
 
 sub tags {
-    my ( $self ) = @_;
-    my %tagged_docs = $self->_tag_docs;
+    my ( $self, @post_pages ) = @_;
+    my %tagged_docs = $self->_tag_docs( @post_pages );
     return map {; { title => $_, href => $self->_tag_url( $_ ), } }
         sort keys %tagged_docs
 }
 
 sub _tag_docs {
-    my ( $self ) = @_;
+    my ( $self, @post_pages ) = @_;
     my %tagged_docs;
-    for my $page ( $self->post_pages ) {
+    for my $page ( @post_pages ) {
         for my $tag ( @{ $page->document->tags } ) {
             push @{ $tagged_docs{ $tag } }, $page;
         }
@@ -342,7 +342,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 DESCRIPTION
 

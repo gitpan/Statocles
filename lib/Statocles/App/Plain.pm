@@ -1,7 +1,7 @@
 package Statocles::App::Plain;
 # ABSTRACT: Plain documents made into pages with no extras
-$Statocles::App::Plain::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::App::Plain::VERSION = '0.028';
+use Statocles::Base 'Class';
 extends 'Statocles::App';
 use List::Util qw( first );
 use Statocles::Store;
@@ -18,27 +18,21 @@ has url_root => (
 
 has store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
+    isa => Store,
     required => 1,
-    coerce => Statocles::Store->coercion,
+    coerce => Store->coercion,
 );
 
 
 has theme => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Theme'],
+    isa => Theme,
     required => 1,
-    coerce => Statocles::Theme->coercion,
+    coerce => Theme->coercion,
 );
 
-has _pages => (
-    is => 'ro',
-    isa => ArrayRef[ConsumerOf['Statocles::Page']],
-    lazy => 1,
-    builder => '_build_pages',
-);
 
-sub _build_pages {
+sub pages {
     my ( $self ) = @_;
     my @pages;
 
@@ -46,29 +40,22 @@ sub _build_pages {
         my $url = $doc->path;
         $url =~ s/[.]yml$/.html/;
 
-        push @pages, Statocles::Page::Document->new(
+        my $page = Statocles::Page::Document->new(
             path => join( '/', $self->url_root, $url ),
             document => $doc,
             layout => $self->theme->template( site => 'layout.html' ),
             published => Time::Piece->new,
         );
+
+        if ( $url eq 'index.html' ) {
+            unshift @pages, $page;
+        }
+        else {
+            push @pages, $page;
+        }
     }
 
-    return \@pages;
-}
-
-
-sub pages {
-    my ( $self ) = @_;
-    return @{ $self->_pages };
-}
-
-
-sub index {
-    my ( $self ) = @_;
-    my $index_path = join "/", $self->url_root, 'index.html';
-    $index_path =~ s{/+}{/}g;
-    return first { $_->path eq $index_path } $self->pages;
+    return @pages;
 }
 
 1;
@@ -83,7 +70,7 @@ Statocles::App::Plain - Plain documents made into pages with no extras
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 SYNOPSIS
 
@@ -120,11 +107,6 @@ Only layouts are used.
 =head2 pages
 
 Get the L<pages|Statocles::Page> for this app.
-
-=head2 index
-
-The main index page for this app. This app may be used for the L<site
-index|Statocles::Site/index>.
 
 =head1 AUTHOR
 

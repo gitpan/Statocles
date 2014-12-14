@@ -1,5 +1,5 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 use Capture::Tiny qw( capture );
 use File::Spec::Functions qw( splitdir );
 use Statocles::Theme;
@@ -7,6 +7,7 @@ use Statocles::Store;
 use Statocles::App::Blog;
 use Statocles::Template;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
+$Statocles::SITE = Statocles::Site->new( build_store => '.' );
 
 my $theme = Statocles::Theme->new(
     store => $SHARE_DIR->child( 'theme' ),
@@ -220,11 +221,11 @@ subtest 'tag pages' => sub {
     }
 
     push @tag_pages, map { @$_ } @feeds;
-    cmp_deeply [ $app->tag_pages ], bag( @tag_pages );
+    cmp_deeply [ $app->tag_pages( pages( @sorted_docs ) ) ], bag( @tag_pages );
     push @all_pages, @tag_pages;
 
     subtest 'tag navigation' => sub {
-        cmp_deeply [ $app->tags ], [
+        cmp_deeply [ $app->tags( pages( @sorted_docs ) ) ], [
             { title => 'better', href => '/blog/tag/better/index.html' },
             { title => 'error message', href => '/blog/tag/error-message/index.html' },
             { title => 'even more tags', href => '/blog/tag/even-more-tags/index.html' },
@@ -289,12 +290,19 @@ subtest 'index page(s)' => sub {
 
     push @pages, @feeds;
 
-    cmp_deeply [$app->index], bag( @pages );
-    push @all_pages, @pages;
+    cmp_deeply [$app->index( pages( @sorted_docs ) )], bag( @pages );
+
+    # index page must be first!
+    unshift @all_pages, @pages;
 };
 
 subtest 'all pages()' => sub {
-    cmp_deeply [ $app->pages ], bag( @all_pages );
+    my @got_pages = $app->pages;
+    # index page must be first
+    my $got_index = shift @got_pages;
+    my $exp_index = shift @all_pages;
+    cmp_deeply $got_index, $exp_index;
+    cmp_deeply [ @got_pages ], bag( @all_pages );
 };
 
 subtest 'commands' => sub {
@@ -432,13 +440,6 @@ ENDCONTENT
             };
         };
     };
-};
-
-subtest 'cache pages' => sub {
-    my ( $index1 ) = $app->index;
-    my ( $index2 ) = $app->index;
-    $index1->path( '/index.html' );
-    is $index2->path, $index1->path;
 };
 
 done_testing;

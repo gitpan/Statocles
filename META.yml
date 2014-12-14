@@ -32,9 +32,8 @@ requires:
   File::Copy::Recursive: '0'
   File::Share: '0'
   Git::Repository: '0'
-  Import::Base: '0'
+  Import::Base: '0.009'
   List::MoreUtils: '0'
-  Memoize: '0'
   Mojolicious: '5.41'
   Moo::Lax: '0'
   Path::Tiny: '0.054'
@@ -52,5 +51,5 @@ resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: http://preaction.github.io/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: '0.027'
+version: '0.028'
 x_authority: cpan:PREACTION

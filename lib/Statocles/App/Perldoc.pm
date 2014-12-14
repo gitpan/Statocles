@@ -1,7 +1,7 @@
 package Statocles::App::Perldoc;
 # ABSTRACT: Render documentation for Perl modules
-$Statocles::App::Perldoc::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::App::Perldoc::VERSION = '0.028';
+use Statocles::Base 'Class';
 extends 'Statocles::App';
 use Statocles::Theme;
 use Statocles::Page::Plain;
@@ -20,9 +20,9 @@ has url_root => (
 
 has theme => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Theme'],
+    isa => Theme,
     required => 1,
-    coerce => Statocles::Theme->coercion,
+    coerce => Theme->coercion,
 );
 
 
@@ -123,16 +123,26 @@ sub pages {
             }
         }
 
-        my $page_url = $module eq $self->index_module ? 'index.html' : "$module.html";
-        $page_url =~ s{::}{/}g;
+        if ( $module eq $self->index_module ) {
+            unshift @pages, Statocles::Page::Plain->new(
+                path => join( '/', $self->url_root, 'index.html' ),
+                layout => $self->theme->template( site => 'layout.html' ),
+                template => $self->theme->template( perldoc => 'pod.html' ),
+                content => "$dom",
+            );
+        }
+        else {
+            my $page_url = "$module.html";
+            $page_url =~ s{::}{/}g;
 
-        push @pages, Statocles::Page::Plain->new(
-            path => join( '/', $self->url_root, $page_url ),
-            layout => $self->theme->template( site => 'layout.html' ),
-            template => $self->theme->template( perldoc => 'pod.html' ),
-            content => "$dom",
-        );
+            push @pages, Statocles::Page::Plain->new(
+                path => join( '/', $self->url_root, $page_url ),
+                layout => $self->theme->template( site => 'layout.html' ),
+                template => $self->theme->template( perldoc => 'pod.html' ),
+                content => "$dom",
+            );
 
+        }
     }
 
     return @pages;
@@ -229,7 +239,7 @@ Statocles::App::Perldoc - Render documentation for Perl modules
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 DESCRIPTION
 

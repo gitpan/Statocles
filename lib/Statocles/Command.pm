@@ -1,7 +1,7 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::Command::VERSION = '0.028';
+use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
 use File::Share qw( dist_dir );
@@ -33,20 +33,23 @@ sub main {
     return pod2usage(0) if $opt{help};
 
     if ( $opt{version} ) {
-        print "Statocles version $Statocles::Command::VERSION (Perl $^V)\n";
+        say "Statocles version $Statocles::Command::VERSION (Perl $^V)";
         return 0;
     }
 
     my $method = $argv[0];
     return pod2usage("ERROR: Missing command") unless $method;
 
-    local $Statocles::VERBOSE = $opt{verbose};
-
     my $wire = Beam::Wire->new( file => $opt{config} );
 
     my $cmd = $class->new(
         site => $wire->get( $opt{site} ),
     );
+
+    if ( $opt{verbose} ) {
+        $cmd->site->log->handle( \*STDOUT );
+        $cmd->site->log->level( 'debug' );
+    }
 
     if ( grep { $_ eq $method } qw( build deploy ) ) {
         $cmd->site->$method;
@@ -58,7 +61,7 @@ sub main {
             my $app = $apps->{$app_name};
             my $root = $app->url_root;
             my $class = ref $app;
-            print "$app_name ($root -- $class)\n";
+            say "$app_name ($root -- $class)";
         }
         return 0;
     }
@@ -77,7 +80,7 @@ sub main {
         # Find the port we're listening on
         my $id = $daemon->acceptors->[0];
         my $handle = $daemon->ioloop->acceptor( $id )->handle;
-        print "Listening on " . sprintf( 'http://%s:%d', $handle->sockhost || '127.0.0.1', $handle->sockport ) . "\n";
+        say "Listening on " . sprintf( 'http://%s:%d', $handle->sockhost || '127.0.0.1', $handle->sockport );
 
         # Give control to the IOLoop
         Mojo::IOLoop->start;
@@ -128,6 +131,8 @@ sub main {
 
     sub startup {
         my ( $self ) = @_;
+        $self->log( $self->site->log );
+
         my $base;
         if ( $self->site->base_url ) {
             $base = Mojo::URL->new( $self->site->base_url )->path->to_string;
@@ -146,6 +151,69 @@ sub main {
             # this is convenience until we can track image directories and other non-generated
             # content.
             $self->site->deploy_store->path;
+
+        # Watch for filesystem events and rebuild the site Right now this only
+        # works on OSX. We should spin this off into Mojo::IOLoop::FSEvents and
+        # make it work cross-platform, including a pure-Perl fallback
+        my $can_watch = eval { require Mac::FSEvents; 1 };
+        if ( !$can_watch && $^O =~ /darwin/ ) {
+            say "To watch for filesystem changes and automatically rebuild the site, ",
+                "install the Mac::FSEvents module from CPAN";
+        }
+
+        if ( $can_watch ) {
+
+            # Collect the paths to watch
+            my %watches = ();
+            for my $app ( values %{ $self->site->apps } ) {
+                if ( $app->can( 'theme' ) ) {
+                    push @{ $watches{ $app->theme->store->path } }, $app->theme;
+                }
+
+                if ( $app->can( 'store' ) ) {
+                    push @{ $watches{ $app->store->path } }, $app->store;
+                }
+
+            }
+
+            require Mojo::IOLoop::Stream;
+            my $ioloop = Mojo::IOLoop->singleton;
+            use Cwd qw( getcwd );
+            my $build_dir = Path::Tiny->new( getcwd, $self->site->build_store->path );
+
+            for my $path ( keys %watches ) {
+                $self->log->info( "Watching for changes in '$path'" );
+
+                my $fs = Mac::FSEvents->new( {
+                    path => "$path",
+                    latency => 1.0,
+                } );
+
+                my $handle = $fs->watch;
+                $ioloop->reactor->io( $handle, sub {
+                    my ( $reactor, $writable ) = @_;
+
+                    my $rebuild;
+                    REBUILD:
+                    while ( $reactor->is_readable( $handle ) ) {
+                        for my $event ( $fs->read_events ) {
+                            if ( $event->path =~ /^\Q$build_dir/ ) {
+                                next;
+                            }
+
+                            $_->clear for @{ $watches{ $path } };
+                            $rebuild = 1;
+                        }
+                    }
+
+                    if ( $rebuild ) {
+                        $self->log->info( "Path '$path' changed... Rebuilding" );
+                        $self->site->build;
+                    }
+                } );
+                $ioloop->reactor->watch( $handle, 1, 0 );
+            }
+        }
 
         my $serve_static = sub {
             my ( $c ) = @_;
@@ -197,7 +265,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 SYNOPSIS
 

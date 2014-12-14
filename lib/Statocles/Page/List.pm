@@ -1,7 +1,7 @@
 package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
-$Statocles::Page::List::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::Page::List::VERSION = '0.028';
+use Statocles::Base 'Class';
 with 'Statocles::Page';
 use List::Util qw( max );
 use List::MoreUtils qw( part );
@@ -83,7 +83,7 @@ Statocles::Page::List - A page presenting a list of other pages
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 DESCRIPTION
 

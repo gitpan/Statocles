@@ -1,19 +1,20 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.027';
-use Statocles::Base;
-use base 'Exporter';
-our @EXPORT_OK = qw( diag );
+$Statocles::VERSION = '0.028';
+# The currently-running site.
+# I hate this, but I know of no better way to ensure that we always have access
+# to a Mojo::Log object, while still being relatively useful, without having to
+# wire up every single object with a log object.
+our $SITE;
 
-our $VERBOSE = 0;
-
-
-# I imagine this is just temporary until we start using Log::Any or something...
-sub diag {
-    my ( $level, @msg ) = @_;
-    return unless $VERBOSE >= $level;
-    say @msg;
+BEGIN {
+    package # Hide from PAUSE
+        site;
+    sub log { return $SITE->log }
 }
+
+use Statocles::Base;
+
 
 1;
 
@@ -27,7 +28,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 SYNOPSIS
 
@@ -195,12 +196,6 @@ A L<Statocles::Store> reads and writes documents and pages. The default store
 reads documents in YAML and writes pages to a file, but stores could read
 documents as JSON, or from a Mongo database, and write pages to a database, or
 whereever you want!
-
-=head1 SUBROUTINES
-
-=head2 diag( level, message )
-
-Write a diagnostic message to STDOUT, but only if C<$Statocles::VERBOSE> is set.
 
 =head1 AUTHOR
 

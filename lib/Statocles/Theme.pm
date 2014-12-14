@@ -1,7 +1,7 @@
 package Statocles::Theme;
 # ABSTRACT: Templates, headers, footers, and navigation
-$Statocles::Theme::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::Theme::VERSION = '0.028';
+use Statocles::Base 'Class';
 use Statocles::Store;
 use File::Share qw( dist_dir );
 use Scalar::Util qw( blessed );
@@ -9,8 +9,8 @@ use Scalar::Util qw( blessed );
 
 has store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
-    coerce => Statocles::Store->coercion,
+    isa => Store,
+    coerce => Store->coercion,
     required => 1,
 );
 
@@ -19,6 +19,8 @@ has _templates => (
     is => 'ro',
     isa => HashRef[HashRef[InstanceOf['Statocles::Template']]],
     default => sub { {} },
+    lazy => 1,  # Must be lazy or the clearer won't re-init the default
+    clearer => 'clear',
 );
 
 
@@ -50,15 +52,6 @@ sub template {
     return $self->_templates->{ $app }{ $template } ||= $self->read( $app, $template );
 }
 
-
-sub coercion {
-    my ( $class ) = @_;
-    return sub {
-        return $_[0] if blessed $_[0] and $_[0]->isa( $class );
-        return $class->new( store => $_[0] );
-    };
-}
-
 1;
 
 __END__
@@ -71,7 +64,7 @@ Statocles::Theme - Templates, headers, footers, and navigation
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 SYNOPSIS
 
@@ -122,11 +115,6 @@ L<template|Statocles::Template> object.
 
 Get the L<template|Statocles::Template> from the given C<section> with the
 given C<name>.
-
-=head2 coercion
-
-Class method to coerce a string representing a path into a Statocles::Theme
-object. Returns a subref suitable to be used as a type coercion in an attriute.
 
 =head1 AUTHOR
 

@@ -1,7 +1,7 @@
 package Statocles::Document;
 # ABSTRACT: Base class for all Statocles documents
-$Statocles::Document::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::Document::VERSION = '0.028';
+use Statocles::Base 'Class';
 
 
 has path => (
@@ -75,7 +75,7 @@ Statocles::Document - Base class for all Statocles documents
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 DESCRIPTION
 

@@ -1,21 +1,17 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 use Statocles::Theme;
 use Statocles::Template;
 use Cwd qw( getcwd );
+use Scalar::Util qw( refaddr );
 my $SHARE_DIR = path( __DIR__, 'share' );
+
+$Statocles::SITE = Statocles::Site->new( build_store => '.' );
 
 subtest 'attributes' => sub {
     subtest 'store is required' => sub {
         throws_ok { Statocles::Theme->new( ) } qr/store/ or diag $@;
     };
-};
-
-subtest 'theme coercion' => sub {
-    my $coerce = Statocles::Theme->coercion;
-    my $theme = $coerce->( $SHARE_DIR->child( 'theme' ) );
-    isa_ok $theme, 'Statocles::Theme';
-    is $theme->store->path, $SHARE_DIR->child( 'theme' );
 };
 
 sub read_templates {
@@ -119,6 +115,16 @@ subtest 'templates from directory' => sub {
         my $theme_path = path(qw( theme default ));
         like $theme->store->path, qr{\Q$theme_path\E$}
     };
+};
+
+subtest 'theme caching' => sub {
+    my $theme = Statocles::Theme->new(
+        store => '::default',
+    );
+
+    my $tmpl = $theme->template( site => 'sitemap.xml' );
+    $theme->clear;
+    isnt refaddr $theme->template( site => 'sitemap.xml' ), refaddr $tmpl, 'new object created';
 };
 
 done_testing;

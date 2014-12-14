@@ -1,10 +1,11 @@
 package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
-$Statocles::Store::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::Store::VERSION = '0.028';
+use Statocles::Base 'Class';
 use Scalar::Util qw( blessed );
 use Statocles::Document;
 use YAML;
+use List::MoreUtils qw( firstidx );
 use File::Spec::Functions qw( splitdir );
 
 my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
@@ -23,6 +24,7 @@ has documents => (
     isa => ArrayRef[InstanceOf['Statocles::Document']],
     lazy => 1,
     builder => 'read_documents',
+    clearer => 'clear',
 );
 
 
@@ -44,43 +46,37 @@ sub read_documents {
 
 sub read_document {
     my ( $self, $path ) = @_;
-    diag( 1, "Read document: ", $path );
+    site->log->debug( "Read document: " . $path );
     my $full_path = $self->path->child( $path );
-    open my $fh, '<:encoding(UTF-8)', $full_path or die "Could not open '$full_path' for reading: $!\n";
-    my $doc;
-    my $buffer = '';
-    while ( my $line = <$fh> ) {
-        if ( !$doc ) { # Building YAML
-            if ( $line =~ /^---/ && $buffer ) {
-                eval {
-                    $doc = YAML::Load( $buffer );
-                };
-                if ( $@ ) {
-                    die "Error parsing YAML in '$full_path'\n$@";
-                }
-                $buffer = '';
-            }
-            else {
-                $buffer .= $line;
-            }
-        }
-        else { # Building Markdown
-            $buffer .= $line;
-        }
-    }
-    close $fh;
+    my @lines = $full_path->lines_utf8;
 
-    # Clear the remaining buffer
-    if ( !$doc && $buffer ) { # Must be only YAML
+    shift @lines while $lines[0] =~ /^---/;
+    # The next --- is the end of the YAML frontmatter
+    my $i = firstidx { /^---/ } @lines;
+
+    my $doc;
+    # If we found the marker between YAML and Markdown
+    if ( $i > 0 ) {
+        # Before the marker is YAML
         eval {
-            $doc = YAML::Load( $buffer );
+            $doc = YAML::Load( join "", @lines[0..$i-1] );
         };
         if ( $@ ) {
             die "Error parsing YAML in '$full_path'\n$@";
         }
+        # After the marker is Markdown
+        if ( !$doc->{content} ) {
+            $doc->{content} = join "", @lines[$i+1..$#lines];
+        }
     }
-    elsif ( !$doc->{content} && $buffer ) {
-        $doc->{content} = $buffer;
+    # Otherwise, must be completely YAML
+    else {
+        eval {
+            $doc = YAML::Load( join "", @lines );
+        };
+        if ( $@ ) {
+            die "Error parsing YAML in '$full_path'\n$@";
+        }
     }
 
     return $self->_thaw_document( $doc );
@@ -101,7 +97,7 @@ sub write_document {
     if ( $path->is_absolute ) {
         die "Cannot write document '$path': Path must not be absolute";
     }
-    diag( 1, "Write document: ", $path );
+    site->log->debug( "Write document: " . $path );
 
     $doc = { %{ $doc } }; # Shallow copy for safety
     my $content = delete( $doc->{content} ) // '';
@@ -125,7 +121,7 @@ sub _freeze_document {
 
 sub read_file {
     my ( $self, $path ) = @_;
-    diag( 1, "Read file: ", $path );
+    site->log->debug( "Read file: " . $path );
     return $self->path->child( $path )->slurp_utf8;
 }
 
@@ -138,19 +134,10 @@ sub has_file {
 
 sub write_file {
     my ( $self, $path, $content ) = @_;
-    diag( 1, "Write file: ", $path );
+    site->log->debug( "Write file: " . $path );
     my $full_path = $self->path->child( $path );
     $full_path->touchpath->spew_utf8( $content );
     return;
-}
-
-
-sub coercion {
-    my ( $class ) = @_;
-    return sub {
-        return $_[0] if blessed $_[0] and $_[0]->isa( $class );
-        return $class->new( path => $_[0] );
-    };
 }
 
 1;
@@ -165,7 +152,7 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 DESCRIPTION
 
@@ -200,6 +187,10 @@ All the L<documents|Statocles::Document> currently read by this store.
 
 =head1 METHODS
 
+=head2 clear()
+
+Clear the cached documents in this Store.
+
 =head2 read_documents()
 
 Read the directory C<path> and create the L<document|Statocles::Document> objects inside.
@@ -232,11 +223,6 @@ directories.
 
 Write the given C<content> to the given C<path>. This is mostly used to write
 out L<page objects|Statocles::Page>.
-
-=head2 coercion
-
-Class method to coerce a string representing a path into a Statocles::Store
-object. Returns a subref suitable to be used as a type coercion in an attriute.
 
 =head1 AUTHOR
 

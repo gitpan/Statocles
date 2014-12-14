@@ -1,7 +1,7 @@
 package Statocles::Template;
 # ABSTRACT: A template object to pass around
-$Statocles::Template::VERSION = '0.027';
-use Statocles::Class;
+$Statocles::Template::VERSION = '0.028';
+use Statocles::Base 'Class';
 use Statocles::Store;
 use Mojo::Template;
 use Scalar::Util qw( blessed );
@@ -29,9 +29,9 @@ has path => (
 
 has store => (
     is => 'ro',
-    isa => InstanceOf['Statocles::Store'],
+    isa => Store,
     predicate => 'has_store',
-    coerce => Statocles::Store->coercion,
+    coerce => Store->coercion,
 );
 
 
@@ -44,11 +44,11 @@ around BUILDARGS => sub {
             || $caller_class->isa( 'Sub::Quote' )
             || $caller_class->isa( 'Method::Generate::Constructor' )
         ) {
-            #; print "Class: $caller_class\n";
+            #; say "Class: $caller_class";
             $i++;
             $caller_class = (caller $i)[0];
         }
-        #; print "Class: $caller_class\n";
+        #; say "Class: $caller_class";
         $args->{path} = join " line ", (caller($i))[1,2];
     }
     return $args;
@@ -139,7 +139,7 @@ Statocles::Template - A template object to pass around
 
 =head1 VERSION
 
-version 0.027
+version 0.028
 
 =head1 DESCRIPTION
 

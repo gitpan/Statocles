@@ -1,6 +1,7 @@
 
-use Statocles::Test;
+use Statocles::Base 'Test';
 my $SHARE_DIR = path( __DIR__, 'share' );
+$Statocles::SITE = Statocles::Site->new( build_store => '.' );
 
 use Statocles::Store;
 use Statocles::Page::Document;
@@ -81,6 +82,15 @@ subtest 'read documents' => sub {
         path => $SHARE_DIR->child( 'blog' ),
     );
     cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+
+    subtest 'clear documents' => sub {
+        # Edit the document
+        $store->documents->[0]->title( 'This is a new title' );
+        # Clear all the documents
+        $store->clear;
+        # Re-read them from disk
+        cmp_deeply $store->documents, bag( @exp_docs ) or diag explain $store->documents;
+    };
 
     subtest 'bad documents' => sub {
         my $store = Statocles::Store->new(
@@ -210,16 +220,9 @@ subtest 'path that has regex-special characters inside' => sub {
     cmp_deeply $store->documents, bag( @exp_docs );
 };
 
-subtest 'store coercion' => sub {
-    my $coerce = Statocles::Store->coercion;
-    my $store = $coerce->( $SHARE_DIR->child( 'blog' ) );
-    isa_ok $store, 'Statocles::Store';
-    is $store->path, $SHARE_DIR->child( 'blog' );
-};
-
 subtest 'verbose' => sub {
-    no warnings qw( once );
-    local $Statocles::VERBOSE = 1;
+
+    local $ENV{MOJO_LOG_LEVEL} = 'debug';
 
     subtest 'write' => sub {
         my $tmpdir = tempdir;
@@ -231,16 +234,14 @@ subtest 'verbose' => sub {
             my ( $out, $err, $exit ) = capture {
                 $store->write_file( 'path.html' => 'HTML' );
             };
-            ok !$err, 'no output on stderr' or diag $err;
-            is $out, "Write file: path.html\n";
+            like $err, qr{\QWrite file: path.html};
         };
 
         subtest 'write_document' => sub {
             my ( $out, $err, $exit ) = capture {
                 $store->write_document( 'path.yml' => { foo => 'BAR' } );
             };
-            ok !$err, 'no output on stderr' or diag $err;
-            is $out, "Write document: path.yml\n";
+            like $err, qr{\QWrite document: path.yml};
         };
     };
 
@@ -250,22 +251,22 @@ subtest 'verbose' => sub {
             my $store = Statocles::Store->new(
                 path => $SHARE_DIR->child( 'theme' ),
             );
+            my $path = path( qw( blog post.html.ep ) );
             my ( $out, $err, $exit ) = capture {
-                $store->read_file( path( qw( blog post.html.ep ) ) );
+                $store->read_file( $path );
             };
-            ok !$err, 'no output on stderr' or diag $err;
-            is $out, 'Read file: ' . path( qw( blog post.html.ep ) ) . "\n";
+            like $err, qr{\QRead file: $path};
         };
 
         subtest 'read document' => sub {
             my $store = Statocles::Store->new(
                 path => $SHARE_DIR->child( 'blog' ),
             );
+            my $path = path( qw( 2014 04 23 slug.yml ) );
             my ( $out, $err, $exit ) = capture {
-                $store->read_document( path( qw( 2014 04 23 slug.yml ) ) );
+                $store->read_document( $path );
             };
-            ok !$err, 'no output on stderr' or diag $err;
-            is $out, 'Read document: ' . path( qw( 2014 04 23 slug.yml ) ) . "\n";
+            like $err, qr{\QRead document: $path};
         };
 
     };
