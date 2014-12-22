@@ -1,6 +1,6 @@
 package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
-$Statocles::Page::List::VERSION = '0.028';
+$Statocles::Page::List::VERSION = '0.029';
 use Statocles::Base 'Class';
 with 'Statocles::Page';
 use List::Util qw( max );
@@ -50,6 +50,7 @@ sub paginate {
             pages => [ @{$pages}[ @{ $sets[$i] } ] ],
             ( $i != $#sets ? ( next => sprintf( $path_format, $i + 2 ) ) : () ),
             ( $i > 0 ? ( prev => $prev ) : () ),
+            published => $pages->[0]->last_modified,
             %args,
         );
     }
@@ -68,7 +69,7 @@ sub vars {
 
 sub last_modified {
     my ( $self ) = @_;
-    return max map { $_->last_modified } @{ $self->pages };
+    return $self->published || max map { $_->last_modified } @{ $self->pages };
 }
 
 1;
@@ -83,7 +84,7 @@ Statocles::Page::List - A page presenting a list of other pages
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 DESCRIPTION
 

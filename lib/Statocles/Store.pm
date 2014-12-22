@@ -1,6 +1,6 @@
 package Statocles::Store;
 # ABSTRACT: A repository for Documents and Pages
-$Statocles::Store::VERSION = '0.028';
+$Statocles::Store::VERSION = '0.029';
 use Statocles::Base 'Class';
 use Scalar::Util qw( blessed );
 use Statocles::Document;
@@ -8,7 +8,8 @@ use YAML;
 use List::MoreUtils qw( firstidx );
 use File::Spec::Functions qw( splitdir );
 
-my $DT_FORMAT = '%Y-%m-%d %H:%M:%S';
+my $DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S';
+my $DATE_FORMAT = '%Y-%m-%d';
 
 
 has path => (
@@ -26,6 +27,16 @@ has documents => (
     builder => 'read_documents',
     clearer => 'clear',
 );
+
+sub BUILD {
+    my ( $self ) = @_;
+    if ( !$self->path->exists ) {
+        die sprintf "Store path '%s' does not exist", $self->path->stringify;
+    }
+    elsif ( !$self->path->is_dir ) {
+        die sprintf "Store path '%s' is not a directory", $self->path->stringify;
+    }
+}
 
 
 sub read_documents {
@@ -85,7 +96,28 @@ sub read_document {
 sub _thaw_document {
     my ( $self, $doc ) = @_;
     if ( exists $doc->{last_modified} ) {
-        $doc->{last_modified} = Time::Piece->strptime( $doc->{last_modified}, $DT_FORMAT );
+
+        my $dt;
+        eval {
+            $dt = Time::Piece->strptime( $doc->{last_modified}, $DATETIME_FORMAT );
+        };
+
+        if ( $@ ) {
+            eval {
+                $dt = Time::Piece->strptime( $doc->{last_modified}, $DATE_FORMAT );
+            };
+
+            if ( $@ ) {
+                die sprintf "Could not parse last_modified '%s'. Does not match '%s' or '%s'",
+                    $doc->{last_modified},
+                    $DATETIME_FORMAT,
+                    $DATE_FORMAT,
+                    ;
+            }
+
+        }
+
+        $doc->{last_modified} = $dt;
     }
     return $doc;
 }
@@ -105,7 +137,7 @@ sub write_document {
     chomp $header;
 
     my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew( join "\n", $header, '---', $content );
+    $full_path->touchpath->spew_utf8( join "\n", $header, '---', $content );
 
     return $full_path;
 }
@@ -113,7 +145,7 @@ sub write_document {
 sub _freeze_document {
     my ( $self, $doc ) = @_;
     if ( exists $doc->{last_modified} ) {
-        $doc->{last_modified} = $doc->{last_modified}->strftime( $DT_FORMAT );
+        $doc->{last_modified} = $doc->{last_modified}->strftime( $DATETIME_FORMAT );
     }
     return $doc;
 }
@@ -132,11 +164,39 @@ sub has_file {
 }
 
 
+sub find_files {
+    my ( $self ) = @_;
+    my $iter = $self->path->iterator({ recurse => 1 });
+    return sub {
+        my $path = $iter->();
+        return unless $path;
+        $path = $iter->() while $path->is_dir;
+        return $path->relative( $self->path )->absolute( '/' );
+    };
+}
+
+
+sub open_file {
+    my ( $self, $path ) = @_;
+    return $self->path->child( $path )->openr_raw;
+}
+
+
 sub write_file {
     my ( $self, $path, $content ) = @_;
     site->log->debug( "Write file: " . $path );
     my $full_path = $self->path->child( $path );
-    $full_path->touchpath->spew_utf8( $content );
+
+    if ( ref $content eq 'GLOB' ) {
+        my $fh = $full_path->touchpath->openw_raw;
+        while ( my $line = <$content> ) {
+            $fh->print( $line );
+        }
+    }
+    else {
+        $full_path->touchpath->spew_utf8( $content );
+    }
+
     return;
 }
 
@@ -152,7 +212,7 @@ Statocles::Store - A repository for Documents and Pages
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 DESCRIPTION
 
@@ -219,10 +279,25 @@ Returns true if a file exists with the given C<path>.
 NOTE: This should not be used to check for directories, as not all stores have
 directories.
 
+=head2 find_files()
+
+Returns an iterator that, when called, produces a single path suitable to be passed
+to L<read_file>.
+
+=head2 open_file( $path )
+
+Open the file with the given path. Returns a filehandle.
+
+The filehandle opened is using raw bytes, not UTF-8 characters.
+
 =head2 write_file( $path, $content )
 
 Write the given C<content> to the given C<path>. This is mostly used to write
 out L<page objects|Statocles::Page>.
+
+C<content> may be a simple string or a filehandle. If given a string, will
+write the string using UTF-8 characters. If given a filehandle, will write out
+the raw bytes read from it with no special encoding.
 
 =head1 AUTHOR
 

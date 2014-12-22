@@ -1,6 +1,6 @@
 package Statocles::Types;
 # ABSTRACT: Type constraints and coercions for Statocles
-$Statocles::Types::VERSION = '0.028';
+$Statocles::Types::VERSION = '0.029';
 use Type::Library -base, -declare => qw( Store Theme );
 use Type::Utils -all;
 use Types::Standard -types;
@@ -25,7 +25,7 @@ Statocles::Types - Type constraints and coercions for Statocles
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 SYNOPSIS
 

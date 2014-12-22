@@ -4,6 +4,7 @@ use Statocles::Site;
 use Statocles::Theme;
 use Statocles::Store;
 use Statocles::App::Blog;
+use Statocles::App::Static;
 use Mojo::DOM;
 use Mojo::URL;
 my $SHARE_DIR = path( __DIR__, 'share' );
@@ -15,18 +16,39 @@ subtest 'site writes application' => sub {
     subtest 'build' => sub {
         $site->build;
 
-        for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, build => $page->path );
-            ok !$tmpdir->child( 'deploy', $page->path )->exists, 'not deployed yet';
+        for my $page ( $site->app( 'blog' )->pages, $site->app( 'static' )->pages ) {
+            ok $tmpdir->child( 'build', $page->path )->exists, $page->path . ' built';
+            ok !$tmpdir->child( 'deploy', $page->path )->exists, $page->path . ' not deployed yet';
         }
+
+        subtest 'check static content' => sub {
+            for my $page ( $site->app( 'static' )->pages ) {
+                my $fh = $page->render;
+                my $content = do { local $/; <$fh> };
+                ok $tmpdir->child( 'build', $page->path )->slurp_raw eq $content,
+                    $page->path . ' content is correct';
+            }
+        };
+
     };
 
     subtest 'deploy' => sub {
         $site->deploy;
 
-        for my $page ( $site->app( 'blog' )->pages ) {
-            subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => $page->path );
+        for my $page ( $site->app( 'blog' )->pages, $site->app( 'static' )->pages ) {
+            ok $tmpdir->child( 'build', $page->path )->exists, $page->path . ' built';
+            ok $tmpdir->child( 'deploy', $page->path )->exists, $page->path . ' deployed';
         }
+
+        subtest 'check static content' => sub {
+            for my $page ( $site->app( 'static' )->pages ) {
+                my $fh = $page->render;
+                my $content = do { local $/; <$fh> };
+                ok $tmpdir->child( 'build', $page->path )->slurp_raw eq $content,
+                    $page->path . ' content is correct';
+            }
+        };
+
     };
 };
 
@@ -88,12 +110,14 @@ subtest 'sitemap.xml and robots.txt' => sub {
         '/blog/2014/05/22/(regex)[name].file.html' => '2014-05-22',
         '/blog/2014/06/02/more_tags.html' => '2014-06-02',
         '/index.html' => '2014-06-02',
-        '/blog/page-2.html' => '2014-04-30',
+        '/blog/page-2.html' => '2014-06-02',
         '/blog/tag/more/index.html' => '2014-06-02',
         '/blog/tag/better/index.html' => '2014-06-02',
-        '/blog/tag/better/page-2.html' => '2014-04-30',
+        '/blog/tag/better/page-2.html' => '2014-06-02',
         '/blog/tag/error-message/index.html' => '2014-05-22',
         '/blog/tag/even-more-tags/index.html' => '2014-06-02',
+        '/static.txt' => $today,
+        '/static.yml' => $today,
     );
 
     my @posts = qw(
@@ -101,6 +125,8 @@ subtest 'sitemap.xml and robots.txt' => sub {
         /blog/2014/04/30/plug.html
         /blog/2014/05/22/(regex)[name].file.html
         /blog/2014/06/02/more_tags.html
+        /static.txt
+        /static.yml
     );
 
     my @lists = qw(
@@ -154,6 +180,7 @@ subtest 'sitemap.xml and robots.txt' => sub {
         ok !$tmpdir->child( 'deploy', 'sitemap.xml' )->exists, 'not deployed yet';
         ok !$tmpdir->child( 'deploy', 'robots.txt' )->exists, 'not deployed yet';
     };
+
     subtest 'deploy' => sub {
         $site->deploy;
         my $dom = Mojo::DOM->new( $tmpdir->child( 'deploy', 'sitemap.xml' )->slurp );
@@ -208,6 +235,16 @@ subtest 'site urls' => sub {
                 subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, build => $page->path );
                 ok !$tmpdir->child( 'deploy', $page->path )->exists, 'not deployed yet';
             }
+
+            subtest 'check static content' => sub {
+                for my $page ( $site->app( 'static' )->pages ) {
+                    my $fh = $page->render;
+                    my $content = do { local $/; <$fh> };
+                    is $tmpdir->child( 'build', $page->path )->slurp_raw, $content,
+                        $page->path . ' content is correct';
+                }
+            };
+
         };
 
         subtest 'deploy' => sub {
@@ -216,8 +253,17 @@ subtest 'site urls' => sub {
             for my $page ( $site->app( 'blog' )->pages ) {
                 subtest 'page content: ' . $page->path => test_content( $tmpdir, $site, $page, deploy => $page->path );
             }
-        };
 
+            subtest 'check static content' => sub {
+                for my $page ( $site->app( 'static' )->pages ) {
+                    my $fh = $page->render;
+                    my $content = do { local $/; <$fh> };
+                    is $tmpdir->child( 'deploy', $page->path )->slurp_raw, $content,
+                        $page->path . ' content is correct';
+                }
+            };
+
+        };
     };
 };
 
@@ -227,15 +273,26 @@ sub test_site {
     my ( $tmpdir, %site_args ) = @_;
 
     my $blog = Statocles::App::Blog->new(
-        store => $SHARE_DIR->child( 'blog' ),
+        store => $SHARE_DIR->child( qw( app blog ) ),
         url_root => '/blog',
         theme => $SHARE_DIR->child( 'theme' ),
         page_size => 2,
     );
 
+    my $static = Statocles::App::Static->new(
+        store => $SHARE_DIR->child( qw( app static ) ),
+        url_root => '/static',
+    );
+
+    $tmpdir->child( 'build' )->mkpath;
+    $tmpdir->child( 'deploy' )->mkpath;
+
     my $site = Statocles::Site->new(
         title => 'Test Site',
-        apps => { blog => $blog },
+        apps => {
+            blog => $blog,
+            static => $static,
+        },
         build_store => $tmpdir->child( 'build' ),
         deploy_store => $tmpdir->child( 'deploy' ),
         base_url => 'http://example.com',
@@ -269,8 +326,6 @@ sub test_content {
                 }
             }
         }
-
-        eq_or_diff "$got_dom", "$expect_dom";
 
         if ( $got_dom->at('title') ) {
             like $got_dom->at('title')->text, qr{@{[$site->title]}}, 'page contains site title ' . $site->title;

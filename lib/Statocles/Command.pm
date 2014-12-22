@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.028';
+$Statocles::Command::VERSION = '0.029';
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
@@ -66,6 +66,10 @@ sub main {
         return 0;
     }
     elsif ( $method eq 'daemon' ) {
+        # Build the site first no matter what.  We may end up watching for
+        # future changes, but assume they meant to build first
+        $cmd->site->build;
+
         require Mojo::Server::Daemon;
         our $daemon = Mojo::Server::Daemon->new(
             silent => 1,
@@ -227,7 +231,7 @@ sub main {
             my $asset = $self->static->file( $path );
             if ( !$asset ) {
                 # Check for index.html
-                my $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
+                $path = Mojo::Path->new( $c->stash->{path} . "/index.html" );
                 $asset = $self->static->file( $path );
             }
 
@@ -235,7 +239,8 @@ sub main {
                 return $c->render( status => 404, text => 'Not found' );
             }
 
-            return $c->reply->asset( $asset );
+            # The static helper will choose the right content type and charset
+            return $c->reply->static( $path );
         };
 
         if ( $base ) {
@@ -265,7 +270,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,6 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.028';
+$Statocles::Site::VERSION = '0.029';
 use Statocles::Base 'Class';
 use Statocles::Store;
 use Mojo::URL;
@@ -116,21 +116,23 @@ sub write {
     my $base_path = Mojo::URL->new( $self->base_url )->path;
     $base_path =~ s{/$}{};
     for my $page ( @pages ) {
-        my $html = $page->render( %args );
+        my $content = $page->render( %args );
 
-        if ( $base_path =~ /\S/ ) {
-            my $dom = Mojo::DOM->new( $html );
-            for my $attr ( qw( src href ) ) {
-                for my $el ( $dom->find( "[$attr]" )->each ) {
-                    my $url = $el->attr( $attr );
-                    next unless $url =~ m{^/};
-                    $el->attr( $attr, join "", $base_path, $url );
+        if ( !ref $content ) {
+            if ( $base_path =~ /\S/ ) {
+                my $dom = Mojo::DOM->new( $content );
+                for my $attr ( qw( src href ) ) {
+                    for my $el ( $dom->find( "[$attr]" )->each ) {
+                        my $url = $el->attr( $attr );
+                        next unless $url =~ m{^/};
+                        $el->attr( $attr, join "", $base_path, $url );
+                    }
                 }
+                $content = $dom->to_string;
             }
-            $html = $dom->to_string;
         }
 
-        $store->write_file( $page->path, $html );
+        $store->write_file( $page->path, $content );
     }
 
     # Build the sitemap.xml
@@ -171,7 +173,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 SYNOPSIS
 
@@ -237,11 +239,15 @@ are defined by your L<theme|Statocles::Theme>. For example:
 
 =head2 build_store
 
-The L<store|Statocles::Store> object to use for C<build()>.
+The L<store|Statocles::Store> object to use for C<build()>. This is a workspace
+and will be rebuilt often, using the C<build> and C<daemon> commands. This is
+also the store the C<daemon> command reads to serve the site.
 
 =head2 deploy_store
 
 The L<store|Statocles::Store> object to use for C<deploy()>. Defaults to L<build_store>.
+This is intended to be the production deployment of the site. A build gets promoted
+to production by using the C<deploy> command.
 
 =head2 log
 

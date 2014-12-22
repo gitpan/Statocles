@@ -1,6 +1,6 @@
 package Statocles::Base;
 # ABSTRACT: Base module for Statocles modules
-$Statocles::Base::VERSION = '0.028';
+$Statocles::Base::VERSION = '0.029';
 use strict;
 use warnings;
 use base 'Import::Base';
@@ -31,7 +31,9 @@ our %IMPORT_BUNDLES = (
         qw( Test::More Test::Deep Test::Differences Test::Exception ),
         'Dir::Self' => [qw( __DIR__ )],
         'Path::Tiny' => [qw( path tempdir )],
+        'Statocles::Test' => [qw( test_constructor test_pages )],
         'Statocles::Site',
+        sub { $Statocles::VERSION = 0.001; return }, # Set version normally done via dzil
     ],
 
     Class => [
@@ -58,7 +60,7 @@ Statocles::Base - Base module for Statocles modules
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 SYNOPSIS
 
@@ -153,6 +155,10 @@ The test bundle includes:
 =item L<Dir::Self> '__DIR__'
 
 =item L<Path::Tiny> 'path', 'tempdir'
+
+=item L<Statocles::Test>
+
+Some common test routines for Statocles.
 
 =item L<Statocles::Site>
 

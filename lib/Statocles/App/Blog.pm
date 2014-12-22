@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.028';
+$Statocles::App::Blog::VERSION = '0.029';
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store;
@@ -16,6 +16,7 @@ has store => (
     is => 'ro',
     isa => Store,
     coerce => Store->coercion,
+    required => 1,
 );
 
 
@@ -111,6 +112,11 @@ ENDHELP
             title => $title,
             last_modified => Time::Piece->new,
         );
+
+        # Read post content on STDIN
+        if ( !-t *STDIN ) {
+            $doc{content} = do { local $/; <STDIN> };
+        }
 
         if ( $ENV{EDITOR} ) {
             # I can see no good way to test this automatically
@@ -342,7 +348,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 DESCRIPTION
 

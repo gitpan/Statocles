@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.028';
+$Statocles::VERSION = '0.029';
 # The currently-running site.
 # I hate this, but I know of no better way to ensure that we always have access
 # to a Mojo::Log object, while still being relatively useful, without having to
@@ -28,7 +28,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.028
+version 0.029
 
 =head1 SYNOPSIS
 
@@ -196,6 +196,11 @@ A L<Statocles::Store> reads and writes documents and pages. The default store
 reads documents in YAML and writes pages to a file, but stores could read
 documents as JSON, or from a Mongo database, and write pages to a database, or
 whereever you want!
+
+=head1 SEE ALSO
+
+There are static site generators written in other languages. See a big list of them at
+L<https://staticsitegenerators.net>.
 
 =head1 AUTHOR
 

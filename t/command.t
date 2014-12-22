@@ -14,8 +14,12 @@ use YAML;
 # Build a config file so we can test config loading and still use
 # temporary directories
 my $tmp = tempdir;
-dircopy $SHARE_DIR->child( 'blog' )->stringify, $tmp->child( 'blog' )->stringify;
+dircopy $SHARE_DIR->child( qw( app blog ) )->stringify, $tmp->child( 'blog' )->stringify;
 dircopy $SHARE_DIR->child( 'theme' )->stringify, $tmp->child( 'theme' )->stringify;
+$tmp->child( 'build_site' )->mkpath;
+$tmp->child( 'deploy_site' )->mkpath;
+$tmp->child( 'build_foo' )->mkpath;
+$tmp->child( 'deploy_foo' )->mkpath;
 
 my $config = {
     theme => {
@@ -220,6 +224,9 @@ subtest 'delegate to app command' => sub {
 };
 
 subtest 'run the http daemon' => sub {
+    $tmp->child( 'build_site' )->remove_tree; # We want daemon to rebuild the site
+    $tmp->child( 'build_site' )->mkpath;
+
     # We need to stop the daemon after it starts
     my ( $port, $app );
     my $timeout = Mojo::IOLoop->singleton->timer( 0, sub {
@@ -260,6 +267,8 @@ subtest 'run the http daemon' => sub {
 
     isa_ok $app, 'Statocles::Command::_MOJOAPP';
 
+    ok $tmp->child( 'build_site', 'index.html' )->exists, 'site was built';
+
     subtest 'Mojolicious app' => sub {
         subtest 'root site' => sub {
 
@@ -272,13 +281,15 @@ subtest 'run the http daemon' => sub {
             # Check that / gets index.html
             $t->get_ok( "/" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                ->content_type_is( 'text/html;charset=UTF-8' )
                 ;
 
             # Check that /index.html gets the right content
             $t->get_ok( "/index.html" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                ->content_type_is( 'text/html;charset=UTF-8' )
                 ;
 
             # Check that malicious URL gets plonked
@@ -318,8 +329,9 @@ subtest 'run the http daemon' => sub {
                             # Check that /index.html gets the right content
                             $t->get_ok( "/index.html" )
                                 ->status_is( 200 )
-                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
                                 ->content_like( qr{This is some new content for our blog!} )
+                                ->content_type_is( 'text/html;charset=UTF-8' )
                                 ;
 
                         } );
@@ -344,8 +356,9 @@ subtest 'run the http daemon' => sub {
                             # Check that /index.html gets the right content
                             $t->get_ok( "/index.html" )
                                 ->status_is( 200 )
-                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
                                 ->content_like( qr{<p>Extra footer!</p>} )
+                                ->content_type_is( 'text/html;charset=UTF-8' )
                                 ;
 
                         } );
@@ -378,13 +391,15 @@ subtest 'run the http daemon' => sub {
             # Check that /nonroot gets index.html
             $t->get_ok( "/nonroot" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                ->content_type_is( 'text/html;charset=UTF-8' )
                 ;
 
             # Check that /nonroot/index.html gets the right content
             $t->get_ok( "/nonroot/index.html" )
                 ->status_is( 200 )
-                ->content_is( $tmp->child( build_site => 'index.html' )->slurp )
+                ->content_is( $tmp->child( build_site => 'index.html' )->slurp_utf8 )
+                ->content_type_is( 'text/html;charset=UTF-8' )
                 ;
 
             # Check that malicious URL gets plonked
@@ -423,8 +438,8 @@ subtest 'bundle the necessary components' => sub {
             ok !$err;
             like $out, qr{Theme "default" written to "share/theme/default"};
             like $out, qr{Make sure to update "$config_fn"};
-            is $tmp->child( @site_layout )->slurp,
-                $SHARE_DIR->parent->parent->child( @site_layout )->slurp;
+            is $tmp->child( @site_layout )->slurp_utf8,
+                $SHARE_DIR->parent->parent->child( @site_layout )->slurp_utf8;
             ok $tmp->child( @site_footer )->is_file;
         };
         subtest 'second time does not overwrite hooks' => sub {
@@ -439,9 +454,9 @@ subtest 'bundle the necessary components' => sub {
             like $out, qr{Theme "default" written to "share/theme/default"};
             like $out, qr{Make sure to update "$config_fn"};
 
-            is $tmp->child( @site_layout )->slurp,
-                $SHARE_DIR->parent->parent->child( @site_layout )->slurp;
-            is $tmp->child( @site_footer )->slurp, 'SITE FOOTER';
+            is $tmp->child( @site_layout )->slurp_utf8,
+                $SHARE_DIR->parent->parent->child( @site_layout )->slurp_utf8;
+            is $tmp->child( @site_footer )->slurp_utf8, 'SITE FOOTER';
         };
     };
 };
