@@ -1,9 +1,9 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.029';
+$Statocles::App::Blog::VERSION = '0.030';
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
-use Statocles::Store;
+use Statocles::Store::File;
 use Statocles::Theme;
 use Statocles::Page::Document;
 use Statocles::Page::List;
@@ -116,11 +116,17 @@ ENDHELP
         # Read post content on STDIN
         if ( !-t *STDIN ) {
             $doc{content} = do { local $/; <STDIN> };
+            # Re-open STDIN as the TTY so that the editor (vim) can use it
+            # XXX Is this also a problem on Windows?
+            if ( -e '/dev/tty' ) {
+                close STDIN;
+                open STDIN, '/dev/tty';
+            }
         }
 
         if ( $ENV{EDITOR} ) {
             # I can see no good way to test this automatically
-            my $tmp_store = Statocles::Store->new( path => Path::Tiny->tempdir );
+            my $tmp_store = Statocles::Store::File->new( path => Path::Tiny->tempdir );
             my $tmp_path = $tmp_store->write_document( new_post => \%doc );
             system $ENV{EDITOR}, $tmp_path;
             %doc = %{ $tmp_store->read_document( 'new_post' ) };
@@ -129,7 +135,7 @@ ENDHELP
 
         my $slug = lc $title;
         $slug =~ s/\s+/-/g;
-        my $path = Path::Tiny->new( @date_parts, "$slug.yml" );
+        my $path = Path::Tiny->new( @date_parts, "$slug.markdown" );
         my $full_path = $self->store->write_document( $path => \%doc );
         say "New post at: $full_path";
 
@@ -348,7 +354,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.029
+version 0.030
 
 =head1 DESCRIPTION
 

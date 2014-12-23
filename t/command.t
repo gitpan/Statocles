@@ -29,13 +29,13 @@ my $config = {
         },
     },
     build => {
-        class => 'Statocles::Store',
+        class => 'Statocles::Store::File',
         args => {
             path => $tmp->child( 'build_site' ),
         },
     },
     deploy => {
-        class => 'Statocles::Store',
+        class => 'Statocles::Store::File',
         args => {
             path => $tmp->child( 'deploy_site' ),
         },
@@ -44,7 +44,7 @@ my $config = {
         'class' => 'Statocles::App::Blog',
         'args' => {
             store => {
-                '$class' => 'Statocles::Store',
+                '$class' => 'Statocles::Store::File',
                 '$args' => {
                     path => $tmp->child( 'blog' ),
                 },
@@ -67,13 +67,13 @@ my $config = {
         },
     },
     build_foo => {
-        class => 'Statocles::Store',
+        class => 'Statocles::Store::File',
         args => {
             path => $tmp->child( 'build_foo' ),
         },
     },
     deploy_foo => {
-        class => 'Statocles::Store',
+        class => 'Statocles::Store::File',
         args => {
             path => $tmp->child( 'deploy_foo' ),
         },
@@ -313,7 +313,7 @@ subtest 'run the http daemon' => sub {
                 subtest 'watch for filesystem events' => sub {
 
                     subtest 'content store' => sub {
-                        my $path = Path::Tiny->new( qw( 2014 06 02 more_tags.yml ) );
+                        my $path = Path::Tiny->new( qw( 2014 06 02 more_tags.markdown ) );
                         my $store = $t->app->site->app( 'blog' )->store;
                         my $doc = $store->read_document( $path );
                         $doc->{content} = "This is some new content for our blog!";

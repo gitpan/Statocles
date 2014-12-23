@@ -2,7 +2,6 @@
 use Statocles::Base 'Test';
 use Statocles::Site;
 use Statocles::Theme;
-use Statocles::Store;
 use Statocles::App::Blog;
 use Statocles::App::Static;
 use Mojo::DOM;
@@ -116,8 +115,6 @@ subtest 'sitemap.xml and robots.txt' => sub {
         '/blog/tag/better/page-2.html' => '2014-06-02',
         '/blog/tag/error-message/index.html' => '2014-05-22',
         '/blog/tag/even-more-tags/index.html' => '2014-06-02',
-        '/static.txt' => $today,
-        '/static.yml' => $today,
     );
 
     my @posts = qw(
@@ -125,8 +122,6 @@ subtest 'sitemap.xml and robots.txt' => sub {
         /blog/2014/04/30/plug.html
         /blog/2014/05/22/(regex)[name].file.html
         /blog/2014/06/02/more_tags.html
-        /static.txt
-        /static.yml
     );
 
     my @lists = qw(

@@ -30,7 +30,7 @@ subtest 'constructor' => sub {
     subtest 'attribute types/coercions' => sub {
         subtest 'store' => sub {
             my $app = Statocles::App::Blog->new( %required );
-            isa_ok $app->store, 'Statocles::Store';
+            ok $app->store->DOES( 'Statocles::Store' );
             is $app->store->path, $SHARE_DIR->child( qw( app blog ) );
         },
 
@@ -620,7 +620,7 @@ subtest 'commands' => sub {
                     sprintf( '%04i', $year + 1900 ),
                     sprintf( '%02i', $mon + 1 ),
                     sprintf( '%02i', $day ),
-                    'this-is-a-title.yml',
+                    'this-is-a-title.markdown',
                 );
 
                 subtest 'run the command' => sub {
@@ -660,7 +660,7 @@ ENDCONTENT
                 local $ENV{EDITOR}; # We can't very well open vim...
 
                 my $doc_path = $tmpdir->child(
-                    'blog', '2014', '04', '01', 'this-is-a-title.yml',
+                    'blog', '2014', '04', '01', 'this-is-a-title.markdown',
                 );
 
                 subtest 'run the command' => sub {
@@ -705,7 +705,7 @@ ENDCONTENT
                     sprintf( '%04i', $year + 1900 ),
                     sprintf( '%02i', $mon + 1 ),
                     sprintf( '%02i', $day ),
-                    'this-is-a-title-for-stdin.yml',
+                    'this-is-a-title-for-stdin.markdown',
                 );
 
                 subtest 'run the command' => sub {
@@ -718,6 +718,10 @@ ENDCONTENT
                     is $exit, 0;
                     like $out, qr{New post at: \Q$doc_path},
                         'contains blog post document path';
+
+                    if ( -e '/dev/tty' ) {
+                        ok -t *STDIN, 'STDIN gets reset to our TTY';
+                    }
                 };
 
                 subtest 'check the generated document' => sub {

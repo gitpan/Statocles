@@ -1,6 +1,6 @@
 package Statocles::Base;
 # ABSTRACT: Base module for Statocles modules
-$Statocles::Base::VERSION = '0.029';
+$Statocles::Base::VERSION = '0.030';
 use strict;
 use warnings;
 use base 'Import::Base';
@@ -22,7 +22,7 @@ our @IMPORT_MODULES = (
 
 my @class_modules = (
     'Types::Standard' => [qw( :all )],
-    'Types::Path::Tiny' => [qw( Path )],
+    'Types::Path::Tiny' => [qw( Path AbsPath )],
     'Statocles::Types' => [qw( :all )],
 );
 
@@ -60,7 +60,7 @@ Statocles::Base - Base module for Statocles modules
 
 =head1 VERSION
 
-version 0.029
+version 0.030
 
 =head1 SYNOPSIS
 

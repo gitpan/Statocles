@@ -1,6 +1,6 @@
 package Statocles::App::Static;
 # ABSTRACT: Manage static files like CSS, JS, images, and other untemplated content
-$Statocles::App::Static::VERSION = '0.029';
+$Statocles::App::Static::VERSION = '0.030';
 use Statocles::Base 'Class';
 extends 'Statocles::App';
 use Statocles::Page::File;
@@ -27,6 +27,7 @@ sub pages {
     my @pages;
     my $iter = $self->store->find_files;
     while ( my $path = $iter->() ) {
+        next if $path->basename =~ /^[.]/;
         push @pages, Statocles::Page::File->new(
             path => $path,
             fh => $self->store->open_file( $path ),
@@ -48,7 +49,7 @@ Statocles::App::Static - Manage static files like CSS, JS, images, and other unt
 
 =head1 VERSION
 
-version 0.029
+version 0.030
 
 =head1 ATTRIBUTES
 

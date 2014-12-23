@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.029';
+$Statocles::VERSION = '0.030';
 # The currently-running site.
 # I hate this, but I know of no better way to ensure that we always have access
 # to a Mojo::Log object, while still being relatively useful, without having to
@@ -28,7 +28,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.029
+version 0.030
 
 =head1 SYNOPSIS
 
@@ -134,8 +134,8 @@ easily editable with any text editor. A sample document looks like:
     This is a paragraph
 
 This is the same format that L<Jekyll|http://jekyllrb.com> uses. The document
-format is described in the L<Statocles::Store> documentation under
-L<Frontmatter Document Format|Statocles::Store/"Frontmatter Document Format">.
+format is described in the L<Statocles::Store::File> documentation under
+L<Frontmatter Document Format|Statocles::Store::File/"Frontmatter Document Format">.
 
 =head2 PAGES
 
@@ -193,9 +193,9 @@ A simple Git repository site.
 =head2 STORES
 
 A L<Statocles::Store> reads and writes documents and pages. The default store
-reads documents in YAML and writes pages to a file, but stores could read
-documents as JSON, or from a Mongo database, and write pages to a database, or
-whereever you want!
+(L<Statocles::Store::File>) reads documents in YAML and writes pages to a file,
+but stores could read documents as JSON, or from a Mongo database, and write
+pages to a database, or whereever you want!
 
 =head1 SEE ALSO
 

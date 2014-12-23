@@ -1,8 +1,7 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.029';
+$Statocles::Site::VERSION = '0.030';
 use Statocles::Base 'Class';
-use Statocles::Store;
 use Mojo::URL;
 use Mojo::DOM;
 use Mojo::Log;
@@ -136,7 +135,8 @@ sub write {
     }
 
     # Build the sitemap.xml
-    my @indexed_pages = grep { !$_->isa( 'Statocles::Page::Feed' ) } @pages;
+    # html files only
+    my @indexed_pages = grep { $_->path =~ /[.]html?$/ } @pages;
     my $default_theme = Statocles::Theme->new( store => '::default' );
     my $tmpl = $default_theme->template( site => 'sitemap.xml' );
     $store->write_file( 'sitemap.xml', $tmpl->render( site => $self, pages => \@indexed_pages ) );
@@ -173,7 +173,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.029
+version 0.030
 
 =head1 SYNOPSIS
 

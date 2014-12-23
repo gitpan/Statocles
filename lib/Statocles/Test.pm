@@ -1,6 +1,6 @@
 package Statocles::Test;
 # ABSTRACT: Common test routines for Statocles
-$Statocles::Test::VERSION = '0.029';
+$Statocles::Test::VERSION = '0.030';
 use Statocles::Base;
 use Test::More;
 use Test::Exception;
@@ -123,7 +123,7 @@ Statocles::Test - Common test routines for Statocles
 
 =head1 VERSION
 
-version 0.029
+version 0.030
 
 =head1 SUBROUTINES
 

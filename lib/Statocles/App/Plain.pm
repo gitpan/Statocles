@@ -1,11 +1,9 @@
 package Statocles::App::Plain;
 # ABSTRACT: Plain documents made into pages with no extras
-$Statocles::App::Plain::VERSION = '0.029';
+$Statocles::App::Plain::VERSION = '0.030';
 use Statocles::Base 'Class';
 extends 'Statocles::App';
 use List::Util qw( first );
-use Statocles::Store;
-use Statocles::Theme;
 use Statocles::Page::Document;
 
 
@@ -38,7 +36,7 @@ sub pages {
 
     for my $doc ( @{ $self->store->documents } ) {
         my $url = $doc->path;
-        $url =~ s/[.]yml$/.html/;
+        $url =~ s/[.]markdown$/.html/;
 
         my $page = Statocles::Page::Document->new(
             path => join( '/', $self->url_root, $url ),
@@ -70,7 +68,7 @@ Statocles::App::Plain - Plain documents made into pages with no extras
 
 =head1 VERSION
 
-version 0.029
+version 0.030
 
 =head1 SYNOPSIS
 
