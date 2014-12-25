@@ -1,6 +1,6 @@
 package Statocles::Document;
 # ABSTRACT: Base class for all Statocles documents
-$Statocles::Document::VERSION = '0.030';
+$Statocles::Document::VERSION = '0.031';
 use Statocles::Base 'Class';
 
 
@@ -75,7 +75,7 @@ Statocles::Document - Base class for all Statocles documents
 
 =head1 VERSION
 
-version 0.030
+version 0.031
 
 =head1 DESCRIPTION
 

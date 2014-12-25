@@ -1,6 +1,6 @@
 package Statocles::App::Static;
 # ABSTRACT: Manage static files like CSS, JS, images, and other untemplated content
-$Statocles::App::Static::VERSION = '0.030';
+$Statocles::App::Static::VERSION = '0.031';
 use Statocles::Base 'Class';
 extends 'Statocles::App';
 use Statocles::Page::File;
@@ -49,7 +49,7 @@ Statocles::App::Static - Manage static files like CSS, JS, images, and other unt
 
 =head1 VERSION
 
-version 0.030
+version 0.031
 
 =head1 ATTRIBUTES
 

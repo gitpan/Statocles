@@ -1,7 +1,8 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.030';
+$Statocles::Command::VERSION = '0.031';
 use Statocles::Base 'Class';
+use Scalar::Util qw( blessed );
 use Getopt::Long qw( GetOptionsFromArray );
 use Pod::Usage::Return qw( pod2usage );
 use File::Share qw( dist_dir );
@@ -39,12 +40,24 @@ sub main {
 
     my $method = $argv[0];
     return pod2usage("ERROR: Missing command") unless $method;
+    if ( !-e $opt{config} ) {
+        warn sprintf qq{ERROR: Could not find config file "\%s"\n}, $opt{config};
+        return 1;
+    }
 
     my $wire = Beam::Wire->new( file => $opt{config} );
+    my $site = eval { $wire->get( $opt{site} ) };
 
-    my $cmd = $class->new(
-        site => $wire->get( $opt{site} ),
-    );
+    if ( $@ ) {
+        if ( blessed $@ && $@->isa( 'Beam::Wire::Exception::NotFound' ) ) {
+            warn sprintf qq{ERROR: Could not find site named "%s" in config file "%s"\n},
+                $opt{site}, $opt{config};
+            return 1;
+        }
+        die $@;
+    }
+
+    my $cmd = $class->new( site => $site );
 
     if ( $opt{verbose} ) {
         $cmd->site->log->handle( \*STDOUT );
@@ -182,8 +195,7 @@ sub main {
 
             require Mojo::IOLoop::Stream;
             my $ioloop = Mojo::IOLoop->singleton;
-            use Cwd qw( getcwd );
-            my $build_dir = Path::Tiny->new( getcwd, $self->site->build_store->path );
+            my $build_dir = $self->site->build_store->path->realpath;
 
             for my $path ( keys %watches ) {
                 $self->log->info( "Watching for changes in '$path'" );
@@ -205,18 +217,20 @@ sub main {
                                 next;
                             }
 
+                            $self->log->info( "Path '" . $event->path . "' changed... Rebuilding" );
                             $_->clear for @{ $watches{ $path } };
                             $rebuild = 1;
                         }
                     }
 
                     if ( $rebuild ) {
-                        $self->log->info( "Path '$path' changed... Rebuilding" );
                         $self->site->build;
                     }
                 } );
                 $ioloop->reactor->watch( $handle, 1, 0 );
             }
+
+            $self->log->info( "Ignoring changes in '$build_dir'" );
         }
 
         my $serve_static = sub {
@@ -270,7 +284,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.030
+version 0.031
 
 =head1 SYNOPSIS
 

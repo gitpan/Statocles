@@ -1,6 +1,6 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.030';
+$Statocles::Site::VERSION = '0.031';
 use Statocles::Base 'Class';
 use Mojo::URL;
 use Mojo::DOM;
@@ -173,7 +173,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.030
+version 0.031
 
 =head1 SYNOPSIS
 

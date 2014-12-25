@@ -1,6 +1,6 @@
 package Statocles::Site::Git;
 # ABSTRACT: A git-based site
-$Statocles::Site::Git::VERSION = '0.030';
+$Statocles::Site::Git::VERSION = '0.031';
 use Statocles::Base 'Class';
 extends 'Statocles::Site';
 
@@ -102,7 +102,7 @@ Statocles::Site::Git - A git-based site
 
 =head1 VERSION
 
-version 0.030
+version 0.031
 
 =head1 DESCRIPTION
 

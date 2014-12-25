@@ -1,6 +1,6 @@
 package Statocles::Store::File;
 # ABSTRACT: A store made up of plain files
-$Statocles::Store::File::VERSION = '0.030';
+$Statocles::Store::File::VERSION = '0.031';
 use Statocles::Base 'Class';
 with 'Statocles::Store';
 use Scalar::Util qw( weaken blessed );
@@ -252,7 +252,7 @@ Statocles::Store::File - A store made up of plain files
 
 =head1 VERSION
 
-version 0.030
+version 0.031
 
 =head1 DESCRIPTION
 

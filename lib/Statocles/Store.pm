@@ -1,6 +1,6 @@
 package Statocles::Store;
 # ABSTRACT: Base role for repositories of documents and files
-$Statocles::Store::VERSION = '0.030';
+$Statocles::Store::VERSION = '0.031';
 use Statocles::Base 'Role';
 
 1;
@@ -15,7 +15,7 @@ Statocles::Store - Base role for repositories of documents and files
 
 =head1 VERSION
 
-version 0.030
+version 0.031
 
 =head1 DESCRIPTION
 

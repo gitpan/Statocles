@@ -1,5 +1,6 @@
 
 use Statocles::Base 'Test';
+use POSIX qw( locale_h );
 use Capture::Tiny qw( capture );
 use Statocles::App::Blog;
 my $SHARE_DIR = path( __DIR__ )->parent->child( 'share' );
@@ -53,8 +54,7 @@ subtest 'pages' => sub {
         index_tags => [ '-better', '+more', '+error message' ],
     );
 
-    test_pages(
-        $site, $app,
+    my @page_tests = (
 
         # Index pages
         '/blog/index.html' => sub {
@@ -71,6 +71,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ ( 'preaction' ) x 2 ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/index.atom
+                    /blog/index.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/page-2.html' => sub {
@@ -87,6 +103,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/index.atom
+                    /blog/index.rss
+                ) ),
+                'feeds list is available';
         },
 
         # Index feeds
@@ -166,6 +198,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ ( 'preaction' ) x 2 ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better.atom
+                    /blog/tag/better.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/tag/better/page-2.html' => sub {
@@ -182,6 +230,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better.atom
+                    /blog/tag/better.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/tag/error-message/index.html' => sub {
@@ -198,6 +262,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/error-message.atom
+                    /blog/tag/error-message.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/tag/more/index.html' => sub {
@@ -214,6 +294,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/more.atom
+                    /blog/tag/more.rss
+                ) ),
+                'feeds list is available';
         },
 
         '/blog/tag/even-more-tags/index.html' => sub {
@@ -230,6 +326,22 @@ subtest 'pages' => sub {
             cmp_deeply [ $dom->find( '.author' )->map( 'text' )->each ],
                 [ 'preaction' ],
                 'author is correct';
+
+            cmp_deeply [ $dom->find( '.tags a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/better/index.html
+                    /blog/tag/error-message/index.html
+                    /blog/tag/more/index.html
+                    /blog/tag/even-more-tags/index.html
+                ) ),
+                'tag list is available';
+
+            cmp_deeply [ $dom->find( '.feeds a' )->map( attr => 'href' )->each ],
+                bag( qw(
+                    /blog/tag/even-more-tags.atom
+                    /blog/tag/even-more-tags.rss
+                ) ),
+                'feeds list is available';
         },
 
         # Tag feeds
@@ -557,6 +669,32 @@ subtest 'pages' => sub {
         # Does not show /blog/9999/12/31/forever-is-a-long-time.html
         # Does not show /blog/draft/a-draft-post.html
     );
+
+
+    test_pages( $site, $app, @page_tests );
+
+    subtest 'different locale' => sub {
+        diag "Current LC_TIME locale: " . setlocale( LC_TIME );
+
+        my $new_locale;
+        eval {
+            $new_locale = setlocale( LC_TIME, 'ru_RU' );
+        };
+        if ( $@ ) {
+            diag "Could not set locale to ru_RU: $@";
+            pass "Cannot test locale";
+            return;
+        }
+        if ( $new_locale ne 'ru_RU' ) {
+            diag "Could not set locale to ru_RU. Still $new_locale";
+            pass "Cannot test locale";
+            return;
+        }
+
+        test_pages( $site, $app, @page_tests );
+        is setlocale( LC_TIME ), 'ru_RU', 'locale is preserved';
+        setlocale( LC_TIME, "" );
+    };
 };
 
 subtest 'commands' => sub {
@@ -709,6 +847,10 @@ ENDCONTENT
                 );
 
                 subtest 'run the command' => sub {
+                    diag -t *STDIN
+                        ? "Before test: STDIN is interactive"
+                        : "Before test: STDIN is not interactive";
+
                     open my $stdin, '<', \"This is content from STDIN\n";
                     local *STDIN = $stdin;
 
@@ -720,7 +862,9 @@ ENDCONTENT
                         'contains blog post document path';
 
                     if ( -e '/dev/tty' ) {
-                        ok -t *STDIN, 'STDIN gets reset to our TTY';
+                        diag -t *STDIN
+                            ? "After test: STDIN is now interactive"
+                            : "After Test: STDIN is still not interactive";
                     }
                 };
 

@@ -51,5 +51,5 @@ resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: http://preaction.github.io/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: '0.030'
+version: '0.031'
 x_authority: cpan:PREACTION

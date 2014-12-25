@@ -1,6 +1,6 @@
 package Statocles::App;
 # ABSTRACT: Base class for Statocles applications
-$Statocles::App::VERSION = '0.030';
+$Statocles::App::VERSION = '0.031';
 use Statocles::Base 'Class';
 
 1;
@@ -15,7 +15,7 @@ Statocles::App - Base class for Statocles applications
 
 =head1 VERSION
 
-version 0.030
+version 0.031
 
 =head1 DESCRIPTION
 

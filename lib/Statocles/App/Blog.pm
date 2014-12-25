@@ -1,6 +1,6 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.030';
+$Statocles::App::Blog::VERSION = '0.031';
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store::File;
@@ -45,6 +45,14 @@ has page_size => (
 has index_tags => (
     is => 'ro',
     isa => ArrayRef[Str],
+    default => sub { [] },
+);
+
+# A cache of the last set of post pages we have
+# XXX: We need to allow apps to have a "clear" the way that Store and Theme do
+has _post_pages => (
+    is => 'rw',
+    isa => ArrayRef,
     default => sub { [] },
 );
 
@@ -183,6 +191,9 @@ sub post_pages {
             tags => \@tags,
         );
     }
+
+    $self->_post_pages( [ @pages ] );
+
     return @pages;
 }
 
@@ -319,8 +330,8 @@ sub pages {
 
 
 sub tags {
-    my ( $self, @post_pages ) = @_;
-    my %tagged_docs = $self->_tag_docs( @post_pages );
+    my ( $self ) = @_;
+    my %tagged_docs = $self->_tag_docs( @{ $self->_post_pages } );
     return map {; { title => $_, href => $self->_tag_url( $_ ), } }
         sort keys %tagged_docs
 }
@@ -354,7 +365,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.030
+version 0.031
 
 =head1 DESCRIPTION
 
