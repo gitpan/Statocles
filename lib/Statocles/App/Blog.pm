@@ -1,10 +1,9 @@
 package Statocles::App::Blog;
 # ABSTRACT: A blog application
-$Statocles::App::Blog::VERSION = '0.031';
+$Statocles::App::Blog::VERSION = '0.032';
 use Statocles::Base 'Class';
 use Getopt::Long qw( GetOptionsFromArray );
 use Statocles::Store::File;
-use Statocles::Theme;
 use Statocles::Page::Document;
 use Statocles::Page::List;
 use Statocles::Page::Feed;
@@ -24,14 +23,6 @@ has url_root => (
     is => 'ro',
     isa => Str,
     required => 1,
-);
-
-
-has theme => (
-    is => 'ro',
-    isa => Theme,
-    required => 1,
-    coerce => Theme->coercion,
 );
 
 
@@ -183,8 +174,8 @@ sub post_pages {
 
         push @pages, Statocles::Page::Document->new(
             app => $self,
-            layout => $self->theme->template( site => 'layout.html' ),
-            template => $self->theme->template( blog => 'post.html' ),
+            layout => $self->site->theme->template( site => 'layout.html' ),
+            template => $self->site->theme->template( blog => 'post.html' ),
             document => $doc,
             path => $path,
             published => Time::Piece->strptime( $date, '%Y-%m-%d' ),
@@ -235,8 +226,8 @@ sub index {
         # Sorting by path just happens to also sort by date
         pages => [ sort { $b->path cmp $a->path } @index_post_pages ],
         app => $self,
-        template => $self->theme->template( blog => 'index.html' ),
-        layout => $self->theme->template( site => 'layout.html' ),
+        template => $self->site->theme->template( blog => 'index.html' ),
+        layout => $self->site->theme->template( site => 'layout.html' ),
     );
 
     my $index = $pages[0];
@@ -248,7 +239,7 @@ sub index {
             type => $FEEDS{ $feed }{ type },
             page => $index,
             path => join( "/", $self->url_root, 'index.' . $feed ),
-            template => $self->theme->template( blog => $FEEDS{$feed}{template} ),
+            template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
         );
         push @feed_pages, $page;
         push @feed_links, {
@@ -281,8 +272,8 @@ sub tag_pages {
             # Sorting by path just happens to also sort by date
             pages => [ sort { $b->path cmp $a->path } @{ $tagged_docs{ $tag } } ],
             app => $self,
-            template => $self->theme->template( blog => 'index.html' ),
-            layout => $self->theme->template( site => 'layout.html' ),
+            template => $self->site->theme->template( blog => 'index.html' ),
+            layout => $self->site->theme->template( site => 'layout.html' ),
         );
 
         my $index = $tag_pages[0];
@@ -297,7 +288,7 @@ sub tag_pages {
                 app => $self,
                 page => $index,
                 path => join( "/", $self->url_root, 'tag', $tag_file ),
-                template => $self->theme->template( blog => $FEEDS{$feed}{template} ),
+                template => $self->site->theme->template( blog => $FEEDS{$feed}{template} ),
             );
             push @feed_pages, $page;
             push @feed_links, {
@@ -365,7 +356,7 @@ Statocles::App::Blog - A blog application
 
 =head1 VERSION
 
-version 0.031
+version 0.032
 
 =head1 DESCRIPTION
 
@@ -416,11 +407,6 @@ The L<store|Statocles::Store> to read for documents.
 
 The URL root of this application. All pages from this app will be under this
 root. Use this to ensure two apps do not try to write the same path.
-
-=head2 theme
-
-The L<theme|Statocles::Theme> for this app. See L</THEME> for what templates this app
-uses.
 
 =head2 page_size
 
@@ -549,7 +535,7 @@ Doug Bell <preaction@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Doug Bell.
+This software is copyright (c) 2015 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

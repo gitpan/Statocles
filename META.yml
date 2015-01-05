@@ -15,7 +15,7 @@ configure_requires:
   ExtUtils::MakeMaker: '0'
   File::ShareDir::Install: '0.06'
   Module::Build: '0.3601'
-dynamic_config: 0
+dynamic_config: 1
 generated_by: 'Dist::Zilla version 5.023, CPAN::Meta::Converter version 2.142690'
 license: perl
 meta-spec:
@@ -51,5 +51,7 @@ resources:
   bugtracker: https://github.com/preaction/Statocles/issues
   homepage: http://preaction.github.io/Statocles
   repository: https://github.com/preaction/Statocles.git
-version: '0.031'
+version: '0.032'
 x_authority: cpan:PREACTION
+x_contributors:
+  - 'tadegenban <youyouken@126.com>'

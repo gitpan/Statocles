@@ -1,6 +1,6 @@
 package Statocles::Types;
 # ABSTRACT: Type constraints and coercions for Statocles
-$Statocles::Types::VERSION = '0.031';
+$Statocles::Types::VERSION = '0.032';
 use Type::Library -base, -declare => qw( Store Theme );
 use Type::Utils -all;
 use Types::Standard -types;
@@ -29,7 +29,7 @@ Statocles::Types - Type constraints and coercions for Statocles
 
 =head1 VERSION
 
-version 0.031
+version 0.032
 
 =head1 SYNOPSIS
 
@@ -75,7 +75,7 @@ Doug Bell <preaction@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Doug Bell.
+This software is copyright (c) 2015 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

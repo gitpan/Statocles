@@ -1,6 +1,6 @@
 package Statocles::Site;
 # ABSTRACT: An entire, configured website
-$Statocles::Site::VERSION = '0.031';
+$Statocles::Site::VERSION = '0.032';
 use Statocles::Base 'Class';
 use Mojo::URL;
 use Mojo::DOM;
@@ -19,9 +19,18 @@ has base_url => (
 );
 
 
+has theme => (
+    is => 'ro',
+    isa => Theme,
+    required => 1,
+    coerce => Theme->coercion,
+);
+
+
 has apps => (
     is => 'ro',
     isa => HashRef[InstanceOf['Statocles::App']],
+    default => sub { {} },
 );
 
 
@@ -67,7 +76,11 @@ has log => (
 
 
 sub BUILD {
-    $Statocles::SITE = shift;
+    my ( $self ) = @_;
+    $Statocles::SITE = $self;
+    for my $app ( values %{ $self->apps } ) {
+        $app->site( $self );
+    }
 }
 
 
@@ -137,18 +150,13 @@ sub write {
     # Build the sitemap.xml
     # html files only
     my @indexed_pages = grep { $_->path =~ /[.]html?$/ } @pages;
-    my $default_theme = Statocles::Theme->new( store => '::default' );
-    my $tmpl = $default_theme->template( site => 'sitemap.xml' );
+    my $tmpl = $self->theme->template( site => 'sitemap.xml' );
     $store->write_file( 'sitemap.xml', $tmpl->render( site => $self, pages => \@indexed_pages ) );
 
     # robots.txt is the best way for crawlers to automatically discover sitemap.xml
     # We should do more with this later...
-    my @robots = (
-        "Sitemap: " . $self->url( 'sitemap.xml' ),
-        "User-Agent: *",
-        "Disallow: ",
-    );
-    $store->write_file( 'robots.txt', join "\n", @robots );
+    my $robots_tmpl = $self->theme->template( site => 'robots.txt' );
+    $store->write_file( 'robots.txt', $robots_tmpl->render( site => $self ) );
 }
 
 
@@ -173,7 +181,7 @@ Statocles::Site - An entire, configured website
 
 =head1 VERSION
 
-version 0.031
+version 0.032
 
 =head1 SYNOPSIS
 
@@ -203,6 +211,10 @@ The site title, used in templates.
 =head2 base_url
 
 The base URL of the site, including protocol and domain. Used mostly for feeds.
+
+=head2 theme
+
+The L<theme|Statocles::Theme> for this site. All apps share the same theme.
 
 =head2 apps
 
@@ -285,7 +297,7 @@ Doug Bell <preaction@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Doug Bell.
+This software is copyright (c) 2015 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

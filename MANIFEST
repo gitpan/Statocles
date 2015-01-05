@@ -10,6 +10,7 @@ README
 README.mkdn
 bin/statocles
 cpanfile
+dist.ini.bak
 index.html
 lib/Statocles.pm
 lib/Statocles/App.pm
@@ -44,6 +45,7 @@ share/theme/default/site/footer.html
 share/theme/default/site/head_after.html
 share/theme/default/site/header_after.html
 share/theme/default/site/layout.html.ep
+share/theme/default/site/robots.txt.ep
 share/theme/default/site/sidebar_before.html
 share/theme/default/site/sitemap.xml.ep
 share/zsh/_statocles
@@ -101,6 +103,8 @@ t/share/theme/blog/index.rss.ep
 t/share/theme/blog/post.html.ep
 t/share/theme/perldoc/pod.html.ep
 t/share/theme/site/layout.html.ep
+t/share/theme/site/robots.txt.ep
+t/share/theme/site/sitemap.xml.ep
 t/share/tmpl/error.html.ep
 t/share/tmpl/include_with_html.html.ep
 t/share/tmpl/include_with_template.html.ep

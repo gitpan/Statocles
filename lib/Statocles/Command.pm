@@ -1,6 +1,6 @@
 package Statocles::Command;
 # ABSTRACT: The statocles command-line interface
-$Statocles::Command::VERSION = '0.031';
+$Statocles::Command::VERSION = '0.032';
 use Statocles::Base 'Class';
 use Scalar::Util qw( blessed );
 use Getopt::Long qw( GetOptionsFromArray );
@@ -183,15 +183,12 @@ sub main {
             # Collect the paths to watch
             my %watches = ();
             for my $app ( values %{ $self->site->apps } ) {
-                if ( $app->can( 'theme' ) ) {
-                    push @{ $watches{ $app->theme->store->path } }, $app->theme;
-                }
-
                 if ( $app->can( 'store' ) ) {
                     push @{ $watches{ $app->store->path } }, $app->store;
                 }
-
             }
+
+            push @{ $watches{ $self->site->theme->store->path } }, $self->site->theme;
 
             require Mojo::IOLoop::Stream;
             my $ioloop = Mojo::IOLoop->singleton;
@@ -284,7 +281,7 @@ Statocles::Command - The statocles command-line interface
 
 =head1 VERSION
 
-version 0.031
+version 0.032
 
 =head1 SYNOPSIS
 
@@ -324,7 +321,7 @@ Doug Bell <preaction@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Doug Bell.
+This software is copyright (c) 2015 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

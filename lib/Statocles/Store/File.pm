@@ -1,6 +1,6 @@
 package Statocles::Store::File;
 # ABSTRACT: A store made up of plain files
-$Statocles::Store::File::VERSION = '0.031';
+$Statocles::Store::File::VERSION = '0.032';
 use Statocles::Base 'Class';
 with 'Statocles::Store';
 use Scalar::Util qw( weaken blessed );
@@ -252,7 +252,7 @@ Statocles::Store::File - A store made up of plain files
 
 =head1 VERSION
 
-version 0.031
+version 0.032
 
 =head1 DESCRIPTION
 
@@ -341,7 +341,7 @@ Doug Bell <preaction@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Doug Bell.
+This software is copyright (c) 2015 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

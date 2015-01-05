@@ -1,6 +1,6 @@
 package Statocles::Base;
 # ABSTRACT: Base module for Statocles modules
-$Statocles::Base::VERSION = '0.031';
+$Statocles::Base::VERSION = '0.032';
 use strict;
 use warnings;
 use base 'Import::Base';
@@ -60,7 +60,7 @@ Statocles::Base - Base module for Statocles modules
 
 =head1 VERSION
 
-version 0.031
+version 0.032
 
 =head1 SYNOPSIS
 
@@ -180,7 +180,7 @@ Doug Bell <preaction@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Doug Bell.
+This software is copyright (c) 2015 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

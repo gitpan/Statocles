@@ -1,6 +1,6 @@
 package Statocles;
 # ABSTRACT: A static site generator
-$Statocles::VERSION = '0.031';
+$Statocles::VERSION = '0.032';
 # The currently-running site.
 # I hate this, but I know of no better way to ensure that we always have access
 # to a Mojo::Log object, while still being relatively useful, without having to
@@ -28,7 +28,7 @@ Statocles - A static site generator
 
 =head1 VERSION
 
-version 0.031
+version 0.032
 
 =head1 SYNOPSIS
 
@@ -209,9 +209,15 @@ them at L<https://staticsitegenerators.net>.
 
 Doug Bell <preaction@cpan.org>
 
+=head1 CONTRIBUTOR
+
+=for stopwords tadegenban
+
+tadegenban <youyouken@126.com>
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Doug Bell.
+This software is copyright (c) 2015 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

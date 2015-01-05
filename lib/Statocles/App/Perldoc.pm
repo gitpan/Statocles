@@ -1,9 +1,8 @@
 package Statocles::App::Perldoc;
 # ABSTRACT: Render documentation for Perl modules
-$Statocles::App::Perldoc::VERSION = '0.031';
+$Statocles::App::Perldoc::VERSION = '0.032';
 use Statocles::Base 'Class';
 extends 'Statocles::App';
-use Statocles::Theme;
 use Statocles::Page::Plain;
 use Scalar::Util qw( blessed );
 use List::MoreUtils qw( any );
@@ -15,14 +14,6 @@ has url_root => (
     is => 'ro',
     isa => Str,
     required => 1,
-);
-
-
-has theme => (
-    is => 'ro',
-    isa => Theme,
-    required => 1,
-    coerce => Theme->coercion,
 );
 
 
@@ -126,8 +117,8 @@ sub pages {
         if ( $module eq $self->index_module ) {
             unshift @pages, Statocles::Page::Plain->new(
                 path => join( '/', $self->url_root, 'index.html' ),
-                layout => $self->theme->template( site => 'layout.html' ),
-                template => $self->theme->template( perldoc => 'pod.html' ),
+                layout => $self->site->theme->template( site => 'layout.html' ),
+                template => $self->site->theme->template( perldoc => 'pod.html' ),
                 content => "$dom",
             );
         }
@@ -137,8 +128,8 @@ sub pages {
 
             push @pages, Statocles::Page::Plain->new(
                 path => join( '/', $self->url_root, $page_url ),
-                layout => $self->theme->template( site => 'layout.html' ),
-                template => $self->theme->template( perldoc => 'pod.html' ),
+                layout => $self->site->theme->template( site => 'layout.html' ),
+                template => $self->site->theme->template( perldoc => 'pod.html' ),
                 content => "$dom",
             );
 
@@ -239,7 +230,7 @@ Statocles::App::Perldoc - Render documentation for Perl modules
 
 =head1 VERSION
 
-version 0.031
+version 0.032
 
 =head1 DESCRIPTION
 
@@ -251,11 +242,6 @@ This application generates HTML from the POD in the requested modules.
 
 The URL root of this application. All pages from this app will be under this
 root. Use this to ensure two apps do not try to write the same path.
-
-=head2 theme
-
-The L<theme|Statocles::Theme> for this app. See L</THEME> for what templates this app
-uses.
 
 =head2 inc
 
@@ -294,7 +280,7 @@ Doug Bell <preaction@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Doug Bell.
+This software is copyright (c) 2015 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

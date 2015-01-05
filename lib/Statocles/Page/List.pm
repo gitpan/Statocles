@@ -1,6 +1,6 @@
 package Statocles::Page::List;
 # ABSTRACT: A page presenting a list of other pages
-$Statocles::Page::List::VERSION = '0.031';
+$Statocles::Page::List::VERSION = '0.032';
 use Statocles::Base 'Class';
 with 'Statocles::Page';
 use List::Util qw( max );
@@ -84,7 +84,7 @@ Statocles::Page::List - A page presenting a list of other pages
 
 =head1 VERSION
 
-version 0.031
+version 0.032
 
 =head1 DESCRIPTION
 
@@ -151,7 +151,7 @@ Doug Bell <preaction@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Doug Bell.
+This software is copyright (c) 2015 by Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
